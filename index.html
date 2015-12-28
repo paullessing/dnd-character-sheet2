@@ -12,6 +12,11 @@
 	<!-- 2. Configure SystemJS -->
 	<script>
 		System.config({
+			paths: {
+				'*': './node_modules/*',
+				'app/*': 'app/*'
+			},
+			packageConfigPaths: ['./node_modules/*/package.json'],
 			packages: {
 				app: {
 					format: 'register',
@@ -19,11 +24,8 @@
 				}
 			}
 		});
-		Promise.resolve().then(function() {
-			System.import('node_modules/underscore/underscore.js');
-		}).then(function() {
-			System.import('app/boot');
-		}).catch(console.error.bind(console));
+		System.import('app/boot')
+				.catch(console.error.bind(console));
 	</script>
 
 </head>
