@@ -1,17 +1,14 @@
-import {Component} from 'angular2/core';
+import { Component } from 'angular2/core';
+import { PersonalityComponent } from './personality/personality.component';
 
 /**
  * Main app component for the character sheet app
  */
 @Component({
     selector: 'character-sheet',
-    template: '<h1>D&D 5e Character Sheet</h1>'
+    templateUrl: 'app/app.component.html',
+    directives: [PersonalityComponent]
 })
-class AppComponent {
+export class AppComponent {
 
-}
-
-
-export {
-    AppComponent
 }
