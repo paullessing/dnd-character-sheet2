@@ -1,20 +1,22 @@
 <h2>Personality</h2>
 <div>
 	<label for="traits">Personality traits</label>
-	<textarea id="traits" [ngModel]="traits"></textarea>
+	<textarea id="traits" [(ngModel)]="traits" (blur)="updateField()"></textarea>
 </div>
 
 <div>
 	<label for="ideals">Ideals</label>
-	<textarea id="ideals" [ngModel]="ideals"></textarea>
+	<textarea id="ideals" [(ngModel)]="ideals" (blur)="updateField()"></textarea>
 </div>
 
 <div>
 	<label for="bonds">Bonds</label>
-	<textarea id="bonds" [ngModel]="bonds"></textarea>
+	<textarea id="bonds" [(ngModel)]="bonds" (blur)="updateField()"></textarea>
 </div>
 
 <div>
 	<label for="flaws">Flaws</label>
-	<textarea id="flaws" [ngModel]="flaws"></textarea>
+	<textarea id="flaws" [(ngModel)]="flaws" (blur)="updateField()"></textarea>
 </div>
+
+<button (click)="save()">Save</button>

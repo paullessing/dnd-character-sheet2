@@ -10,12 +10,12 @@ import {OnInit} from "angular2/core";
     templateUrl: 'app/personality/personality.component.html'
 })
 export class PersonalityComponent implements OnInit {
-    traits:string;
-    ideals:string;
-    bonds:string;
-    flaws:string;
+    traits: string;
+    ideals: string;
+    bonds: string;
+    flaws: string;
 
-    constructor(private _personalityService:PersonalityService) {
+    constructor(private _personalityService: PersonalityService) {
     }
 
     ngOnInit() {
@@ -25,5 +25,13 @@ export class PersonalityComponent implements OnInit {
             this.bonds = personality.bonds;
             this.flaws = personality.flaws;
         });
+    }
+
+    updateField() {
+        this._personalityService.updatePersonality(this.traits, this.ideals, this.bonds, this.flaws);
+    }
+
+    save() {
+        this._personalityService.storeUpdates();
     }
 }
