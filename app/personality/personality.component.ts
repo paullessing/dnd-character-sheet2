@@ -19,7 +19,7 @@ export class PersonalityComponent implements OnInit {
     }
 
     ngOnInit() {
-        this._personalityService.getPersonality().then(personality => {
+        this._personalityService.getPersonality().subscribe(personality => {
             this.traits = personality.traits;
             this.ideals = personality.ideals;
             this.bonds = personality.bonds;

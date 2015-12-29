@@ -1,5 +1,6 @@
 import {Injectable} from 'angular2/core';
-import {Personality, PersonalityUpdate} from './personality';
+import {Observable} from 'rxjs/Rx';
+import {Personality, IPersonality} from './personality';
 import * as _ from 'underscore';
 
 /**
@@ -7,52 +8,42 @@ import * as _ from 'underscore';
  */
 @Injectable()
 export class PersonalityService {
-    private _personality: Personality;
-    private _updates: PersonalityUpdate[] = [];
+    private _personalities: Personality[] = [];
+    private _observable: Observable<Personality>;
+    private _notify: () => void;
 
-    getPersonality(): Promise<Personality> {
-        // TODO real implementation
-        if (!this._personality) {
-            this._personality = new Personality("I have traits", "My ideals", "James Bond", "I am flawless");
+    getPersonality(): Observable<Personality> {
+        if (this._observable) {
+            return this._observable;
         }
-        return Promise.resolve(this._personality);
-    }
-
-    updatePersonality(traits: string, ideals: string, bonds: string, flaws: string): Promise<Personality> {
-        return Promise.resolve().then(() => {
-            var update: PersonalityUpdate = this._diff(this._personality, {
-                traits: traits,
-                ideals: ideals,
-                bonds: bonds,
-                flaws: flaws
-            });
-            if (!update) {
-                return;
-            }
-            this._updates.push(update);
-            this._personality.update(update);
-            console.log(this._updates, this._personality);
-        }).then(() => this._personality)
-        .catch(console.error.bind(console));
-    }
-
-    private _diff(personality: Personality, changes: PersonalityUpdate): PersonalityUpdate {
-        var result = {};
-        var hasDifferences = false;
-        ['traits', 'ideals', 'bonds', 'flaws'].forEach(key => {
-            if (changes[key] && changes[key] !== personality[key]) {
-                result[key] = changes[key];
-                hasDifferences = true;
-            }
+        this._observable = new Observable(observer => {
+            this._notify = () => observer.next(this.currentPersonality);
         });
-        return hasDifferences ? result : null;
+        Promise.resolve().then(() => {
+            // TODO real implementation
+            this.addNewState(new Personality("I have traits", "My ideals", "James Bond", "I am flawless"));
+        });
+        return this._observable;
+    }
+
+    private addNewState(personality: Personality) {
+        this._personalities.push(personality);
+        this._notify();
+    }
+
+    private get currentPersonality(): Personality {
+        return this._personalities[this._personalities.length - 1];
+    }
+
+    updatePersonality(traits: string, ideals: string, bonds: string, flaws: string): void {
+        this.addNewState(new Personality(traits, ideals, bonds, flaws));
     }
 
     storeUpdates() {
-        if (!this._updates.length) {
+        if (!this._personalities.length) {
             return;
         }
-        var update = _.extend({}, ...this._updates);
+        var update = _.extend({}, ...this._personalities);
         console.log(update); // TODO do something sensible with this
     }
 }
