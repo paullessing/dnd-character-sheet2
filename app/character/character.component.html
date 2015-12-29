@@ -1,0 +1,37 @@
+<h2>Character Details</h2>
+<div>
+	<label for="name">Character Name</label>
+	<input type="text" id="name" />
+</div>
+<div>
+	<label for="class">Class</label>
+	<select id="class">
+		<option *ngFor="#class of classes" [value]="class">{{class}}</option>
+	</select>
+</div>
+<div>
+	<label for="level">Level</label>
+	<input id="level" type="number" step="1" min="1" disabled />
+</div>
+<div>
+	<label for="background">Background</label>
+	<input type="text" id="background" />
+</div>
+<div>
+	<label for="playerName">Player Name</label>
+	<input type="text" id="playerName" />
+</div>
+<div>
+	<label for="race">Race</label>
+	<input type="text" id="race" />
+</div>
+<div>
+	<label for="alignment">Alignment</label>
+	<select id="alignment">
+		<option *ngFor="#alignment of alignments" [value]="alignment">{{alignment}}</option>
+	</select>
+</div>
+<div>
+	<label for="xp">Experience Points</label>
+	<input type="number" step="1" min="0" id="xp" />
+</div>
