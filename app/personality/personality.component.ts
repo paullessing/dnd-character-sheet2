@@ -1,6 +1,7 @@
 import {Component} from 'angular2/core';
 import {PersonalityService} from './personality.service';
 import {OnInit} from "angular2/core";
+import {Personality} from "./personality";
 
 /**
  * Component showing personality traits, motivation etc.
@@ -10,28 +11,14 @@ import {OnInit} from "angular2/core";
     templateUrl: 'app/personality/personality.component.html'
 })
 export class PersonalityComponent implements OnInit {
-    traits: string;
-    ideals: string;
-    bonds: string;
-    flaws: string;
+    personality: Personality;
 
     constructor(private _personalityService: PersonalityService) {
     }
 
     ngOnInit() {
         this._personalityService.getPersonality().subscribe(personality => {
-            this.traits = personality.traits;
-            this.ideals = personality.ideals;
-            this.bonds = personality.bonds;
-            this.flaws = personality.flaws;
+            this.personality = personality;
         });
-    }
-
-    updateField() {
-        this._personalityService.updatePersonality(this.traits, this.ideals, this.bonds, this.flaws);
-    }
-
-    save() {
-        this._personalityService.storeUpdates();
     }
 }

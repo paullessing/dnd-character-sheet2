@@ -1,6 +1,8 @@
 import {Component} from 'angular2/core';
 import {Alignment, AlignmentNames} from './alignments';
 import {Class, ClassNames} from "./classes";
+import {Character} from "./character";
+import {OnInit} from "angular2/core";
 
 /**
  * Component showing basic character details.
@@ -9,17 +11,16 @@ import {Class, ClassNames} from "./classes";
     selector: 'character',
     templateUrl: 'app/character/character.component.html'
 })
-export class CharacterComponent {
+export class CharacterComponent implements OnInit{
     // TODO allow multiclassing
 
     alignments = AlignmentNames;
     classes = ClassNames;
 
-    name: string;
-    characterClass: Class;
-    background: string;
-    playerName: string;
-    race: string;
-    alignment: Alignment;
-    xp: number;
+    character: Character;
+
+    ngOnInit() {
+        // TODO implement using a service
+        this.character = new Character("Aragorn", Class.Ranger, "Noble", "JRR Tolkien", "Human", Alignment.LawfulGood, 10000);
+    }
 }

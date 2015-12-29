@@ -1,37 +1,35 @@
 <h2>Character Details</h2>
-<div>
-	<label for="name">Character Name</label>
-	<input type="text" id="name" />
-</div>
-<div>
-	<label for="class">Class</label>
-	<select id="class">
-		<option *ngFor="#class of classes; #i = index" [value]="i">{{class}}</option>
-	</select>
-</div>
-<div>
-	<label for="level">Level</label>
-	<input id="level" type="number" step="1" min="1" disabled />
-</div>
-<div>
-	<label for="background">Background</label>
-	<input type="text" id="background" />
-</div>
-<div>
-	<label for="playerName">Player Name</label>
-	<input type="text" id="playerName" />
-</div>
-<div>
-	<label for="race">Race</label>
-	<input type="text" id="race" />
-</div>
-<div>
-	<label for="alignment">Alignment</label>
-	<select id="alignment">
-		<option *ngFor="#alignment of alignments; #i = index" [value]="i">{{alignment}}</option>
-	</select>
-</div>
-<div>
-	<label for="xp">Experience Points</label>
-	<input type="number" step="1" min="0" id="xp" />
+<div *ngIf="character">
+	<div>
+		<label for="name">Character Name</label>
+		<p id="name">{{ character.name }}</p>
+	</div>
+	<div>
+		<label for="class">Class</label>
+		<p id="class">{{ character.className }}</p>
+	</div>
+	<div>
+		<label for="level">Level</label>
+		<p id="level">{{ character.level }}</p>
+	</div>
+	<div>
+		<label for="background">Background</label>
+		<p id="background">{{ character.background }}</p>
+	</div>
+	<div>
+		<label for="playerName">Player Name</label>
+		<p id="playerName">{{ character.playerName }}</p>
+	</div>
+	<div>
+		<label for="race">Race</label>
+		<p id="race">{{ character.race }}</p>
+	</div>
+	<div>
+		<label for="alignment">Alignment</label>
+		<p id="alignment">{{ character.alignmentName }}</p>
+	</div>
+	<div>
+		<label for="xp">Experience Points</label>
+		<p id="xp">{{ character.xp }}</p>
+	</div>
 </div>

@@ -1,5 +1,7 @@
 import {Class} from "./classes";
 import {Alignment} from "./alignments";
+import {ClassNames} from "./classes";
+import {AlignmentNames} from "./alignments";
 
 export class Character {
     constructor(
@@ -17,6 +19,14 @@ export class Character {
         this.race = this.race || '';
         this.xp = this.xp && this.xp > 0 ? this.xp : 0;
         Object.freeze(this);
+    }
+
+    public get className(): string {
+        return ClassNames[this.characterClass];
+    }
+
+    public get alignmentName(): string {
+        return AlignmentNames[this.alignment];
     }
 
     public get level(): number {
