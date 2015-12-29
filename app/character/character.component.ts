@@ -1,4 +1,6 @@
 import {Component} from 'angular2/core';
+import {Alignment, AlignmentNames} from './alignments';
+import {Class, ClassNames} from "./classes";
 
 /**
  * Component showing basic character details.
@@ -8,23 +10,16 @@ import {Component} from 'angular2/core';
     templateUrl: 'app/character/character.component.html'
 })
 export class CharacterComponent {
-    alignments: string[] = [
-        "Lawful Good",
-        "Lawful Neutral",
-        "Lawful Evil",
-        "Neutral Good",
-        "True Neutral",
-        "Neutral Evil",
-        "Chaotic Good",
-        "Chaotic Neutral",
-        "Chaotic Evil"
-    ];
-    classes: string[] = [
-        // TODO missing loads of classes
-        "Bard",
-        "Ranger",
-        "Rogue",
-        "Paladin",
-        "Warlock"
-    ]
+    // TODO allow multiclassing
+
+    alignments = AlignmentNames;
+    classes = ClassNames;
+
+    name: string;
+    characterClass: Class;
+    background: string;
+    playerName: string;
+    race: string;
+    alignment: Alignment;
+    xp: number;
 }

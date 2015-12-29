@@ -6,7 +6,7 @@
 <div>
 	<label for="class">Class</label>
 	<select id="class">
-		<option *ngFor="#class of classes" [value]="class">{{class}}</option>
+		<option *ngFor="#class of classes; #i = index" [value]="i">{{class}}</option>
 	</select>
 </div>
 <div>
@@ -28,7 +28,7 @@
 <div>
 	<label for="alignment">Alignment</label>
 	<select id="alignment">
-		<option *ngFor="#alignment of alignments" [value]="alignment">{{alignment}}</option>
+		<option *ngFor="#alignment of alignments; #i = index" [value]="i">{{alignment}}</option>
 	</select>
 </div>
 <div>
