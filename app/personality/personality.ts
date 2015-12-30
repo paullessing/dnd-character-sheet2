@@ -5,6 +5,10 @@ export interface IPersonality {
     flaws?: string;
 }
 
+function trimToEmpty(value) {
+    return ('' + value).trim();
+}
+
 /**
  * Contains information about a character's personality.
  */
@@ -15,10 +19,17 @@ export class Personality implements IPersonality {
     public flaws: string;
 
     constructor(data: IPersonality) {
-        this.traits = data.traits || '';
-        this.ideals = data.ideals || '';
-        this.bonds = data.bonds || '';
-        this.flaws = data.flaws || '';
+        this.traits = trimToEmpty(data.traits);
+        this.ideals = trimToEmpty(data.ideals);
+        this.bonds = trimToEmpty(data.bonds);
+        this.flaws = trimToEmpty(data.flaws);
         Object.freeze(this); // Make immutable
+    }
+
+    public equals(that: Personality): boolean {
+        return this.traits === that.traits
+            && this.ideals === that.ideals
+            && this.bonds === that.bonds
+            && this.flaws === that.flaws;
     }
 }
