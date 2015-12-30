@@ -9,28 +9,16 @@ export interface IPersonality {
  * Contains information about a character's personality.
  */
 export class Personality implements IPersonality {
-    traits: string;
-    ideals: string;
-    bonds: string;
-    flaws: string;
+    public traits: string;
+    public ideals: string;
+    public bonds: string;
+    public flaws: string;
 
-    constructor(
-        traits: string | IPersonality,
-        ideals?: string,
-        bonds?: string,
-        flaws?: string
-    ) {
-        if (typeof traits !== 'string') {
-            let personality: IPersonality = traits;
-            traits = personality.traits;
-            ideals = personality.ideals;
-            bonds = personality.bonds;
-            flaws = personality.flaws;
-        }
-        this.traits = (traits as string) || '';
-        this.ideals = ideals || '';
-        this.bonds = bonds || '';
-        this.flaws = flaws || '';
+    constructor(data: IPersonality) {
+        this.traits = data.traits || '';
+        this.ideals = data.ideals || '';
+        this.bonds = data.bonds || '';
+        this.flaws = data.flaws || '';
         Object.freeze(this); // Make immutable
     }
 }

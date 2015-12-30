@@ -12,8 +12,8 @@ import {IPersonality} from "./personality";
     templateUrl: 'app/personality/personality.component.html'
 })
 export class PersonalityComponent implements OnInit {
-    personality: IPersonality;
-    isEditing: boolean;
+    public personality: IPersonality;
+    public isEditing: boolean;
 
     constructor(private _personalityService: PersonalityService) {
     }
@@ -25,7 +25,7 @@ export class PersonalityComponent implements OnInit {
         });
     }
 
-    edit() {
+    public edit() {
         this.personality = {
             traits: this.personality.traits,
             ideals: this.personality.ideals,
@@ -35,7 +35,7 @@ export class PersonalityComponent implements OnInit {
         this.isEditing = true;
     }
 
-    save() {
+    public save() {
         this._personalityService.updatePersonality(this.personality);
         this.isEditing = false;
     }

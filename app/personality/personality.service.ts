@@ -12,7 +12,7 @@ export class PersonalityService {
     private _observable: Observable<Personality>;
     private _notify: () => void;
 
-    getPersonality(): Observable<Personality> {
+    public getPersonality(): Observable<Personality> {
         if (this._observable) {
             return this._observable;
         }
@@ -21,7 +21,12 @@ export class PersonalityService {
         });
         Promise.resolve().then(() => {
             // TODO real implementation
-            this.addNewState(new Personality("I have traits", "My ideals", "James Bond", "I am flawless"));
+            this.addNewState(new Personality({
+                traits: "I have traits",
+                ideals: "My ideals",
+                bonds: "James Bond",
+                flaws: "I am flawless"
+            }));
         });
         return this._observable;
     }
@@ -36,11 +41,11 @@ export class PersonalityService {
     }
 
     // TODO add a dispatcher so we can just listen to update events
-    updatePersonality(newPersonality: IPersonality): void {
+    public updatePersonality(newPersonality: IPersonality): void {
         this.addNewState(new Personality(newPersonality));
     }
 
-    storeUpdates() {
+    public storeUpdates() {
         if (!this._personalities.length) {
             return;
         }

@@ -3,21 +3,33 @@ import {Alignment} from "./alignments";
 import {ClassNames} from "./classes";
 import {AlignmentNames} from "./alignments";
 
-export class Character {
-    constructor(
-        public name: string,
-        public characterClass: Class,
-        public background: string,
-        public playerName: string,
-        public race: string,
-        public alignment: Alignment,
-        public xp: number
-    ) {
-        this.name = this.name || '';
-        this.background = this.background || '';
-        this.playerName = this.playerName || '';
-        this.race = this.race || '';
-        this.xp = this.xp && this.xp > 0 ? this.xp : 0;
+export interface ICharacter {
+    name: string;
+    characterClass: Class;
+    background: string;
+    playerName: string;
+    race: string;
+    alignment: Alignment;
+    xp: number;
+}
+
+export class Character implements ICharacter {
+    public name: string;
+    public characterClass: Class;
+    public background: string;
+    public playerName: string;
+    public race: string;
+    public alignment: Alignment;
+    public xp: number;
+
+    constructor(data: ICharacter) {
+        this.name = data.name || '';
+        this.characterClass = data.characterClass;
+        this.background = data.background || '';
+        this.playerName = data.playerName || '';
+        this.race = data.race || '';
+        this.alignment = data.alignment;
+        this.xp = data.xp && data.xp > 0 ? data.xp : 0;
         Object.freeze(this);
     }
 

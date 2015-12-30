@@ -14,13 +14,21 @@ import {OnInit} from "angular2/core";
 export class CharacterComponent implements OnInit{
     // TODO allow multiclassing
 
-    alignments = AlignmentNames;
-    classes = ClassNames;
+    public alignments = AlignmentNames;
+    public classes = ClassNames;
 
-    character: Character;
+    public character: Character;
 
     ngOnInit() {
         // TODO implement using a service
-        this.character = new Character("Aragorn", Class.Ranger, "Noble", "JRR Tolkien", "Human", Alignment.LawfulGood, 10000);
+        this.character = new Character({
+            name: "Aragorn",
+            characterClass: Class.Ranger,
+            background: "Noble",
+            playerName: "JRR Tolkien",
+            race: "Human",
+            alignment: Alignment.LawfulGood,
+            xp: 10000
+        });
     }
 }
