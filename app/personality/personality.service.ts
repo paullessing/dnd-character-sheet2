@@ -35,8 +35,9 @@ export class PersonalityService {
         return this._personalities[this._personalities.length - 1];
     }
 
-    updatePersonality(traits: string, ideals: string, bonds: string, flaws: string): void {
-        this.addNewState(new Personality(traits, ideals, bonds, flaws));
+    // TODO add a dispatcher so we can just listen to update events
+    updatePersonality(newPersonality: IPersonality): void {
+        this.addNewState(new Personality(newPersonality));
     }
 
     storeUpdates() {
