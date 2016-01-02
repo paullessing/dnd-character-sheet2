@@ -3,6 +3,7 @@ import {Alignment, AlignmentNames} from './alignments';
 import {Class, ClassNames} from "./classes";
 import {Character} from "./character";
 import {OnInit} from "angular2/core";
+import {CharacterService} from "./character.service";
 
 /**
  * Component showing basic character details.
@@ -16,19 +17,15 @@ export class CharacterComponent implements OnInit{
 
     public alignments = AlignmentNames;
     public classes = ClassNames;
-
     public character: Character;
 
+    constructor(private _characterService: CharacterService) {
+    }
+
     ngOnInit() {
-        // TODO implement using a service
-        this.character = new Character({
-            name: "Aragorn",
-            characterClass: Class.Ranger,
-            background: "Noble",
-            playerName: "JRR Tolkien",
-            race: "Human",
-            alignment: Alignment.LawfulGood,
-            xp: 10000
-        });
+        this._characterService.getCharacter().subscribe(character => {
+            this.character = character;
+            console.log("Updated character", character);
+        });;
     }
 }

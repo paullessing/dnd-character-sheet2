@@ -1,8 +1,7 @@
 import {Component} from 'angular2/core';
 import {PersonalityService} from './personality.service';
 import {OnInit} from "angular2/core";
-import {Personality} from "./personality";
-import {IPersonality} from "./personality";
+import {Personality, IPersonality} from "./personality";
 
 /**
  * Component showing personality traits, motivation etc.
@@ -13,6 +12,7 @@ import {IPersonality} from "./personality";
 })
 export class PersonalityComponent implements OnInit {
     public personality: IPersonality;
+    public editPersonality: IPersonality;
     public isEditing: boolean;
 
     constructor(private _personalityService: PersonalityService) {
@@ -26,7 +26,7 @@ export class PersonalityComponent implements OnInit {
     }
 
     public edit() {
-        this.personality = {
+        this.editPersonality = {
             traits: this.personality.traits,
             ideals: this.personality.ideals,
             bonds: this.personality.bonds,
@@ -36,7 +36,11 @@ export class PersonalityComponent implements OnInit {
     }
 
     public save() {
-        this._personalityService.updatePersonality(this.personality);
+        this._personalityService.updatePersonality(this.editPersonality);
+        this.isEditing = false;
+    }
+
+    public cancel() {
         this.isEditing = false;
     }
 }

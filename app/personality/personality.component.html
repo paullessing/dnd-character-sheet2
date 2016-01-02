@@ -27,23 +27,23 @@
 	<h2>Edit Personality</h2>
 	<div>
 		<label for="traits">Personality traits</label>
-		<textarea id="traits" [(ngModel)]="personality.traits"></textarea>
+		<textarea id="traits" [(ngModel)]="editPersonality.traits"></textarea>
 	</div>
 
 	<div>
 		<label for="ideals">Ideals</label>
-		<textarea id="ideals" [(ngModel)]="personality.ideals"></textarea>
+		<textarea id="ideals" [(ngModel)]="editPersonality.ideals"></textarea>
 	</div>
 
 	<div>
 		<label for="bonds">Bonds</label>
-		<textarea id="bonds" [(ngModel)]="personality.bonds"></textarea>
+		<textarea id="bonds" [(ngModel)]="editPersonality.bonds"></textarea>
 	</div>
 
 	<div>
 		<label for="flaws">Flaws</label>
-		<textarea id="flaws" [(ngModel)]="personality.flaws"></textarea>
+		<textarea id="flaws" [(ngModel)]="editPersonality.flaws"></textarea>
 	</div>
 
-	<button (click)="save()">Save</button>
+	<a href="javascript:void(0)" (click)="cancel()">Cancel</a> <button (click)="save()">Save</button>
 </div>

@@ -49,6 +49,16 @@ export class Character implements ICharacter {
     public get xpToNextLevel(): number {
         return getXpRequiredForLevelUp(this.xp);
     }
+
+    public equals(that: Character) {
+        return this.name === that.name
+            && this.characterClass === that.characterClass
+            && this.background === that.background
+            && this.playerName === that.playerName
+            && this.race === that.race
+            && this.alignment === that.alignment
+            && this.xp === that.xp;
+    }
 }
 
 var xpToLevel = [
