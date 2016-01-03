@@ -23,7 +23,7 @@
 	<button (click)="edit()">Edit</button>
 </div>
 
-<div *ngIf="isEditing">
+<form *ngIf="isEditing" (submit)="save()">
 	<h2>Edit Personality</h2>
 	<div>
 		<label for="traits">Personality traits</label>
@@ -45,5 +45,5 @@
 		<textarea id="flaws" [(ngModel)]="editPersonality.flaws"></textarea>
 	</div>
 
-	<a href="javascript:void(0)" (click)="cancel()">Cancel</a> <button (click)="save()">Save</button>
-</div>
+	<a href="javascript:void(0)" (click)="cancel()">Cancel</a> <button type="submit">Save</button>
+</form>

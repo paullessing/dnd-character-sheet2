@@ -1,35 +1,74 @@
 <h2>Character Details</h2>
-<div *ngIf="character">
+<div *ngIf="character && !isEditing">
+	<div>
+		<label>Character Name</label>
+		<p>{{ character.name }}</p>
+	</div>
+	<div>
+		<label>Class</label>
+		<p>{{ character.className }}</p>
+	</div>
+	<div>
+		<label>Level</label>
+		<p>{{ character.level }}</p>
+	</div>
+	<div>
+		<label>Background</label>
+		<p>{{ character.background }}</p>
+	</div>
+	<div>
+		<label>Player Name</label>
+		<p>{{ character.playerName }}</p>
+	</div>
+	<div>
+		<label>Race</label>
+		<p>{{ character.race }}</p>
+	</div>
+	<div>
+		<label>Alignment</label>
+		<p>{{ character.alignmentName }}</p>
+	</div>
+	<div>
+		<label>Experience Points</label>
+		<p>{{ character.xp }}</p>
+	</div>
+	<button (click)="edit()">Edit</button>
+</div>
+
+<form *ngIf="isEditing" (submit)="save()">
 	<div>
 		<label for="name">Character Name</label>
-		<p id="name">{{ character.name }}</p>
+		<input type="text" id="name" [(ngModel)]="editCharacter.name" />
 	</div>
 	<div>
 		<label for="class">Class</label>
-		<p id="class">{{ character.className }}</p>
-	</div>
-	<div>
-		<label for="level">Level</label>
-		<p id="level">{{ character.level }}</p>
+		<select id="class" [(ngModel)]="editCharacter.characterClass" required>
+			<option value="" disabled>Select One</option>
+			<option *ngFor="#class of classes; #id = index" [value]="id">{{class}}</option>
+		</select>
 	</div>
 	<div>
 		<label for="background">Background</label>
-		<p id="background">{{ character.background }}</p>
+		<input type="text" id="background" [(ngModel)]="editCharacter.background" />
 	</div>
 	<div>
 		<label for="playerName">Player Name</label>
-		<p id="playerName">{{ character.playerName }}</p>
+		<input type="text" id="playerName" [(ngModel)]="editCharacter.playerName" />
 	</div>
 	<div>
 		<label for="race">Race</label>
-		<p id="race">{{ character.race }}</p>
+		<input type="text" id="race" [(ngModel)]="editCharacter.race" />
 	</div>
 	<div>
 		<label for="alignment">Alignment</label>
-		<p id="alignment">{{ character.alignmentName }}</p>
+		<select id="alignment" [(ngModel)]="editCharacter.alignment" required>
+			<option value="" disabled>Select One</option>
+			<option *ngFor="#alignment of alignments; #id = index" [value]="id">{{alignment}}</option>
+		</select>
 	</div>
 	<div>
 		<label for="xp">Experience Points</label>
-		<p id="xp">{{ character.xp }}</p>
+		<input type="number" step="1" min="0" id="xp" [(ngModel)]="editCharacter.xp" />
 	</div>
-</div>
+	<a href="javascript:void(0)" (click)="cancel()">Cancel</a> <button type="submit">Save</button>
+</form>
