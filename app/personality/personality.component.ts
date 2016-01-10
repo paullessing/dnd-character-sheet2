@@ -2,6 +2,8 @@ import {Component} from 'angular2/core';
 import {PersonalityService} from './personality.service';
 import {OnInit} from "angular2/core";
 import {Personality, IPersonality} from "./personality";
+import {PersonalityActions} from "./personalityActions.service";
+import {PersonalityRepository} from "./personality.repository";
 
 /**
  * Component showing personality traits, motivation etc.
@@ -15,11 +17,13 @@ export class PersonalityComponent implements OnInit {
     public editPersonality: IPersonality;
     public isEditing: boolean;
 
-    constructor(private _personalityService: PersonalityService) {
+    constructor(private _personalityActions: PersonalityActions, private _personalityRepository: PersonalityRepository) {
     }
 
     ngOnInit() {
-        this._personalityService.getPersonality().subscribe(personality => {
+        this.personality = this._personalityRepository.currentPersonality;
+
+        this._personalityRepository.observable.subscribe(personality => {
             this.personality = personality;
             console.log("Updated personality", personality);
         });
@@ -36,7 +40,7 @@ export class PersonalityComponent implements OnInit {
     }
 
     public save() {
-        this._personalityService.updatePersonality(this.editPersonality);
+        this._personalityActions.update(this.editPersonality);
         this.isEditing = false;
     }
 
