@@ -1,16 +1,14 @@
-import {Component} from 'angular2/core';
-import {PersonalityService} from './personality.service';
-import {OnInit} from "angular2/core";
-import {Personality, IPersonality} from "./personality";
-import {PersonalityActions} from "./personalityActions.service";
-import {PersonalityRepository} from "./personality.repository";
+import {Component, OnInit} from 'angular2/core';
+import {Personality, IPersonality} from "../../entities/personality";
+import {PersonalityActions} from "../../services/personality/personalityActions.service";
+import {PersonalityRepository} from "../../services/personality/personality.repository";
 
 /**
  * Component showing personality traits, motivation etc.
  */
 @Component({
     selector: 'personality',
-    templateUrl: 'app/personality/personality.component.html'
+    templateUrl: 'app/components/personality/personality.component.html'
 })
 export class PersonalityComponent implements OnInit {
     public personality: IPersonality;

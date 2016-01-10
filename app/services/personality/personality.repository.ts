@@ -1,9 +1,10 @@
-import {Dispatcher} from "../common/dispatcher";
-import {PersonalityEventType} from "./personalityActions.service";
-import {IPersonality, Personality} from "./personality";
 import {Injectable} from "angular2/core";
 import {Observable} from "rxjs/Observable";
 import {ReplaySubject} from "rxjs/Rx";
+
+import {Dispatcher} from "../../common/dispatcher";
+import {IPersonality, Personality} from "../../entities/personality";
+import {PersonalityEventType} from "./personalityActions.service";
 
 @Injectable()
 export class PersonalityRepository {
