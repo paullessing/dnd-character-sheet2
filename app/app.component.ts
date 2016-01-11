@@ -1,7 +1,6 @@
 import {Component} from 'angular2/core';
 import {Dispatcher} from "./common/dispatcher";
 import {CharacterComponent} from "./components/character/character.component";
-import {CharacterService} from "./character/character.service";
 import {PersonalityActions} from "./services/personality/personalityActions.service";
 import {PersonalityRepository} from "./services/personality/personality.repository";
 import {PersonalityComponent} from './components/personality/personality.component';

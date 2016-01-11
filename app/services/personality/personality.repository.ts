@@ -9,7 +9,6 @@ import {PersonalityEventType} from "./personalityActions.service";
 export class PersonalityRepository {
     private _personalities: Personality[];
     private _subject: Subject<Personality>;
-    private _notify: (nextValue: Personality) => void;
 
     private loadingPromise: Promise<void>;
 
