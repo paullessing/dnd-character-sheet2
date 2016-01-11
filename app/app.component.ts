@@ -6,6 +6,7 @@ import {PersonalityRepository} from "./services/personality/personality.reposito
 import {PersonalityComponent} from './components/personality/personality.component';
 import {CharacterActions} from "./services/character/characterActions.service";
 import {CharacterRepository} from "./services/character/character.repository";
+import {HistoryRepository} from "./services/history/history.repository";
 
 /**
  * Main app component for the character sheet app.
@@ -19,10 +20,13 @@ import {CharacterRepository} from "./services/character/character.repository";
     ],
     providers: [
         Dispatcher,
+        HistoryRepository,
         CharacterActions, CharacterRepository,
         PersonalityActions, PersonalityRepository,
     ]
 })
 export class AppComponent {
-
+    constructor(historyRepo: HistoryRepository) {
+        // Must construct to ensure HistoryRepo gets created. TODO investigate
+    }
 }
