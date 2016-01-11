@@ -1,6 +1,5 @@
 import {Injectable} from "angular2/core";
-import {Observable} from "rxjs/Observable";
-import {ReplaySubject} from "rxjs/Rx";
+import {Observable, Subject} from "rxjs/Rx";
 
 import {Dispatcher} from "../../common/dispatcher";
 import {IPersonality, Personality} from "../../entities/personality";
@@ -9,29 +8,25 @@ import {PersonalityEventType} from "./personalityActions.service";
 @Injectable()
 export class PersonalityRepository {
     private _personalities: Personality[];
-    private _observable: Observable<Personality>;
+    private _subject: Subject<Personality>;
     private _notify: (nextValue: Personality) => void;
 
     private loadingPromise: Promise<void>;
 
     constructor(private _dispatcher: Dispatcher) {
-        _dispatcher.observable.filter(event => event.type === PersonalityEventType.UPDATE)
-        .subscribe(update => this.onUpdate(update.data));
+        _dispatcher.observable // TODO add filter when it becomes implemented
+            .subscribe(update => update.type === PersonalityEventType.UPDATE && this.onUpdate(update.data));
 
-        this._observable = new Observable(describe => {
-            this._notify = (nextValue: Personality) => describe.next(nextValue);
-            if (this.currentPersonality) {
-                this._notify(this.currentPersonality);
-            }
-        });
+        this._subject = new Subject();
         this.loadingPromise = this.load().then(personalities => {
             this._personalities = personalities || [new Personality({})];
-            if (this._notify) {
-                this._notify(this.currentPersonality);
-            }
-            console.log("Loading promise has resolved", this._personalities.length);
+            this._notify();
         });
-        console.log("Constructor done");
+        console.log("Constructed PersonalityRepository");
+    }
+
+    private _notify() {
+        this._subject.next(this.currentPersonality);
     }
 
     private load(): Promise<Personality[]> {
@@ -45,7 +40,7 @@ export class PersonalityRepository {
     }
 
     public get observable(): Observable<Personality> {
-        return this._observable;
+        return this._subject;
     }
 
     private onUpdate(data: IPersonality): void {
@@ -58,7 +53,7 @@ export class PersonalityRepository {
             }
             this._personalities.push(personality);
             this.persistUpdate(personality);
-            this._notify(personality);
+            this._notify();
 
             console.log("Personalities:", this._personalities);
         });

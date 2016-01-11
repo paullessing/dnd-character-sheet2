@@ -4,13 +4,13 @@ import {ClassNames} from "./classes";
 import {AlignmentNames} from "./alignments";
 
 export interface ICharacter {
-    name: string;
-    characterClass: Class;
-    background: string;
-    playerName: string;
-    race: string;
-    alignment: Alignment;
-    xp: number;
+    name?: string;
+    characterClass?: Class;
+    background?: string;
+    playerName?: string;
+    race?: string;
+    alignment?: Alignment;
+    xp?: number;
 }
 
 export class Character implements ICharacter {

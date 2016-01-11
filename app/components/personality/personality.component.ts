@@ -15,7 +15,10 @@ export class PersonalityComponent implements OnInit {
     public editPersonality: IPersonality;
     public isEditing: boolean;
 
-    constructor(private _personalityActions: PersonalityActions, private _personalityRepository: PersonalityRepository) {
+    constructor(
+        private _personalityActions: PersonalityActions,
+        private _personalityRepository: PersonalityRepository
+    ) {
     }
 
     ngOnInit() {

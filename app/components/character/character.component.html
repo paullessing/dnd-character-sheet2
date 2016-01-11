@@ -30,8 +30,21 @@
 	</div>
 	<div>
 		<label>Experience Points</label>
-		<p>{{ character.xp }}</p>
+		<p>{{ character.xp }} &mdash; <a href="javascript:void(0)" (click)="editXp()">edit</a></p>
 	</div>
+	<form *ngIf="isChangingXp" (submit)="submitXp()">
+		<h2>Add XP</h2>
+		<div>
+			<label>Amount</label>
+			<input [(ngModel)]="xpChange" type="number" step="1" />
+		</div>
+		<div>
+			<label>Reason</label>
+			<input [(ngModel)]="xpChangeReason" type="text" />
+		</div>
+		<button type="submit">Add</button>
+		<a href="javascript:void(0)" (click)="cancel()">Cancel</a>
+	</form>
 	<button (click)="edit()">Edit</button>
 </div>
 

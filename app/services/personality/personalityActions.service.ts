@@ -1,8 +1,7 @@
 import {Injectable} from "angular2/core";
 
-import {IPersonality} from "../../entities/personality";
 import {Dispatcher, Event} from "../../common/dispatcher";
-import {Personality} from "../../entities/personality";
+import {IPersonality, Personality} from "../../entities/personality";
 
 export class PersonalityEventType {
     static UPDATE = 'personality.update';

@@ -1,4 +1,4 @@
-import {Observable} from "rxjs/Observable";
+import {Observable, Subject} from "rxjs/Rx";
 import {Injectable} from "angular2/core";
 
 export interface Event<T> {
@@ -8,20 +8,19 @@ export interface Event<T> {
 
 @Injectable()
 export class Dispatcher {
-    private _observable: Observable<Event<any>>;
-    private _notify: (event: Event<any>) => void;
+    private _subject: Subject<Event<any>>;
 
     constructor() {
-        this._observable = new Observable(describe => {
-            this._notify = (event) => describe.next(event);
-        });
+        this._subject = new Subject();
+        console.log("Constructed Dispatcher");
     }
 
     public dispatch<T>(event: Event<T>) {
-        this._notify(event);
+        console.log("Dispatch", event);
+        this._subject.next(event);
     }
 
     public get observable(): Observable<Event<any>> {
-        return this._observable;
+        return this._subject;
     }
 }
