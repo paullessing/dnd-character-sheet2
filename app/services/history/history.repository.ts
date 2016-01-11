@@ -1,8 +1,9 @@
 import {Injectable} from "angular2/core";
 import {Subscriber, Observable, Subject} from "rxjs/Rx";
-import * as _ from 'underscore';
+import _ from 'underscore';
 
 import {Dispatcher, Event} from "../../common/dispatcher";
+import {moment} from "../../common/moment";
 
 export interface HistoricalCategory {
     name: string;
@@ -22,6 +23,7 @@ export class HistoryRepository {
 
     constructor(private _dispatcher: Dispatcher) {
         console.log("Constructing HistoryRepo");
+
         this._dispatcher.observable.subscribe(event => this.addEvent(event));
 
         this.loadEvents().then(events => {
@@ -45,12 +47,11 @@ export class HistoryRepository {
         let categoryId = currentCategory ? currentCategory.id : -1;
         this.events.push({
             categoryId: categoryId,
-            time: new Date(), // TODO use moment.js
+            time: moment().toDate(),
             event: event
         });
 
-        console.log("History");
-        console.log(this.events);
+        console.log("History", this.events);
     }
 
     private loadEvents(): Promise<HistoricalEvent[]> {
