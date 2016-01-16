@@ -1,6 +1,6 @@
 import {Injectable} from "angular2/core";
 import {Subscriber, Observable, Subject} from "rxjs/Rx";
-import _ from 'underscore';
+import * as _ from 'underscore';
 
 import {Dispatcher, Event} from "../../common/dispatcher";
 import {moment} from "../../common/moment";
@@ -27,14 +27,18 @@ export class HistoryRepository {
         this._dispatcher.observable.subscribe(event => this.addEvent(event));
 
         this.loadEvents().then(events => {
+            // Events might have come in between construction and this load finishing
+            // So add the new ones at the end
             if (this.events.length) {
-                this.events.unshift(...events);
+                this.events = events.concat(this.events);
             }
         });
         this.loadCategories().then(categories => {
             this.categories = categories;
             var currentCategoryId = this.currentCategory.id;
             this.events.forEach(event => {
+                // Events that have come in before the category load will have a negative ID,
+                // so assign the current category's ID instead
                 if (event.categoryId < 0) {
                     event.categoryId = currentCategoryId;
                 }
@@ -44,6 +48,7 @@ export class HistoryRepository {
 
     private addEvent(event: Event<any>) {
         const currentCategory = this.currentCategory;
+        // If we haven't loaded categories at this point, assign an ID of -1 so we can add the category later
         let categoryId = currentCategory ? currentCategory.id : -1;
         this.events.push({
             categoryId: categoryId,

@@ -1,8 +1,10 @@
 import {Observable, Subject} from "rxjs/Rx";
 import {Injectable} from "angular2/core";
 
+export type EventType = string;
+
 export interface Event<T> {
-    type: string;
+    type: EventType;
     data?: T;
 }
 
@@ -22,5 +24,13 @@ export class Dispatcher {
 
     public get observable(): Observable<Event<any>> {
         return this._subject;
+    }
+
+    public subscribe<T>(type: EventType, handler: (data: T) => void) {
+        this.observable.subscribe(event => {
+            if (event.type === type) { // TODO add filter when it becomes implemented
+                handler(event.data);
+            }
+        });
     }
 }

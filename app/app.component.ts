@@ -7,6 +7,8 @@ import {PersonalityComponent} from './components/personality/personality.compone
 import {CharacterActions} from "./services/character/characterActions.service";
 import {CharacterRepository} from "./services/character/character.repository";
 import {HistoryRepository} from "./services/history/history.repository";
+import {AbilitiesRepository} from "./services/abilities/abilities.repository";
+import {AbilitiesComponent} from "./components/abilities/abilities.component";
 
 /**
  * Main app component for the character sheet app.
@@ -17,10 +19,12 @@ import {HistoryRepository} from "./services/history/history.repository";
     directives: [
         PersonalityComponent,
         CharacterComponent,
+        AbilitiesComponent,
     ],
     providers: [
         Dispatcher,
         HistoryRepository,
+        AbilitiesRepository,
         CharacterActions, CharacterRepository,
         PersonalityActions, PersonalityRepository,
     ]

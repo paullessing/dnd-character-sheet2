@@ -16,8 +16,8 @@ export class CharacterRepository {
     private loadingPromise: Promise<void>;
 
     constructor(private _dispatcher: Dispatcher) {
-        this.addHandler(CharacterEventType.UPDATE, (character: ICharacter) => this.onUpdate(character));
-        this.addHandler(CharacterEventType.ADD_XP, (xpUpdate: UpdateXpDetails) => this.onAddXp(xpUpdate));
+        this._dispatcher.subscribe(CharacterEventType.UPDATE, (character: ICharacter) => this.onUpdate(character));
+        this._dispatcher.subscribe(CharacterEventType.ADD_XP, (xpUpdate: UpdateXpDetails) => this.onAddXp(xpUpdate));
 
         this._subject = new Subject();
         this.loadingPromise = this.load().then(characters => {
@@ -30,15 +30,6 @@ export class CharacterRepository {
     private _notify() {
         let character = this.currentCharacter;
         this._subject.next(character);
-    }
-
-    private addHandler<T>(type: CharacterEventType, handler: (data: T) => void) {
-        this._dispatcher.observable // TODO add filter when it becomes implemented
-            .subscribe(event => {
-                if (event.type === type) {
-                    handler(event.data);
-                }
-            });
     }
 
     private load(): Promise<Character[]> {
