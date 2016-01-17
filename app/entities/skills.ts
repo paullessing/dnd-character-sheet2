@@ -19,13 +19,35 @@ export class Skill {
 }
 
 export class Skills extends Array<Skill> {
-    [name: string]: Skill;
+    public byName: { [name: string]: Skill };
 
     constructor(skills: Skill[]) {
-        super(...skills);
+        super();
+        this.push(...skills);
+        this.byName = {};
         skills.forEach(skill => this[skill.name] = skill);
+        Object.freeze(this.byName);
         Object.freeze(this);
     }
+
+    public toAbilitiesMap(): { [name: string]: Skill[] } {
+        let map: { [name: string]: Skill[] } = {};
+        this.forEach(skill => {
+            let list = map[skill.abilityName] || (map[skill.abilityName] = []);
+            list.push(skill);
+        });
+        return map;
+    }
+}
+
+
+export function convertToMap(skills: Skill[]): { [name: string]: Skill[] } {
+    let map: { [name: string]: Skill[] } = {};
+    skills.forEach(skill => {
+        let list = map[skill.abilityName] || (map[skill.abilityName] = []);
+        list.push(skill);
+    });
+    return map;
 }
 
 export interface SkillData {
@@ -39,13 +61,14 @@ interface Definition {
 }
 
 export function loadSkills(abilities: Abilities, skillData: SkillData[] | Skills): Skills {
+    console.log("LoadSkills", abilities, skillData);
     let skillMap: { [name: string]: SkillData } = {};
     skillData.forEach(skill => skillMap[skill.name] = skill);
 
     let skills: Skill[] = Definitions.map((definition: Definition) => {
         let data = skillMap[definition.name];
         const proficiency = data ? data.proficiency : Proficiency.NONE;
-        return new Skill(definition.name, proficiency, abilities[definition.abilityName].modifier, definition.abilityName);
+        return new Skill(definition.name, proficiency, abilities.byName[definition.abilityName].modifier, definition.abilityName);
     });
 
     return new Skills(skills);

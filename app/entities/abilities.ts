@@ -52,33 +52,47 @@ export class Ability {
     public name: string;
     public value: number;
     public modifier: number;
-    public isProficientSavingThrow: boolean;
+    public savingThrows: {
+        isProficient: boolean;
+        modifier: number;
+    }
 
     constructor(
         name: string,
         value: number,
-        isProficientSavingThrow: boolean
+        isProficientSavingThrow: boolean,
+        proficiencyBonus: number
     ) {
         this.name = name;
         this.value = ensureRange(value);
         this.modifier = getAbilityModifier(this.value);
-        this.isProficientSavingThrow = isProficientSavingThrow;
+        this.savingThrows = {
+            isProficient: isProficientSavingThrow,
+            modifier: this.modifier + (isProficientSavingThrow ? proficiencyBonus : 0)
+        };
 
+        Object.freeze(this.savingThrow);
         Object.freeze(this);
     }
 }
 
 export class Abilities extends Array<Ability> {
-    [name: string]: Ability;
+    public byName: { [name: string]: Ability };
     constructor(...abilities: Ability[]) {
-        super(...abilities);
-        abilities.forEach(ability => this[ability.name] = ability);
+        super();
+        this.push(...abilities);
+        console.log("Abilities constructor args", abilities);
+        this.byName = {};
+        abilities.forEach(ability => this.byName[ability.name] = ability);
+        Object.freeze(this.byName);
         Object.freeze(this);
+
+        console.log("Created new abilities", this);
     }
 }
 
 export class AbilitiesFactory {
-    public getAbilities(data: AbilityData[]): Abilities {
+    public getAbilities(data: AbilityData[], proficiencyBonus: number): Abilities {
         data = data || [];
         let abilities: { [name: string]: AbilityData } = {};
         data.forEach(ability => {
@@ -88,7 +102,8 @@ export class AbilitiesFactory {
         let create = (name: string): Ability => new Ability(
             name,
             abilities[name] && abilities[name].value || 10,
-            !!(abilities[name] && abilities[name].isProficientSavingThrow)
+            !!(abilities[name] && abilities[name].isProficientSavingThrow),
+            proficiencyBonus
         );
 
         return new Abilities(

@@ -4,5 +4,11 @@
 		<label>{{ ability.name }}</label>
 		<span>{{ ability.value }}</span>
 		<span>({{ ability.modifier | modifier }})</span>
+		<ul>
+			<li>Saving Throws {{ ability.savingThrows.modifier | modifier }}</li>
+			<li *ngFor="#skill of skills[ability.name]">
+				<span>{{ skill.name }} {{ skill.modifier | modifier }}</span>
+			</li>
+		</ul>
 	</div>
 </div>

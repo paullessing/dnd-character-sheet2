@@ -24,7 +24,7 @@ export class AbilitiesRepository {
 
         this._subject = new Subject();
         this.loadingPromise = this.load().then(abilities => {
-            this._abilities = abilities || [this._abilitiesFactory.getAbilities([])];
+            this._abilities = abilities || [this._abilitiesFactory.getAbilities([], 2)];
             this._notify();
             console.log("Loading promise has resolved with abilities:", this._abilities);
         });
@@ -37,7 +37,7 @@ export class AbilitiesRepository {
     private load(): Promise<Abilities[]> {
         // TODO actually load
         return Promise.resolve([
-            this._abilitiesFactory.getAbilities([])
+            this._abilitiesFactory.getAbilities([], 2)
         ]);
     }
 
