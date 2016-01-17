@@ -69,23 +69,10 @@ export class Ability {
 }
 
 export class Abilities extends Array<Ability> {
-    constructor(
-        public strength: Ability,
-        public dexterity: Ability,
-        public constitution: Ability,
-        public intelligence: Ability,
-        public wisdom: Ability,
-        public charisma: Ability
-    ) {
-        super();
-        this.push(
-            strength,
-            dexterity,
-            constitution,
-            intelligence,
-            wisdom,
-            charisma
-        );
+    [name: string]: Ability;
+    constructor(...abilities: Ability[]) {
+        super(...abilities);
+        abilities.forEach(ability => this[ability.name] = ability);
         Object.freeze(this);
     }
 }
