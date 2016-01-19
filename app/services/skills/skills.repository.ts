@@ -1,5 +1,5 @@
 import {Injectable} from "angular2/core";
-import {Subject, Observable} from "rxjs/Subject";
+import {Subject, Observable} from "rxjs/Rx";
 
 import {Skills, SkillData, loadSkills} from "../../entities/skills";
 import {Abilities} from "../../entities/abilities";

@@ -61,7 +61,7 @@ interface Definition {
 }
 
 export function loadSkills(abilities: Abilities, skillData: SkillData[] | Skills): Skills {
-    console.log("LoadSkills", abilities, skillData);
+    //console.log("LoadSkills", abilities, skillData);
     let skillMap: { [name: string]: SkillData } = {};
     skillData.forEach(skill => skillMap[skill.name] = skill);
 

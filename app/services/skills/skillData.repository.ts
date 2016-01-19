@@ -22,7 +22,7 @@ export class SkillDataRepository {
         this.loadingPromise = this.load().then(skills => {
             this._skills = skills || [];
             this._notify();
-            console.log("Loading promise has resolved with skills:", this._skills);
+            //console.log("SkillDataRepository.construct: Loading promise has resolved with skills:", this._skills);
         });
     }
 

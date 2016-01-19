@@ -71,7 +71,7 @@ export class Ability {
             modifier: this.modifier + (isProficientSavingThrow ? proficiencyBonus : 0)
         };
 
-        Object.freeze(this.savingThrow);
+        Object.freeze(this.savingThrows);
         Object.freeze(this);
     }
 }
@@ -81,13 +81,13 @@ export class Abilities extends Array<Ability> {
     constructor(...abilities: Ability[]) {
         super();
         this.push(...abilities);
-        console.log("Abilities constructor args", abilities);
+        //console.log("Abilities constructor args", abilities);
         this.byName = {};
         abilities.forEach(ability => this.byName[ability.name] = ability);
         Object.freeze(this.byName);
         Object.freeze(this);
 
-        console.log("Created new abilities", this);
+        //console.log("Created new abilities", this);
     }
 }
 

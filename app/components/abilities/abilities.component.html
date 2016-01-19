@@ -4,9 +4,11 @@
 		<label>{{ ability.name }}</label>
 		<span>{{ ability.value }}</span>
 		<span>({{ ability.modifier | modifier }})</span>
-		<ul>
-			<li>Saving Throws {{ ability.savingThrows.modifier | modifier }}</li>
+		<ul style="padding-left: 2rem; font-size: 0.9rem;">
+			<li><input type="checkbox" [ngModel]="ability.savingThrows.isProficient" disabled />
+				Saving Throws {{ ability.savingThrows.modifier | modifier }}</li>
 			<li *ngFor="#skill of skills[ability.name]">
+				<input type="checkbox" [ngModel]="skill.isProficient" disabled />
 				<span>{{ skill.name }} {{ skill.modifier | modifier }}</span>
 			</li>
 		</ul>
