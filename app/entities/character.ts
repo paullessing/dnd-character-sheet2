@@ -50,6 +50,10 @@ export class Character implements ICharacter {
         return getXpRequiredForLevelUp(this.xp);
     }
 
+    public get proficiencyBonus(): number {
+        return Math.floor((this.level - 1) / 4) + 2;
+    }
+
     public equals(that: Character) {
         return this.name === that.name
             && this.characterClass === that.characterClass

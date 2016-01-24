@@ -5,6 +5,7 @@ export class Proficiency {
     static JACK_OF_ALL_TRADES = 'Jack of all Trades';
     static YES = 'Yes';
     static EXPERTISE = 'Expertise';
+    static values = [Proficiency.NONE, Proficiency.JACK_OF_ALL_TRADES, Proficiency.YES, Proficiency.EXPERTISE];
 }
 
 export class Skill {
@@ -30,7 +31,7 @@ export class Skills extends Array<Skill> {
         Object.freeze(this);
     }
 
-    public toAbilitiesMap(): { [name: string]: Skill[] } {
+    public toAbilitiesMap(): { [abilityName: string]: Skill[] } {
         let map: { [name: string]: Skill[] } = {};
         this.forEach(skill => {
             let list = map[skill.abilityName] || (map[skill.abilityName] = []);
@@ -60,7 +61,7 @@ interface Definition {
     abilityName: string;
 }
 
-export function loadSkills(abilities: Abilities, skillData: SkillData[] | Skills): Skills {
+export function loadSkills(abilities: Abilities, skillData: SkillData[] | Skills, proficiencyBonus: number): Skills {
     //console.log("LoadSkills", abilities, skillData);
     let skillMap: { [name: string]: SkillData } = {};
     skillData.forEach(skill => skillMap[skill.name] = skill);
@@ -68,7 +69,16 @@ export function loadSkills(abilities: Abilities, skillData: SkillData[] | Skills
     let skills: Skill[] = Definitions.map((definition: Definition) => {
         let data = skillMap[definition.name];
         const proficiency = data ? data.proficiency : Proficiency.NONE;
-        return new Skill(definition.name, proficiency, abilities.byName[definition.abilityName].modifier, definition.abilityName);
+        let modifier = abilities.byName[definition.abilityName].modifier;
+        if (proficiency === Proficiency.JACK_OF_ALL_TRADES) {
+            modifier += Math.floor(proficiencyBonus / 2);
+        } else if (proficiency === Proficiency.YES) {
+            modifier += proficiencyBonus;
+        } else if (proficiency === Proficiency.EXPERTISE) {
+            modifier += proficiencyBonus * 2;
+        }
+
+        return new Skill(definition.name, proficiency, modifier, definition.abilityName);
     });
 
     return new Skills(skills);
@@ -148,3 +158,16 @@ const Definitions: Definition[] = [
         abilityName: AbilityName.Wisdom
     }
 ];
+
+function generateInitialSkills() {
+    let initialSkills: SkillData[] = Definitions.map(definition => {
+        let data: SkillData = {
+            name: definition.name,
+            proficiency: Proficiency.NONE
+        };
+        return Object.freeze(data);
+    });
+    return Object.freeze(initialSkills);
+}
+
+export const InitialSkills: SkillData[] = generateInitialSkills();

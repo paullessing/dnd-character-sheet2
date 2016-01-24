@@ -12,6 +12,7 @@ export const Names = {
     Intelligence: 'Intelligence',
     Wisdom: 'Wisdom',
     Charisma: 'Charisma',
+    values: ['Strength', 'Dexterity', 'Constitution', 'Intelligence', 'Wisdom', 'Charisma'],
 }
 
 export const AbilityDefinitions: AbilityDefinition[] = [

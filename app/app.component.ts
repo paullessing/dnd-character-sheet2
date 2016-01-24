@@ -12,6 +12,9 @@ import {AbilitiesComponent} from "./components/abilities/abilities.component";
 import {SkillDataRepository} from "./services/skills/skillData.repository";
 import {SkillsRepository} from "./services/skills/skills.repository";
 import {AbilityDataRepository} from "./services/abilities/abilityData.repository";
+import {EditAbilitiesComponent} from "./components/edit-abilities/edit-abilities.component";
+import {AbilitiesActions} from "./services/abilities/abilitiesActions.service";
+import {SkillsActions} from "./services/skills/skillsActions.service";
 
 /**
  * Main app component for the character sheet app.
@@ -23,12 +26,13 @@ import {AbilityDataRepository} from "./services/abilities/abilityData.repository
         PersonalityComponent,
         CharacterComponent,
         AbilitiesComponent,
+        EditAbilitiesComponent,
     ],
     providers: [
         Dispatcher,
         HistoryRepository,
-        AbilityDataRepository, AbilitiesRepository,
-        SkillDataRepository, SkillsRepository,
+        AbilitiesActions, AbilityDataRepository, AbilitiesRepository,
+        SkillsActions, SkillDataRepository, SkillsRepository,
         CharacterActions, CharacterRepository,
         PersonalityActions, PersonalityRepository,
     ]

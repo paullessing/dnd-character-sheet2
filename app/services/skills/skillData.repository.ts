@@ -3,8 +3,9 @@ import {Subscriber, Observable, Subject} from "rxjs/Rx";
 import * as _ from 'underscore';
 
 import {Dispatcher, Event} from "../../common/dispatcher";
-import {Skills, Skill, loadSkills, SkillData} from "../../entities/skills";
+import {Skills, Skill, SkillData} from "../../entities/skills";
 import {SkillsEventType} from "./skillsActions.service";
+import {InitialSkills} from "../../entities/skills";
 
 @Injectable()
 export class SkillDataRepository {
@@ -32,7 +33,7 @@ export class SkillDataRepository {
 
     private load(): Promise<SkillData[][]> {
         // TODO actually load
-        let data: SkillData[] = [];
+        let data: SkillData[] = InitialSkills;
         return Promise.resolve([
             data
         ]);
@@ -46,16 +47,22 @@ export class SkillDataRepository {
         // Avoid weird race condition where we try to push onto the array before the async load has finished
         this.loadingPromise
             .then(() => {
-                let skillsMap = {};
-                data.forEach(skill => skillsMap[skill.name] = skill);
-                let newData = this.currentSkillData.map(skill => {
-                    return skillsMap[skill.name] ? _.extend({}, skill, skillsMap[skill.name]) : skill
-                });
+                let skillsMap = this.skillDataToMap(data);
+                let currentMap = this.skillDataToMap(this.currentSkillData);
+                let newData = InitialSkills.map(skill => _.extend({}, skill, currentMap[skill.name], skillsMap[skill.name]));
+
+                console.log("SkillDataRepository.update", "Updated skills", newData);
 
                 this._skills.push(newData);
                 this.persistUpdate(newData);
                 this._notify();
             });
+    }
+
+    private skillDataToMap(data: SkillData[]): { [skillName: string]: SkillData } {
+        let skillsMap: { [skillName: string]: SkillData } = {};
+        data.forEach(skill => skillsMap[skill.name] = skill);
+        return skillsMap;
     }
 
     private persistUpdate(skills: SkillData[]): void {

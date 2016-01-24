@@ -13,4 +13,6 @@
 			</li>
 		</ul>
 	</div>
+	<button type="button" *ngIf="!isEditing" (click)="edit()">Edit</button>
+	<edit-abilities *ngIf="isEditing" (done)="doneEditing()"></edit-abilities>
 </div>

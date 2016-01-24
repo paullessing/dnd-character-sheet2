@@ -1,0 +1,25 @@
+<h2>Edit Abilities</h2>
+<form *ngIf="abilities" (submit)="save()">
+	<div *ngFor="#ability of abilities">
+		<label>{{ ability.name }}</label>
+		<input [(ngModel)]="ability.value" required />
+		<ul style="padding-left: 2rem; font-size: 0.9rem;">
+			<li>
+				<label>
+					<input type="checkbox" [(ngModel)]="ability.isProficientSavingThrow" />
+					Saving Throws
+				</label>
+			</li>
+			<li *ngFor="#skill of skills[ability.name]">
+				<label>
+					<select [(ngModel)]="skill.proficiency" >
+						<option *ngFor="#proficiency of proficiencies" [value]="proficiency">{{ proficiency }}</option>
+					</select>
+					<span>{{ skill.name }}</span>
+				</label>
+			</li>
+		</ul>
+	</div>
+	<button type="submit">Save</button>
+	<a href="javascript:void(0)" (click)="cancel()">Cancel</a>
+</form>

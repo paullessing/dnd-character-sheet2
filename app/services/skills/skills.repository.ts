@@ -5,19 +5,22 @@ import {Skills, SkillData, loadSkills} from "../../entities/skills";
 import {Abilities} from "../../entities/abilities";
 import {SkillDataRepository} from "./skillData.repository";
 import {AbilitiesRepository} from "../abilities/abilities.repository";
+import {CharacterRepository} from "../character/character.repository";
 
 @Injectable()
 export class SkillsRepository {
 
     private _lastAbilities: Abilities;
     private _lastSkillData: SkillData[];
+    private _lastProficiencyBonus: number = null;
 
     private _currentSkills: Skills;
     private _subject: Subject<Skills>;
 
     constructor(
         private _skillDataRepository: SkillDataRepository,
-        private _abilitiesRepository: AbilitiesRepository
+        private _abilitiesRepository: AbilitiesRepository,
+        private _characterRepository: CharacterRepository
     ) {
         this._subject = new Subject();
 
@@ -29,6 +32,10 @@ export class SkillsRepository {
             this._lastAbilities = abilities;
             this.pushUpdate();
         });
+        this._characterRepository.observable.subscribe(character => {
+            this._lastProficiencyBonus = character.proficiencyBonus;
+            this.pushUpdate();
+        })
 
         this._lastAbilities = this._abilitiesRepository.currentAbilities;
         this._lastSkillData = this._skillDataRepository.currentSkillData;
@@ -40,10 +47,13 @@ export class SkillsRepository {
     }
 
     private pushUpdate(): void {
-        if (!this._lastAbilities || !this._lastAbilities.length || !this._lastSkillData) {
+        console.log("SkillsRepository.pushUpdate");
+        if (!this._lastAbilities || !this._lastAbilities.length || !this._lastSkillData || this._lastProficiencyBonus === null) {
             return;
         }
-        this._currentSkills = loadSkills(this._lastAbilities, this._lastSkillData);
+        console.log("SkillsRepository.pushUpdate", "Data", this._lastAbilities, this._lastSkillData);
+        this._currentSkills = loadSkills(this._lastAbilities, this._lastSkillData, this._lastProficiencyBonus);
+        console.log("SkillsRepository.pushUpdate", "Current skills", this._currentSkills);
         this._subject.next(this._currentSkills);
     }
 
