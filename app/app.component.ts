@@ -15,6 +15,7 @@ import {AbilityDataRepository} from "./services/abilities/abilityData.repository
 import {EditAbilitiesComponent} from "./components/edit-abilities/edit-abilities.component";
 import {AbilitiesActions} from "./services/abilities/abilitiesActions.service";
 import {SkillsActions} from "./services/skills/skillsActions.service";
+import {StorageService} from "./services/storage/storage.service";
 
 /**
  * Main app component for the character sheet app.
@@ -35,6 +36,7 @@ import {SkillsActions} from "./services/skills/skillsActions.service";
         SkillsActions, SkillDataRepository, SkillsRepository,
         CharacterActions, CharacterRepository,
         PersonalityActions, PersonalityRepository,
+        StorageService,
     ]
 })
 export class AppComponent {
