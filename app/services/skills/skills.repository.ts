@@ -35,10 +35,14 @@ export class SkillsRepository {
         this._characterRepository.observable.subscribe(character => {
             this._lastProficiencyBonus = character.proficiencyBonus;
             this.pushUpdate();
-        })
+        });
 
         this._lastAbilities = this._abilitiesRepository.currentAbilities;
         this._lastSkillData = this._skillDataRepository.currentSkillData;
+        let character = this._characterRepository.currentCharacter;
+        if (character) {
+            this._lastProficiencyBonus = character.proficiencyBonus;
+        }
         this.pushUpdate();
     }
 
@@ -47,13 +51,12 @@ export class SkillsRepository {
     }
 
     private pushUpdate(): void {
-        console.log("SkillsRepository.pushUpdate");
-        if (!this._lastAbilities || !this._lastAbilities.length || !this._lastSkillData || this._lastProficiencyBonus === null) {
+        if (!this._lastAbilities || !this._lastAbilities.length ||
+            !this._lastSkillData ||
+            this._lastProficiencyBonus === null) {
             return;
         }
-        console.log("SkillsRepository.pushUpdate", "Data", this._lastAbilities, this._lastSkillData);
         this._currentSkills = loadSkills(this._lastAbilities, this._lastSkillData, this._lastProficiencyBonus);
-        console.log("SkillsRepository.pushUpdate", "Current skills", this._currentSkills);
         this._subject.next(this._currentSkills);
     }
 
