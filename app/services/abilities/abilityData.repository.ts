@@ -5,22 +5,26 @@ import * as _ from 'underscore';
 import {Dispatcher, Event} from "../../common/dispatcher";
 import {AbilityData} from "../../entities/abilities";
 import {AbilitiesEventType, AbilitiesDiff} from "./abilitiesActions.service";
+import {StorageService} from "../storage/storage.service";
+
+export const STORAGE_KEY = 'abilities';
 
 @Injectable()
 export class AbilityDataRepository {
-    private _abilityDatas: AbilityData[][];
+    private _abilityData: AbilityData[];
     private _subject: Subject<AbilityData[]>;
 
     private loadingPromise: Promise<void>;
 
     constructor(
-        private _dispatcher: Dispatcher
+        private _dispatcher: Dispatcher,
+        private _storageService: StorageService
     ) {
         this._dispatcher.subscribe(AbilitiesEventType.UPDATE, (data: AbilitiesDiff) => this.update(data));
 
         this._subject = new Subject();
-        this.loadingPromise = this.load().then(abilityDatas => {
-            this._abilityDatas = abilityDatas || [];
+        this.loadingPromise = this.load().then((abilityData: AbilityData[]) => {
+            this._abilityData = abilityData || [];
             this._notify();
             //console.log("AbilityDataRepository.construct", "Loading promise has resolved with abilityDatas:", this._abilityDatas);
         });
@@ -30,7 +34,7 @@ export class AbilityDataRepository {
         this._subject.next(this.currentAbilityData);
     }
 
-    private load(): Promise<AbilityData[][]> {
+    private load(): Promise<AbilityData[]> {
         // TODO actually load
         let data: AbilityData[] = [
             {
@@ -64,9 +68,9 @@ export class AbilityDataRepository {
                 isProficientSavingThrow: false
             }
         ];
-        return Promise.resolve([
-            data
-        ]);
+        return Promise.resolve(
+            this._storageService.get(STORAGE_KEY) || data
+        );
     }
 
     public get observable(): Observable<AbilityData[]> {
@@ -81,25 +85,21 @@ export class AbilityDataRepository {
                     return diff[abilityData.name] ? _.extend({}, abilityData, diff[abilityData.name]) : abilityData;
                 });
 
-                this._abilityDatas.push(newData);
+                this._abilityData = newData;
                 this.persistUpdate(newData);
                 this._notify();
             });
     }
 
-    private persistUpdate(skills: AbilityData[]): void {
-        // TODO implement, probably async
+    private persistUpdate(abilityData: AbilityData[]): void {
+        this._storageService.set(STORAGE_KEY, abilityData);
     }
 
     /**
      * Returns the current abilities value. Might be null if the value is lazy-loaded.
-     * @returns {Skills|null}
+     * @returns {AbilityData[]|null}
      */
     public get currentAbilityData(): AbilityData[] {
-        if (!this._abilityDatas || !this._abilityDatas.length) {
-            return null;
-        } else {
-            return this._abilityDatas[this._abilityDatas.length - 1];
-        }
+        return this._abilityData;
     }
 }

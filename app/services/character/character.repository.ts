@@ -7,23 +7,29 @@ import {ICharacter, Character} from "../../entities/character";
 import {CharacterEventType, UpdateXpDetails} from "./characterActions.service";
 import {Alignment} from "../../entities/alignments";
 import {Class} from "../../entities/classes";
+import {StorageService} from "../storage/storage.service";
+
+export const STORAGE_KEY = 'character';
 
 @Injectable()
 export class CharacterRepository {
-    private _characters: Character[];
+    private _character: Character;
     private _subject: Subject<Character>;
 
     private loadingPromise: Promise<void>;
 
-    constructor(private _dispatcher: Dispatcher) {
+    constructor(
+        private _dispatcher: Dispatcher,
+        private _storageService: StorageService
+    ) {
         this._dispatcher.subscribe(CharacterEventType.UPDATE, (character: ICharacter) => this.onUpdate(character));
         this._dispatcher.subscribe(CharacterEventType.ADD_XP, (xpUpdate: UpdateXpDetails) => this.onAddXp(xpUpdate));
 
         this._subject = new Subject();
-        this.loadingPromise = this.load().then(characters => {
-            this._characters = characters || [new Character({})];
+        this.loadingPromise = this.load().then((character: Character) => {
+            this._character = character || new Character({});
             this._notify();
-            console.log("Loading promise has resolved with characters:", this._characters);
+            console.log("Loading promise has resolved with character:", this._character);
         });
     }
 
@@ -32,9 +38,9 @@ export class CharacterRepository {
         this._subject.next(character);
     }
 
-    private load(): Promise<Character[]> {
+    private load(): Promise<Character> {
         // TODO actually load
-        return Promise.resolve([new Character({
+        return Promise.resolve(new Character(this._storageService.get(STORAGE_KEY) || {
             name: "Aragorn",
             characterClass: Class.Ranger,
             background: "Noble",
@@ -42,7 +48,7 @@ export class CharacterRepository {
             race: "Human",
             alignment: Alignment.LawfulGood,
             xp: 10000
-        })]);
+        }));
     }
 
     public get observable(): Observable<Character> {
@@ -50,7 +56,7 @@ export class CharacterRepository {
     }
 
     private onUpdate(data: ICharacter): void {
-        var character = new Character(data);
+        let character = new Character(data);
         this.update(character);
     }
 
@@ -61,16 +67,16 @@ export class CharacterRepository {
                 if (this.currentCharacter && this.currentCharacter.equals(character)) {
                     return;
                 }
-                this._characters.push(character);
+                this._character = character;
                 this.persistUpdate(character);
                 this._subject.next(character);
 
-                console.log("Personalities:", this._characters);
+                console.log("Personalities:", this._character);
             });
     }
 
     private onAddXp(data: UpdateXpDetails) {
-        var character = this.editCharacter(this.currentCharacter, { xp: this.currentCharacter.xp + data.amount});
+        let character = this.editCharacter(this.currentCharacter, { xp: this.currentCharacter.xp + data.amount});
         this.update(character);
     }
 
@@ -87,18 +93,14 @@ export class CharacterRepository {
     }
 
     private persistUpdate(character: Character): void {
-        // TODO implement, probably async
+        this._storageService.set(STORAGE_KEY, character.getData());
     }
 
     /**
      * Returns the current personality value. Might be null if the value is lazy-loaded.
-     * @returns {Personality|null}
+     * @returns {Character|null}
      */
     public get currentCharacter(): Character {
-        if (!this._characters || !this._characters.length) {
-            return null;
-        } else {
-            return this._characters[this._characters.length - 1];
-        }
+        return this._character;
     }
 }

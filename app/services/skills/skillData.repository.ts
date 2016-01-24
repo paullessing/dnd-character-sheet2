@@ -6,21 +6,25 @@ import {Dispatcher, Event} from "../../common/dispatcher";
 import {Skills, Skill, SkillData} from "../../entities/skills";
 import {SkillsEventType} from "./skillsActions.service";
 import {InitialSkills} from "../../entities/skills";
+import {StorageService} from "../storage/storage.service";
+
+export const STORAGE_KEY = 'skills';
 
 @Injectable()
 export class SkillDataRepository {
-    private _skills: SkillData[][];
+    private _skills: SkillData[];
     private _subject: Subject<SkillData[]>;
 
     private loadingPromise: Promise<void>;
 
     constructor(
-        private _dispatcher: Dispatcher
+        private _dispatcher: Dispatcher,
+        private _storageService: StorageService
     ) {
         this._dispatcher.subscribe(SkillsEventType.UPDATE, (data: SkillData[]) => this.update(data));
 
         this._subject = new Subject();
-        this.loadingPromise = this.load().then(skills => {
+        this.loadingPromise = this.load().then((skills: SkillData[]) => {
             this._skills = skills || [];
             this._notify();
             //console.log("SkillDataRepository.construct: Loading promise has resolved with skills:", this._skills);
@@ -31,12 +35,11 @@ export class SkillDataRepository {
         this._subject.next(this.currentSkillData);
     }
 
-    private load(): Promise<SkillData[][]> {
+    private load(): Promise<SkillData[]> {
         // TODO actually load
-        let data: SkillData[] = InitialSkills;
-        return Promise.resolve([
-            data
-        ]);
+        return Promise.resolve(
+            this._storageService.get(STORAGE_KEY) || InitialSkills
+        );
     }
 
     public get observable(): Observable<SkillData[]> {
@@ -53,7 +56,7 @@ export class SkillDataRepository {
 
                 console.log("SkillDataRepository.update", "Updated skills", newData);
 
-                this._skills.push(newData);
+                this._skills = newData;
                 this.persistUpdate(newData);
                 this._notify();
             });
@@ -66,7 +69,7 @@ export class SkillDataRepository {
     }
 
     private persistUpdate(skills: SkillData[]): void {
-        // TODO implement, probably async
+        this._storageService.set(STORAGE_KEY, skills);
     }
 
     /**
@@ -74,10 +77,6 @@ export class SkillDataRepository {
      * @returns {Skills|null}
      */
     public get currentSkillData(): SkillData[] {
-        if (!this._skills || !this._skills.length) {
-            return null;
-        } else {
-            return this._skills[this._skills.length - 1];
-        }
+        return this._skills;
     }
 }

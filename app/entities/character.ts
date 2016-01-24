@@ -63,6 +63,18 @@ export class Character implements ICharacter {
             && this.alignment === that.alignment
             && this.xp === that.xp;
     }
+
+    public getData(): ICharacter {
+        return {
+            name: this.name,
+            characterClass: this.characterClass,
+            background: this.background,
+            playerName: this.playerName,
+            race: this.race,
+            alignment: this.alignment,
+            xp: this.xp
+        };
+    }
 }
 
 var xpToLevel = [
