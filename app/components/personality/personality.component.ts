@@ -7,7 +7,6 @@ import {PersonalityRepository} from "../../services/personality/personality.repo
  * Component showing personality traits, motivation etc.
  */
 @Component({
-    selector: 'personality',
     templateUrl: 'app/components/personality/personality.component.html'
 })
 export class PersonalityComponent implements OnInit {

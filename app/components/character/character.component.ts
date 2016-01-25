@@ -10,7 +10,6 @@ import {CharacterRepository} from "../../services/character/character.repository
  * Component showing basic character details.
  */
 @Component({
-    selector: 'character',
     templateUrl: 'app/components/character/character.component.html'
 })
 export class CharacterComponent implements OnInit{

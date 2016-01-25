@@ -1,4 +1,5 @@
 import {Component, OnInit} from 'angular2/core';
+import {Router} from "angular2/router";
 
 import {AbilitiesRepository} from "../../services/abilities/abilities.repository";
 import {Abilities} from "../../entities/abilities";
@@ -11,7 +12,6 @@ import {EditAbilitiesComponent} from "../edit-abilities/edit-abilities.component
  * Component showing basic character details.
  */
 @Component({
-    selector: 'abilities',
     templateUrl: 'app/components/abilities/abilities.component.html',
     pipes: [ModifierPipe],
     directives: [EditAbilitiesComponent]
@@ -20,11 +20,10 @@ export class AbilitiesComponent implements OnInit{
     public abilities: Abilities;
     public skills: { [name: string]: Skill[] };
 
-    public isEditing: boolean = false;
-
     constructor(
         private _abilitiesRepository: AbilitiesRepository,
-        private _skillsRepository: SkillsRepository
+        private _skillsRepository: SkillsRepository,
+        private _router: Router
     ) {
     }
 
@@ -43,10 +42,6 @@ export class AbilitiesComponent implements OnInit{
     }
 
     public edit() {
-        this.isEditing = true;
-    }
-
-    public doneEditing() {
-        this.isEditing = false;
+        this._router.navigate(['EditAbilities']);
     }
 }

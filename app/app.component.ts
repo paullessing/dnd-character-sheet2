@@ -1,4 +1,5 @@
 import {Component} from 'angular2/core';
+import {RouteConfig, ROUTER_DIRECTIVES} from "angular2/router";
 import {Dispatcher} from "./common/dispatcher";
 import {CharacterComponent} from "./components/character/character.component";
 import {PersonalityActions} from "./services/personality/personalityActions.service";
@@ -24,6 +25,7 @@ import {StorageService} from "./services/storage/storage.service";
     selector: 'character-sheet',
     templateUrl: 'app/app.component.html',
     directives: [
+        ROUTER_DIRECTIVES,
         PersonalityComponent,
         CharacterComponent,
         AbilitiesComponent,
@@ -39,8 +41,16 @@ import {StorageService} from "./services/storage/storage.service";
         StorageService,
     ]
 })
+@RouteConfig([
+    {path: '/character',            name: 'Character',          component: CharacterComponent, useAsDefault: true},
+    {path: '/abilities',            name: 'Abilities',          component: AbilitiesComponent},
+    {path: '/abilities/edit',       name: 'EditAbilities',      component: EditAbilitiesComponent},
+    {path: '/personality',          name: 'Personality',        component: PersonalityComponent},
+])
 export class AppComponent {
-    constructor(historyRepo: HistoryRepository) {
+    constructor(
+        historyRepo: HistoryRepository
+    ) {
         // Must construct to ensure HistoryRepo gets created. TODO investigate
     }
 }

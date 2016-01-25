@@ -1,4 +1,6 @@
 import {Component, OnInit, EventEmitter} from 'angular2/core';
+import {Router} from "angular2/router";
+
 import {Names as AbilityNames} from "../../entities/abilities";
 import {Skill, SkillData} from "../../entities/skills";
 
@@ -14,9 +16,7 @@ import {Proficiency} from "../../entities/skills";
  * Component showing basic character details.
  */
 @Component({
-    selector: 'edit-abilities',
-    templateUrl: 'app/components/edit-abilities/edit-abilities.component.html',
-    outputs: ['done']
+    templateUrl: 'app/components/edit-abilities/edit-abilities.component.html'
 })
 export class EditAbilitiesComponent implements OnInit {
 
@@ -28,14 +28,14 @@ export class EditAbilitiesComponent implements OnInit {
     public skills: {
         [abilityName: string]: SkillData[]
     };
-    public done = new EventEmitter<void>();
     public proficiencies = Proficiency.values;
 
     constructor(
         private _abilitiesRepository: AbilitiesRepository,
         private _skillsRepository: SkillsRepository,
         private _abilitiesActions: AbilitiesActions,
-        private _skillsActions: SkillsActions
+        private _skillsActions: SkillsActions,
+        private _router: Router
     ) {
     }
 
@@ -69,10 +69,10 @@ export class EditAbilitiesComponent implements OnInit {
         });
         this._abilitiesActions.update(abilities);
         this._skillsActions.update(_.flatten(_.toArray(this.skills), true));
-        this.done.emit(null);
+        this._router.navigate(['Abilities']);
     }
 
     public cancel() {
-        this.done.emit(null);
+        this._router.navigate(['Abilities']);
     }
 }
