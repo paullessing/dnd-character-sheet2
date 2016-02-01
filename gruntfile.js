@@ -3,6 +3,8 @@ var historyApiFallback = require('connect-history-api-fallback');
 
 module.exports = function(grunt) {
 
+  require('load-grunt-tasks')(grunt);
+
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     copy: {
@@ -17,12 +19,26 @@ module.exports = function(grunt) {
       }
     },
     watch: {
-      newer: {
-        files: ['app/**/*'],
+      staticFiles: {
+        files: ['app/**/*', 'index.html', 'style/**/*'],
         tasks: ['newer:copy:main'],
         options: {
           livereload: 30000
         }
+      },
+      ts: {
+        files: ['app/**/*.ts'],
+        tasks: ['ts:app'],
+        options: {
+          livereload: 30000,
+          fast: 'always'
+        }
+      }
+    },
+    ts: {
+      app: {
+        tsconfig: true,
+        reference: 'typings/tsd.d.ts'
       }
     },
     connect: {
@@ -50,11 +66,6 @@ module.exports = function(grunt) {
       }
     }
   });
-
-  grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-contrib-connect');
-  grunt.loadNpmTasks('grunt-newer');
 
   grunt.registerTask('default', ['jshint', 'qunit', 'concat', 'uglify']);
 

@@ -3,14 +3,16 @@
         "target": "es5",
         "module": "system",
         "moduleResolution": "node",
-        "rootDir": "app",
+        "outDir": "dist",
         "sourceMap": true,
+        "sourceRoot": ".",
         "noImplicitAny": false,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "removeComments": false
     },
     "exclude": [
-        "node_modules"
+        "node_modules",
+        "dist"
     ]
 }
