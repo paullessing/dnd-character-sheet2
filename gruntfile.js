@@ -67,8 +67,5 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask('default', ['jshint', 'qunit', 'concat', 'uglify']);
-
-  grunt.registerTask('serve', ['copy', 'connect:dev', 'watch']);
-
+  grunt.registerTask('serve', ['copy', 'ts', 'connect:dev', 'watch']);
 };
