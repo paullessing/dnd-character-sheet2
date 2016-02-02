@@ -7,6 +7,9 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
+    clean: {
+      dist: ['dist/**/*' ,'dist/**/.*']
+    },
     copy: {
       main: {
         files: [
@@ -30,8 +33,7 @@ module.exports = function(grunt) {
         files: ['app/**/*.ts'],
         tasks: ['ts:app'],
         options: {
-          livereload: 30000,
-          fast: 'always'
+          livereload: 30000
         }
       }
     },
@@ -49,7 +51,6 @@ module.exports = function(grunt) {
           base: 'dist',
           useAvailablePort: true,
           livereload: 30000,
-          open: true,
           middleware: function(connect, options, middlewares) {
             return [
               historyApiFallback()
@@ -67,5 +68,5 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask('serve', ['copy', 'ts', 'connect:dev', 'watch']);
+  grunt.registerTask('serve', ['clean', 'copy', 'ts', 'connect:dev', 'watch']);
 };

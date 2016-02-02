@@ -17,6 +17,7 @@ import {EditAbilitiesComponent} from "./components/edit-abilities/edit-abilities
 import {AbilitiesActions} from "./services/abilities/abilitiesActions.service";
 import {SkillsActions} from "./services/skills/skillsActions.service";
 import {StorageService} from "./services/storage/storage.service";
+import {InventoryComponent} from "./components/inventory/inventory.component";
 
 /**
  * Main app component for the character sheet app.
@@ -46,6 +47,7 @@ import {StorageService} from "./services/storage/storage.service";
     {path: '/abilities',            name: 'Abilities',          component: AbilitiesComponent},
     {path: '/abilities/edit',       name: 'EditAbilities',      component: EditAbilitiesComponent},
     {path: '/personality',          name: 'Personality',        component: PersonalityComponent},
+    {path: '/inventory',            name: 'Inventory',          component: InventoryComponent},
 ])
 export class AppComponent {
     constructor(
