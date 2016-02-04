@@ -1,47 +1,42 @@
-export interface IItem {
+export interface ItemTemplate {
     name: string;
     weight?: number; // In lbs
     cost?: number; // In cp
     description?: string;
     modifiers?: any[];
-    isCustom?: boolean;
 }
 
-export class Item implements IItem {
+export interface IItem {
+    name: string;
+    quantity: number;
+    weight?: number; // In lbs
+    cost?: number; // In cp
+    description?: string;
+    modifiers?: any[];
+    modifications?: string;
+}
+
+export class Item {
     public name: string;
+    public quantity: number;
     public weight: number;
     public cost: number;
     public description: string;
     public modifiers: any[];
-    public isCustom: boolean;
+    public modifications: string;
 
     constructor(data: IItem) {
+        if (!data.name) {
+            throw new Error('Item must have a name!');
+        }
         this.name = data.name;
+        this.quantity = data.quantity || 1;
         this.weight = data.weight || null;
         this.cost = data.cost || null;
         this.description = data.description;
         this.modifiers = data.modifiers || [];
-        this.isCustom = typeof data.isCustom === 'undefined' || !!data.isCustom;
-        Object.freeze(this.modifiers);
-        Object.freeze(this);
-    }
-}
-
-export interface IOwnedItem {
-    item: IItem;
-    quantity: number;
-    modifications?: string;
-}
-
-export class OwnedItem {
-    public item: Item;
-    public quantity: number;
-    public modifications: string;
-
-    constructor(data: IOwnedItem) {
-        this.item = new Item(data.item);
-        this.quantity = data.quantity || 1;
         this.modifications = data.modifications;
+        Object.freeze(this.modifiers);
         Object.freeze(this);
     }
 }
@@ -56,14 +51,11 @@ interface DamageDice {
     size: number;
 }
 
-const IITEMS: IItem[] = [
+export const ITEM_TEMPLATES: ItemTemplate[] = Object.freeze([
     {
         name: 'Ball Bearings (bag of 1000)',
         weight: 2,
         cost: 2,
-        description: 'Can be spread in a 10ft square. Any creature entering this area must make a DC13 Dexterity check or fall prone.',
-        isCustom: false
+        description: 'Can be spread in a 10ft square. Any creature entering this area must make a DC13 Dexterity check or fall prone.'
     }
-];
-
-export const ITEMS = IITEMS.map(item => new Item(item));
+]);

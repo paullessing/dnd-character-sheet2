@@ -1,0 +1,41 @@
+<form (submit)="submit()">
+	<p>
+		<label>
+			Name
+			<input [(ngModel)]="item.name" placeholder=""/>
+		</label>
+	</p>
+	<p>
+		<label>
+			Weight (lb)
+			<input [(ngModel)]="item.weight" type="number" min="0" step="0.5" />
+		</label>
+	</p>
+	<p>
+		<label>
+			Cost (cp)
+			<input [(ngModel)]="item.cost" type="number" min="1" step="1" />
+		</label>
+	</p>
+	<p>
+		<label>
+			Description
+			<textarea [(ngModel)]="item.description"></textarea>
+		</label>
+	</p>
+
+	<p>
+		<label>
+			Quantity
+			<input [(ngModel)]="item.quantity" type="number" min="1" step="1" />
+		</label>
+	</p>
+	<p>
+		<label>
+			Modifications
+			<textarea [(ngModel)]="item.modifications"></textarea>
+		</label>
+	</p>
+
+	<button type="submit">Create item</button>
+</form>

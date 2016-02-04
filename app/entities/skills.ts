@@ -61,29 +61,6 @@ interface Definition {
     abilityName: string;
 }
 
-export function loadSkills(abilities: Abilities, skillData: SkillData[] | Skills, proficiencyBonus: number): Skills {
-    //console.log("LoadSkills", abilities, skillData);
-    let skillMap: { [name: string]: SkillData } = {};
-    skillData.forEach(skill => skillMap[skill.name] = skill);
-
-    let skills: Skill[] = Definitions.map((definition: Definition) => {
-        let data = skillMap[definition.name];
-        const proficiency = data ? data.proficiency : Proficiency.NONE;
-        let modifier = abilities.byName[definition.abilityName].modifier;
-        if (proficiency === Proficiency.JACK_OF_ALL_TRADES) {
-            modifier += Math.floor(proficiencyBonus / 2);
-        } else if (proficiency === Proficiency.YES) {
-            modifier += proficiencyBonus;
-        } else if (proficiency === Proficiency.EXPERTISE) {
-            modifier += proficiencyBonus * 2;
-        }
-
-        return new Skill(definition.name, proficiency, modifier, definition.abilityName);
-    });
-
-    return new Skills(skills);
-}
-
 const Definitions: Definition[] = [
     {
         name: 'Acrobatics',
@@ -158,6 +135,29 @@ const Definitions: Definition[] = [
         abilityName: AbilityName.Wisdom
     }
 ];
+
+export function loadSkills(abilities: Abilities, skillData: SkillData[] | Skills, proficiencyBonus: number): Skills {
+    //console.log("LoadSkills", abilities, skillData);
+    let skillMap: { [name: string]: SkillData } = {};
+    skillData.forEach(skill => skillMap[skill.name] = skill);
+
+    let skills: Skill[] = Definitions.map((definition: Definition) => {
+        let data = skillMap[definition.name];
+        const proficiency = data ? data.proficiency : Proficiency.NONE;
+        let modifier = abilities.byName[definition.abilityName].modifier;
+        if (proficiency === Proficiency.JACK_OF_ALL_TRADES) {
+            modifier += Math.floor(proficiencyBonus / 2);
+        } else if (proficiency === Proficiency.YES) {
+            modifier += proficiencyBonus;
+        } else if (proficiency === Proficiency.EXPERTISE) {
+            modifier += proficiencyBonus * 2;
+        }
+
+        return new Skill(definition.name, proficiency, modifier, definition.abilityName);
+    });
+
+    return new Skills(skills);
+}
 
 function generateInitialSkills() {
     let initialSkills: SkillData[] = Definitions.map(definition => {

@@ -1,6 +1,7 @@
 <h2>Inventory</h2>
 <ul>
-	<li *ngFor="#ownedItem of items">
-		{{ ownedItem.item.name }} &times; {{ ownedItem.quantity }}
+	<li *ngFor="#item of items">
+		{{ item.name }} &times; {{ item.quantity }}
 	</li>
+	<edit-item [item]="newItem" (update)="onNewItem($event)"></edit-item>
 </ul>

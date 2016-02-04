@@ -29,12 +29,31 @@ module.exports = function(grunt) {
           livereload: 30000
         }
       },
-      ts: {
-        files: ['app/**/*.ts'],
-        tasks: ['ts:app'],
+      compiledjs: {
+        files: ['dist/**/*.js'],
         options: {
           livereload: 30000
         }
+      }
+      //ts: {
+      //  files: ['app/**/*.ts'],
+      //  tasks: ['ts:app'],
+      //  options: {
+      //    livereload: 30000
+      //  }
+      //}
+    },
+    run: {
+      tswait: {
+        cmd: 'tsc',
+        //args: ['--listFiles']
+      },
+      ts: {
+        options: {
+          wait: false
+        },
+        cmd: 'tsc',
+        args: ['-w']
       }
     },
     ts: {
@@ -68,5 +87,5 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask('serve', ['clean', 'copy', 'ts', 'connect:dev', 'watch']);
+  grunt.registerTask('serve', ['clean', 'copy', 'run:tswait', 'connect:dev', 'run:ts', 'watch']);
 };

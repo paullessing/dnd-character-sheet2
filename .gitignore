@@ -29,6 +29,7 @@ typings
 
 # IntelliJ files
 .idea
+.vscode
 
 app/**/*.js
 app/**/*.js.map
