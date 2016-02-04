@@ -9,7 +9,6 @@ import {AbilityDiff, AbilitiesDiff, AbilitiesActions} from "../../services/abili
 
 import {SkillsRepository} from "../../services/skills/skills.repository";
 import {SkillsActions} from "../../services/skills/skillsActions.service";
-import {} from "../../services/abilities/abilitiesActions.service";
 import {Proficiency} from "../../entities/skills";
 
 /**

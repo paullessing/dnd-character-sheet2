@@ -3,7 +3,6 @@ import {Router} from "angular2/router";
 
 import {AbilitiesRepository} from "../../services/abilities/abilities.repository";
 import {Abilities} from "../../entities/abilities";
-import {ModifierPipe} from "../../common/modifier.pipe";
 import {Skill} from "../../entities/skills";
 import {SkillsRepository} from "../../services/skills/skills.repository";
 import {EditAbilitiesComponent} from "../edit-abilities/edit-abilities.component";
@@ -13,7 +12,6 @@ import {EditAbilitiesComponent} from "../edit-abilities/edit-abilities.component
  */
 @Component({
     templateUrl: 'app/components/abilities/abilities.component.html',
-    pipes: [ModifierPipe],
     directives: [EditAbilitiesComponent]
 })
 export class AbilitiesComponent implements OnInit{

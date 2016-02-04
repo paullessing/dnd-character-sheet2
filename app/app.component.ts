@@ -18,6 +18,8 @@ import {AbilitiesActions} from "./services/abilities/abilitiesActions.service";
 import {SkillsActions} from "./services/skills/skillsActions.service";
 import {StorageService} from "./services/storage/storage.service";
 import {InventoryComponent} from "./components/inventory/inventory.component";
+import {ModifierPipe} from "./common/modifier.pipe";
+import {CurrencyPipe} from "./common/currency.pipe";
 
 /**
  * Main app component for the character sheet app.
@@ -25,6 +27,10 @@ import {InventoryComponent} from "./components/inventory/inventory.component";
 @Component({
     selector: 'character-sheet',
     templateUrl: 'app/app.component.html',
+    pipes: [
+        ModifierPipe,
+        CurrencyPipe,
+    ],
     directives: [
         ROUTER_DIRECTIVES,
         PersonalityComponent,

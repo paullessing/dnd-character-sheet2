@@ -5,7 +5,7 @@ import {Item} from "../../entities/item";
 import {EditItemComponent} from "../edit-item/edit-item.component";
 
 /**
- * Component showing personality traits, motivation etc.
+ * Component showing the character's inventory.
  */
 @Component({
     templateUrl: 'app/components/inventory/inventory.component.html',
@@ -29,7 +29,6 @@ export class InventoryComponent implements OnInit {
     }
 
     public onNewItem(item: Item) {
-        console.log("New Item", item);
         this.items.push(item);
         this.newItem = null;
     }

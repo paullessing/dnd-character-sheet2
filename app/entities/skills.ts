@@ -136,7 +136,7 @@ const Definitions: Definition[] = [
     }
 ];
 
-export function loadSkills(abilities: Abilities, skillData: SkillData[] | Skills, proficiencyBonus: number): Skills {
+export function loadSkills(abilities: Abilities, skillData: SkillData[], proficiencyBonus: number): Skills {
     //console.log("LoadSkills", abilities, skillData);
     let skillMap: { [name: string]: SkillData } = {};
     skillData.forEach(skill => skillMap[skill.name] = skill);
