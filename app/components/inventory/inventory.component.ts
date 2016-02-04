@@ -3,13 +3,14 @@ import {BehaviorSubject, Subject} from "rxjs/Rx";
 
 import {Item} from "../../entities/item";
 import {EditItemComponent} from "../edit-item/edit-item.component";
+import {InventoryEntryComponent} from "./inventory-entry.component";
 
 /**
  * Component showing the character's inventory.
  */
 @Component({
     templateUrl: 'app/components/inventory/inventory.component.html',
-    directives: [EditItemComponent]
+    directives: [EditItemComponent, InventoryEntryComponent]
 })
 export class InventoryComponent implements OnInit {
 
@@ -22,9 +23,9 @@ export class InventoryComponent implements OnInit {
 
     ngOnInit() {
         this.items = [
-            new Item({ name: 'Magic Ring of Ringness', quantity: 1 }),
-            new Item({ name: 'Backpack', quantity: 1 }),
-            new Item({ name: 'Torch', quantity: 7 })
+            new Item({ name: 'Magic Ring of Ringness', quantity: 1, weight: 0, cost: 150000 }),
+            new Item({ name: 'Backpack', quantity: 1, weight: 5, cost: 200 }),
+            new Item({ name: 'Torch', quantity: 7, weight: 1, cost: 50 })
         ];
     }
 

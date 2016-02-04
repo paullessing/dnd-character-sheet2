@@ -35,7 +35,7 @@ export class CurrencyPipe implements PipeTransform {
         if (isNaN(parsedValue) || parsedValue === 0) {
             return '—';
         }
-        let values = convertToAmount(parsedValue);
+        let values = convertToAmount(parsedValue, false);
         let array = toArray(values);
         let present = getPresence(values);
         let smallest = present.indexOf(true);

@@ -1,0 +1,10 @@
+<div>
+	<span>{{ item.name }}</span><span [hidden]="item.quantity <= 1"> ({{ item.quantity }})</span>
+	<div [hidden]="!isExpanded">
+		<p *ngIf="item.description" style="font-style: italic">{{ item.description }}</p>
+		<p>Cost: {{ item.cost | currency }}</p>
+		<p>Weight: {{ item.weight }}lb</p>
+		<p *ngIf="item.modifications" style="font-style: italic">{{ item.modifications }}</p>
+	</div>
+	<a href="javascript:void(0)" (click)="toggle()">&hellip;</a>
+</div>
