@@ -9,7 +9,7 @@ import {SkillsRepository} from "../../services/skills/skills.repository";
 import {EditAbilitiesComponent} from "../edit-abilities/edit-abilities.component";
 
 /**
- * Component showing basic character details.
+ * Component showing character abilities.
  */
 @Component({
     templateUrl: 'app/components/abilities/abilities.component.html',

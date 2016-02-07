@@ -18,6 +18,9 @@ import {AbilitiesActions} from "./services/abilities/abilitiesActions.service";
 import {SkillsActions} from "./services/skills/skillsActions.service";
 import {StorageService} from "./services/storage/storage.service";
 import {InventoryComponent} from "./components/inventory/inventory.component";
+import {ItemActions} from "./services/item/itemActions.service";
+import {ItemRepository} from "./services/item/item.repository";
+import {ShopComponent} from "./components/shop/shop.component";
 
 /**
  * Main app component for the character sheet app.
@@ -31,6 +34,7 @@ import {InventoryComponent} from "./components/inventory/inventory.component";
         CharacterComponent,
         AbilitiesComponent,
         EditAbilitiesComponent,
+        ShopComponent
     ],
     providers: [
         Dispatcher,
@@ -39,6 +43,7 @@ import {InventoryComponent} from "./components/inventory/inventory.component";
         SkillsActions, SkillDataRepository, SkillsRepository,
         CharacterActions, CharacterRepository,
         PersonalityActions, PersonalityRepository,
+        ItemActions, ItemRepository,
         StorageService,
     ]
 })
@@ -48,6 +53,8 @@ import {InventoryComponent} from "./components/inventory/inventory.component";
     {path: '/abilities/edit',       name: 'EditAbilities',      component: EditAbilitiesComponent},
     {path: '/personality',          name: 'Personality',        component: PersonalityComponent},
     {path: '/inventory',            name: 'Inventory',          component: InventoryComponent},
+    {path: '/shop',                 name: 'Shop',               component: ShopComponent},
+
 ])
 export class AppComponent {
     constructor(

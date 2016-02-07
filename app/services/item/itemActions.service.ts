@@ -24,7 +24,7 @@ export interface BuyItemDetails {
 }
 
 @Injectable()
-export class CharacterActions {
+export class ItemActions {
 
     constructor(
         private _dispatcher: Dispatcher

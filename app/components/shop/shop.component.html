@@ -1,0 +1,30 @@
+<h2>Shop</h2>
+<table>
+	<thead>
+		<tr>
+			<th>
+				Name
+			</th>
+			<th>
+				Cost
+			</th>
+			<th>
+				Weight
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		<template ngFor #item [ngForOf]="items">
+			<tr>
+				<td>{{ item.name }}</td>
+				<td>{{ item.cost | currency }}</td>
+				<td>{{ item.weight | weight }}</td>
+			</tr>
+			<tr *ngIf="item.description">
+				<td colspan="3">
+					{{ item.description }}
+				</td>
+			</tr>
+		</template>
+	</tbody>
+</table>

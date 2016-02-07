@@ -41,7 +41,7 @@ export class ItemRepository {
     }
 
     private load(): Promise<Item[]> {
-        let items: IItem[] = this._storageService.get(STORAGE_KEY) || [];
+        let items: IItem[] = this._storageService.get(STORAGE_KEY) as IItem[] || [];
         return Promise.resolve(
             items.map(item => new Item(item))
         );
@@ -56,7 +56,7 @@ export class ItemRepository {
             const newId = ++this._maxId;
             data.id = newId;
             let item = new Item(data);
-            this._items.push(item);
+            this._items = this._items.concat(item);
 
             this.persistUpdate();
             this._notify();
@@ -102,18 +102,36 @@ export class ItemRepository {
     private onBuy(data: BuyItemDetails): void {
         this.loadingPromise.then(() => {
             const template = data.item;
-            let itemData: IItem = {
-                id: ++this._maxId,
-                name: template.name,
-                description: template.description,
-                cost: template.cost,
-                weight: template.weight,
-                modifiers: template.modifiers,
-                quantity: data.count,
-                modifications: data.modifications
-            };
-            let item = new Item(itemData);
-            this._items.push(item);
+            let existingItem = this._items.find((item: Item) => {
+                return item.name === template.name &&
+                        !item.modifications &&
+                        item.cost === template.cost &&
+                        item.description === template.description &&
+                        item.weight === template.weight
+            });
+
+            if (existingItem) {
+                this._items = this._items.map((item: Item) => {
+                    if (item === existingItem) {
+                        return new Item(_.extend({}, item.getData, { quantity: item.quantity + data.count }));
+                    } else {
+                        return item;
+                    }
+                });
+            } else {
+                let itemData: IItem = {
+                    id: ++this._maxId,
+                    name: template.name,
+                    description: template.description,
+                    cost: template.cost,
+                    weight: template.weight,
+                    modifiers: template.modifiers,
+                    quantity: data.count,
+                    modifications: data.modifications
+                };
+                let item = new Item(itemData);
+                this._items = this._items.concat(item);
+            }
 
             this.persistUpdate();
             this._notify();
