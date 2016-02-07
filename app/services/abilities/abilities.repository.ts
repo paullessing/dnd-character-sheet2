@@ -1,6 +1,5 @@
 import {Injectable} from "angular2/core";
 import {Observable, Subject} from "rxjs/Rx";
-import * as _ from 'underscore';
 
 import {AbilityData, Abilities, AbilitiesFactory} from "../../entities/abilities";
 import {AbilityDataRepository} from "./abilityData.repository";

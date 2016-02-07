@@ -7,6 +7,7 @@ export interface ItemTemplate {
 }
 
 export interface IItem {
+    id?: number;
     name: string;
     quantity: number;
     weight?: number; // In lbs
@@ -17,6 +18,7 @@ export interface IItem {
 }
 
 export class Item {
+    public id: number;
     public name: string;
     public quantity: number;
     public weight: number;
@@ -26,9 +28,13 @@ export class Item {
     public modifications: string;
 
     constructor(data: IItem) {
+        if (!data.id) {
+            throw new Error('Item must have an ID!');
+        }
         if (!data.name) {
             throw new Error('Item must have a name!');
         }
+        this.id = data.id;
         this.name = data.name;
         this.quantity = data.quantity || 1;
         this.weight = data.weight || null;
@@ -38,6 +44,10 @@ export class Item {
         this.modifications = data.modifications;
         Object.freeze(this.modifiers);
         Object.freeze(this);
+    }
+
+    public getData(): IItem {
+        return this;
     }
 }
 

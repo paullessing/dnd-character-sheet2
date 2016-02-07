@@ -23,9 +23,9 @@ export class InventoryComponent implements OnInit {
 
     ngOnInit() {
         this.items = [
-            new Item({ name: 'Magic Ring of Ringness', quantity: 1, weight: 0, cost: 150000 }),
-            new Item({ name: 'Backpack', quantity: 1, weight: 5, cost: 200 }),
-            new Item({ name: 'Torch', quantity: 7, weight: 1, cost: 50 })
+            new Item({ id: 1, name: 'Magic Ring of Ringness', quantity: 1, weight: 0, cost: 150000 }),
+            new Item({ id: 2, name: 'Backpack', quantity: 1, weight: 5, cost: 200 }),
+            new Item({ id: 3, name: 'Torch', quantity: 7, weight: 1, cost: 572 })
         ];
     }
 

@@ -1,5 +1,5 @@
 <div>
-	<span>{{ item.name }}</span><span [hidden]="item.quantity <= 1"> ({{ item.quantity }})</span>
+	<span [hidden]="item.quantity <= 1">{{ item.quantity }}&times;</span><span>{{ item.name }}</span>
 	<div [hidden]="!isExpanded">
 		<p *ngIf="item.description" style="font-style: italic">{{ item.description }}</p>
 		<p>Cost: {{ item.cost | currency }}</p>

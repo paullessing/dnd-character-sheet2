@@ -69,9 +69,9 @@ export class CharacterRepository {
                 }
                 this._character = character;
                 this.persistUpdate(character);
-                this._subject.next(character);
+                this._notify();
 
-                console.log("Personalities:", this._character);
+                console.log("Character:", this._character);
             });
     }
 
