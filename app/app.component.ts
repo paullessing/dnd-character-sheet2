@@ -21,6 +21,7 @@ import {InventoryComponent} from "./components/inventory/inventory.component";
 import {ItemActions} from "./services/item/itemActions.service";
 import {ItemRepository} from "./services/item/item.repository";
 import {ShopComponent} from "./components/shop/shop.component";
+import {EditItemComponent} from "./components/edit-item/edit-item.component";
 
 /**
  * Main app component for the character sheet app.
@@ -53,12 +54,14 @@ import {ShopComponent} from "./components/shop/shop.component";
     {path: '/abilities/edit',       name: 'EditAbilities',      component: EditAbilitiesComponent},
     {path: '/personality',          name: 'Personality',        component: PersonalityComponent},
     {path: '/inventory',            name: 'Inventory',          component: InventoryComponent},
+    {path: '/edit-item',            name: 'EditItem',           component: EditItemComponent},
     {path: '/shop',                 name: 'Shop',               component: ShopComponent},
 
 ])
 export class AppComponent {
     constructor(
-        historyRepo: HistoryRepository
+        historyRepo: HistoryRepository,
+        itemRepo: ItemRepository
     ) {
         // Must construct to ensure HistoryRepo gets created. TODO investigate
     }

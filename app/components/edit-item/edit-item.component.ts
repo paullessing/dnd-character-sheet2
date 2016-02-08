@@ -1,8 +1,9 @@
-import {Component, OnInit, Input, Output, EventEmitter, SimpleChange} from 'angular2/core';
+import {Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChange} from 'angular2/core';
 import {Observable} from "rxjs/Observable";
+import {Router, RouteParams} from "angular2/router";
 
 import {Item, IItem, ITEM_TEMPLATES, ItemTemplate} from "../../entities/item";
-import {OnChanges} from "angular2/core";
+import {ItemActions} from "../../services/item/itemActions.service";
 
 /**
  * Component showing personality traits, motivation etc.
@@ -20,13 +21,33 @@ export class EditItemComponent implements OnChanges {
     @Output()
     public update = new EventEmitter<Item>();
 
-    constructor() {
+    private isCreate = true;
+    private isFromShop = false;
+
+    constructor(
+        params: RouteParams,
+        private itemActions: ItemActions,
+        private router: Router
+    ) {
+        if (params.get('template')) {
+            this.isFromShop = true;
+            let name = params.get('name');
+            let template = ITEM_TEMPLATES.find(template => template.name === name);
+            this.item = {
+                name: template.name,
+                cost: template.cost,
+                weight: template.weight,
+                description: template.description,
+                quantity: 1
+            };
+        }
     }
 
     ngOnChanges(changes: {[propertyName: string]: SimpleChange}) {
         if (changes['inputItem']) {
             let change = changes['inputItem'];
             this.updateItem(change.currentValue);
+            this.isCreate = false;
         }
     }
 
@@ -51,6 +72,12 @@ export class EditItemComponent implements OnChanges {
     public submit() {
         console.log("Submitting", this.item);
         // TODO validation
-        this.update.emit(new Item(this.item));
+        if (this.isCreate) {
+            this.itemActions.create(this.item);
+            this.router.navigate([this.isFromShop ? 'Shop' : 'Inventory', {addSuccess: true}]);
+        } else {
+            // TODO not sure I need this
+            this.update.emit(new Item(this.item));
+        }
     }
 }

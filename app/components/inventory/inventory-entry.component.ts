@@ -3,6 +3,7 @@ import {BehaviorSubject, Subject} from "rxjs/Rx";
 
 import {Item} from "../../entities/item";
 import {CurrencyPipe} from "../../common/currency.pipe";
+import {WeightPipe} from "../../common/weight.pipe";
 
 /**
  * Component showing an item in the inventory.
@@ -10,7 +11,7 @@ import {CurrencyPipe} from "../../common/currency.pipe";
 @Component({
     selector: 'inventory-entry',
     templateUrl: 'app/components/inventory/inventory-entry.component.html',
-    pipes: [CurrencyPipe],
+    pipes: [CurrencyPipe, WeightPipe],
 })
 export class InventoryEntryComponent {
 

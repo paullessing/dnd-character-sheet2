@@ -1,0 +1,7 @@
+<button [routerLink]="['EditItem', {name: item.name, template: true}]">Create from Template</button><br />
+<form (submit)="buy()">
+	<label>Count: <input [(ngModel)]="count" type="number" min="1" step="1" required width="50" /></label><br />
+	<label>Reason: <input [(ngModel)]="reason" placeholder="Reason" /></label>
+
+	<button type="submit">Buy</button>
+</form>

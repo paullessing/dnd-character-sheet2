@@ -22,15 +22,12 @@ function getFractional(fraction: number) {
 })
 export class WeightPipe implements PipeTransform {
     public transform(value: any, args: any[]): any {
-        console.log('Weight', value);
         const parsedValue = parseFloat(value);
-        console.log('parsed weight', parsedValue);
         if (isNaN(parsedValue) || parsedValue === 0) {
             return '—';
         }
         let weight = Math.trunc(parsedValue);
         let fractionValue = Math.abs(parsedValue - weight);
-        console.log("FractionValue", fractionValue);
         return weight + getFractional(fractionValue) + (Math.abs(weight) === 1 ? ' lb' : ' lbs');
     }
 }
