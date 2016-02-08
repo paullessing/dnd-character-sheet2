@@ -3,6 +3,7 @@ import {Observable, Subject} from "rxjs/Rx";
 
 import {AbilityData, Abilities, AbilitiesFactory} from "../../entities/abilities";
 import {AbilityDataRepository} from "./abilityData.repository";
+import {CharacterRepository} from "../character/character.repository";
 
 @Injectable()
 export class AbilitiesRepository {
@@ -15,21 +16,26 @@ export class AbilitiesRepository {
     private _abilitiesFactory: AbilitiesFactory;
 
     constructor(
-        private _abilityDataRepository: AbilityDataRepository
+        private _abilityDataRepository: AbilityDataRepository,
+        private _characterRepository: CharacterRepository
     ) {
         this._abilitiesFactory = new AbilitiesFactory();
         this._subject = new Subject();
-
-        this._lastProficiencyBonus = 2; // TODO
 
         this._abilityDataRepository.observable.subscribe(abilityData => {
             this._lastAbilities = abilityData;
             this._update();
         });
+        this._characterRepository.observable.subscribe(character => {
+            this._lastProficiencyBonus = character.proficiencyBonus;
+            this._update();
+        });
 
         this._lastAbilities = this._abilityDataRepository.currentAbilityData;
+        if (this._characterRepository.currentCharacter) {
+            this._lastProficiencyBonus = this._characterRepository.currentCharacter.proficiencyBonus;
+        }
         this._update();
-        // TODO add a listener for proficiency bonus (character data)
     }
 
     private _update() {
