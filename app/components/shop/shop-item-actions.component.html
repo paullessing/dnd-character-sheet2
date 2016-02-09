@@ -1,7 +1,18 @@
-<button [routerLink]="['EditItem', {name: item.name, template: true}]">Create from Template</button><br />
-<form (submit)="buy()">
-	<label>Count: <input [(ngModel)]="count" type="number" min="1" step="1" required width="50" /></label><br />
-	<label>Reason: <input [(ngModel)]="reason" placeholder="Reason" /></label>
+<div>
+	<label><input name="shop-action-type" type="radio" [checked]="action==='gain'" (click)="action='gain'" /> Gain</label>
+	<div [hidden]="action !== 'gain'">
+		<button [routerLink]="['EditItem', {name: item.name, template: true}]">Create from Template</button><br />
+	</div>
+</div>
 
-	<button type="submit">Buy</button>
-</form>
+<div>
+	<label><input name="shop-action-type" type="radio" [checked]="action==='buy'" (click)="action='buy'" /> Buy</label>
+	<div [hidden]="action !== 'buy'">
+		<form (submit)="buy()">
+			<label>Count: <input [(ngModel)]="count" type="number" min="1" step="1" required width="50" /> <span [hidden]="!price">({{ price | currency }})</span></label><br />
+			<label>Reason: <input [(ngModel)]="reason" placeholder="Reason" /></label>
+
+			<button type="submit">Buy</button>
+		</form>
+	</div>
+</div>

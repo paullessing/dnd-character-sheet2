@@ -18,9 +18,18 @@ import {ShopItemActionsComponent} from "./shop-item-actions.component";
 export class ShopComponent {
 
     public items: ItemTemplate[] = ITEM_TEMPLATES;
+    public itemToBuy: ItemTemplate;
 
     constructor(
         private _router: Router
     ) {
+    }
+
+    public select(item: ItemTemplate) {
+        this.itemToBuy = item;
+    }
+
+    public deselect() {
+        this.itemToBuy = null;
     }
 }

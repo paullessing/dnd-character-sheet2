@@ -1,5 +1,5 @@
 <h2>Shop</h2>
-<table>
+<table width="100%">
 	<thead>
 		<tr>
 			<th>
@@ -11,26 +11,26 @@
 			<th>
 				Weight
 			</th>
-			<th>
-				Actions
-			</th>
 		</tr>
 	</thead>
 	<tbody>
 		<template ngFor #item [ngForOf]="items">
 			<tr>
-				<td>{{ item.name }}</td>
+				<td><a (click)="select(item)" href="javascript:void(0)">{{ item.name }}</a>
+					<a href="javascript:void(0)" (click)="isExpanded=!isExpanded" *ngIf="item.description">({{ isExpanded ? '-' : '+' }})</a></td>
 				<td>{{ item.cost | currency }}</td>
 				<td>{{ item.weight | weight }}</td>
-				<td>
-					<shop-item-actions [item]="item"></shop-item-actions>
-				</td>
 			</tr>
-			<tr *ngIf="item.description">
-				<td colspan="4">
+			<tr *ngIf="item.description && isExpanded">
+				<td colspan="3">
 					{{ item.description }}
 				</td>
 			</tr>
 		</template>
 	</tbody>
 </table>
+<div *ngIf="itemToBuy">
+	<h3>{{ itemToBuy.name }}</h3>
+	<shop-item-actions [item]="itemToBuy"></shop-item-actions>
+	<a (click)="deselect()" href="javascript:void(0)">Cancel</a>
+</div>
