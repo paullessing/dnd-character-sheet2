@@ -15,6 +15,7 @@ import {Proficiency} from "../../entities/skills";
  * Component showing basic character details.
  */
 @Component({
+    selector: 'edit-abilities',
     templateUrl: 'app/components/edit-abilities/edit-abilities.component.html'
 })
 export class EditAbilitiesComponent implements OnInit {

@@ -12,6 +12,7 @@ import {EditAbilitiesComponent} from "../edit-abilities/edit-abilities.component
  * Component showing character abilities.
  */
 @Component({
+    selector: 'abilities',
     templateUrl: 'app/components/abilities/abilities.component.html',
     pipes: [ModifierPipe],
     directives: [EditAbilitiesComponent]

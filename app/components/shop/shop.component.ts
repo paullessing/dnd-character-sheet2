@@ -11,6 +11,7 @@ import {ShopItemActionsComponent} from "./shop-item-actions.component";
  * Component listing standard items for sale.
  */
 @Component({
+    selector: 'shop',
     templateUrl: 'app/components/shop/shop.component.html',
     pipes: [WeightPipe, CurrencyPipe],
     directives: [ShopItemActionsComponent],

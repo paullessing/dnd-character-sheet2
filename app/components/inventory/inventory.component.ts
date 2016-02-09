@@ -10,6 +10,7 @@ import {ItemRepository} from "../../services/item/item.repository";
  * Component showing the character's inventory.
  */
 @Component({
+    selector: 'inventory',
     templateUrl: 'app/components/inventory/inventory.component.html',
     directives: [EditItemComponent, InventoryEntryComponent],
 })
