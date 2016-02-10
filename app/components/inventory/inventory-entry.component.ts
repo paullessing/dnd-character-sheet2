@@ -4,6 +4,7 @@ import {BehaviorSubject, Subject} from "rxjs/Rx";
 import {Item} from "../../entities/item";
 import {CurrencyPipe} from "../../common/currency.pipe";
 import {WeightPipe} from "../../common/weight.pipe";
+import {ItemActions} from "../../services/item/itemActions.service";
 
 /**
  * Component showing an item in the inventory.
@@ -19,11 +20,19 @@ export class InventoryEntryComponent {
     public item: Item;
 
     public isExpanded: boolean = false;
+    public removeCount: number;
 
-    constructor() {
+    constructor(
+        private itemActions: ItemActions
+    ) {
     }
 
     public toggle(): void {
         this.isExpanded = !this.isExpanded;
+    }
+
+    public remove(): void {
+        this.itemActions.add(this.item.id, -(this.removeCount || 1), null);
+        this.removeCount = null;
     }
 }

@@ -3,5 +3,5 @@
 	<li *ngFor="#item of items">
 		<inventory-entry [item]="item"></inventory-entry>
 	</li>
-	<edit-item [item]="newItem" (update)="onNewItem($event)"></edit-item>
 </ul>
+<p>Total weight: {{ totalWeight | weight }}</p>

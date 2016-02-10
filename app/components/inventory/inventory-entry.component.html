@@ -5,5 +5,10 @@
 		<p>Cost: {{ item.cost | currency }}</p>
 		<p>Weight: {{ item.weight | weight }}</p>
 		<p *ngIf="item.modifications" style="font-style: italic">{{ item.modifications }}</p>
+		<p>
+			Remove: <input [(ngModel)]="removeCount" type="number" min="0" step="1" [max]="item.quantity" />
+			<button (click)="remove()">Remove {{ removeCount || 1 }}</button>
+			<br /><br />
+		</p>
 	</div>
 </div>
