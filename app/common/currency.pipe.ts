@@ -1,6 +1,7 @@
 import {Pipe, PipeTransform} from "angular2/core";
 
 import {convertToAmount, Amount} from "../entities/currency";
+import {IAmount} from "../entities/currency";
 
 const names = [
     ' cp',
@@ -8,7 +9,7 @@ const names = [
     ' gp',
     ' pp',
 ];
-function getPresence(values: Amount) {
+function getPresence(values: IAmount) {
     return [
         !!values.copper,
         !!values.silver,
@@ -17,7 +18,7 @@ function getPresence(values: Amount) {
     ];
 }
 
-function toArray(values: Amount) {
+function toArray(values: IAmount) {
     return [
         values.copper,
         values.silver,

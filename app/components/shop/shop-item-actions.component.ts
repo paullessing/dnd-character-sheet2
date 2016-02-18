@@ -29,6 +29,8 @@ export class ShopItemActionsComponent implements OnChanges {
 
     ngOnChanges(changes: {[propertyName: string]: SimpleChange}) {
         this.action = null;
+        this.count = null;
+        this.reason = null;
     }
 
     public buy() {
