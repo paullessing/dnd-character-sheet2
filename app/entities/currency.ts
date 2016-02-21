@@ -45,7 +45,7 @@ export class Amount implements IAmount {
         return s;
     }
 
-    public minus(cost: Amount | number): Amount {
+    public minus(cost: IAmount | number): Amount {
         const costInCopper = (typeof cost === 'number' ? cost : toCopper(cost));
         const costAsAmount = (typeof cost === 'number' ? convertToAmount(cost) : cost);
 
@@ -89,7 +89,7 @@ export class Amount implements IAmount {
         return new Amount(newWallet);
     }
 
-    public plus(that: Amount) {
+    public plus(that: IAmount) {
         let newData: IAmount = {};
         Currencies.forEach(currency => newData[currency] = (this[currency] || 0) + (that[currency] || 0));
         return new Amount(newData);
@@ -129,11 +129,11 @@ export const Currencies: string[] = Object.freeze([
     'platinum'
 ]);
 
-export function toCopper(wallet: Amount) {
+export function toCopper(amount: IAmount) {
     let total = 0;
     Object.keys(Exchange).forEach((key) => {
-        if (wallet[key] && typeof wallet[key] === 'number') {
-            total += wallet[key] * Exchange[key].multiplier;
+        if (amount[key] && typeof amount[key] === 'number') {
+            total += amount[key] * Exchange[key].multiplier;
         }
     });
     return total;
