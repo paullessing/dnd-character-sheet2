@@ -5,6 +5,7 @@ import {Item} from "../../entities/item";
 import {InventoryEntryComponent} from "./inventory-entry.component";
 import {ItemRepository} from "../../services/item/item.repository";
 import {WeightPipe} from "../../common/weight.pipe";
+import {WalletComponent} from "../wallet/wallet.component";
 
 /**
  * Component showing the character's inventory.
@@ -12,7 +13,7 @@ import {WeightPipe} from "../../common/weight.pipe";
 @Component({
     selector: 'inventory',
     templateUrl: 'app/components/inventory/inventory.component.html',
-    directives: [InventoryEntryComponent],
+    directives: [InventoryEntryComponent, WalletComponent],
     pipes: [WeightPipe],
 })
 export class InventoryComponent {

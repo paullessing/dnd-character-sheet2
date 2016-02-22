@@ -1,0 +1,46 @@
+<div *ngIf="wallet">
+	<h2>Wallet</h2>
+	<table>
+		<thead>
+		<tr>
+			<th>PP</th>
+			<th>GP</th>
+			<th>EP</th>
+			<th>SP</th>
+			<th>CP</th>
+		</tr>
+		<tr>
+			<td>{{ wallet.platinum }}</td>
+			<td>{{ wallet.gold }}</td>
+			<td>{{ wallet.electrum }}</td>
+			<td>{{ wallet.silver}}</td>
+			<td>{{ wallet.copper }}</td>
+		</tr>
+		</thead>
+	</table>
+
+	<button (click)="edit()">Edit</button>
+</div>
+
+<form *ngIf="isEditing" (submit)="save()">
+	<label><input type="radio" [checked]="isAdd" (click)="isAdd = true" />Add</label>
+	<label><input type="radio" [checked]="!isAdd" (click)="isAdd = false" />Remove</label>
+
+	<label>
+		PP <input type="number" min="0" step="1" [(ngModel)]="changeAmount.platinum" style="width: 50px;" />
+	</label>
+	<label>
+		GP <input type="number" min="0" step="1" [(ngModel)]="changeAmount.gold" style="width: 50px;" />
+	</label>
+	<label>
+		EP <input type="number" min="0" step="1" [(ngModel)]="changeAmount.electrum" style="width: 50px;" />
+	</label>
+	<label>
+		SP <input type="number" min="0" step="1" [(ngModel)]="changeAmount.silver" style="width: 50px;" />
+	</label>
+	<label>
+		CP <input type="number" min="0" step="1" [(ngModel)]="changeAmount.copper" style="width: 50px;" />
+	</label>
+
+	<a href="javascript:void(0)" (click)="cancel()">Cancel</a> <button type="submit">Save</button>
+</form>

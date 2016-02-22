@@ -6,9 +6,9 @@ import {Dispatcher, Event} from "../../common/dispatcher";
 import {StorageService} from "../storage/storage.service";
 import {ItemEventType, BuyItemDetails} from "../item/itemActions.service";
 import {WalletEventType, ChangeAmountDetails} from "./walletActions.service";
-import {Amount} from "../../entities/currency";
+import {Amount, IAmount} from "../../entities/currency";
 
-export const STORAGE_KEY = 'items';
+export const STORAGE_KEY = 'wallet';
 
 @Injectable()
 export class WalletRepository {
@@ -33,13 +33,13 @@ export class WalletRepository {
     }
 
     private load(): Amount {
-        let amount: Amount = _.extend({
+        let amount: Amount = new Amount(_.extend({
                 copper: 0,
                 silver: 0,
                 electrum: 0,
                 gold: 0,
                 platinum: 0
-            }, this._storageService.get(STORAGE_KEY) as Amount);
+            }, this._storageService.get(STORAGE_KEY) as IAmount));
         return amount;
     }
 

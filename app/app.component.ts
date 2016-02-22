@@ -22,6 +22,9 @@ import {ItemActions} from "./services/item/itemActions.service";
 import {ItemRepository} from "./services/item/item.repository";
 import {ShopComponent} from "./components/shop/shop.component";
 import {EditItemComponent} from "./components/edit-item/edit-item.component";
+import {WalletActions} from "./services/wallet/walletActions.service";
+import {WalletRepository} from "./services/wallet/wallet.repository";
+import {WalletComponent} from "./components/wallet/wallet.component";
 
 /**
  * Main app component for the character sheet app.
@@ -45,6 +48,7 @@ import {EditItemComponent} from "./components/edit-item/edit-item.component";
         CharacterActions, CharacterRepository,
         PersonalityActions, PersonalityRepository,
         ItemActions, ItemRepository,
+        WalletActions, WalletRepository,
         StorageService,
     ]
 })
