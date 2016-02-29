@@ -5,9 +5,6 @@
     "path": "typings",
     "bundle": "typings/tsd.d.ts",
     "installed": {
-        "angular2/angular2.d.ts": {
-            "commit": "1ffc055e50f0df255da310485a7871c6f894e370"
-        },
         "underscore/underscore.d.ts": {
             "commit": "dc9dabe74a5be62613b17a3605309783a12ff28a"
         },
@@ -16,6 +13,12 @@
         },
         "moment/moment-node.d.ts": {
             "commit": "627b6c158b73494c803f36fc2fe00ad75faa8fde"
+        },
+        "redux/redux.d.ts": {
+            "commit": "ab2462147a313f69e7118625cfcce21c005fa4af"
+        },
+        "redux-thunk/redux-thunk.d.ts": {
+            "commit": "ab2462147a313f69e7118625cfcce21c005fa4af"
         }
     }
 }

@@ -25,6 +25,8 @@ import {EditItemComponent} from "./components/edit-item/edit-item.component";
 import {WalletActions} from "./services/wallet/walletActions.service";
 import {WalletRepository} from "./services/wallet/wallet.repository";
 import {WalletComponent} from "./components/wallet/wallet.component";
+import {Inject} from "angular2/core";
+import {Store} from 'redux';
 
 /**
  * Main app component for the character sheet app.
@@ -65,8 +67,13 @@ import {WalletComponent} from "./components/wallet/wallet.component";
 export class AppComponent {
     constructor(
         historyRepo: HistoryRepository,
-        itemRepo: ItemRepository
+        itemRepo: ItemRepository,
+        @Inject('Store') store: Store
     ) {
         // Must construct to ensure HistoryRepo gets created. TODO investigate
+        console.group();
+        console.log(store);
+        console.log(store.getState());
+        console.groupEnd();
     }
 }

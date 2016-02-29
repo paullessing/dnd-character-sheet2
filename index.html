@@ -20,8 +20,10 @@
 					defaultExtension: 'js'
 				}
 			},
-			paths: {
-				'moment': 'node_modules/moment/moment.js'
+			map: {
+				'moment': '/node_modules/moment/moment.js',
+				'redux': '/node_modules/redux/dist/redux.js',
+				'redux-thunk': '/node_modules/redux-thunk/lib/index.js'
 			}
 		});
 		Promise.all([
