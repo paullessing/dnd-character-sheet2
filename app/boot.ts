@@ -6,8 +6,7 @@ import {createStore, applyMiddleware} from 'redux';
 import {AppComponent} from './app.component'
 //import {provider} from 'ng2-redux';
 import thunk from 'redux-thunk';
-
-const rootReducer = (state = { character: { name: 'Foo' } }, action) => { return state; };
+import {rootReducer} from "./reducers/root.reducer";
 
 const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
 const store = createStoreWithMiddleware(rootReducer);

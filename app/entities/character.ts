@@ -75,6 +75,12 @@ export class Character implements ICharacter {
             xp: this.xp
         };
     }
+
+    public addXp(xp: number) {
+        let data = this.getData();
+        data.xp += xp;
+        return new Character(data);
+    }
 }
 
 var xpToLevel = [

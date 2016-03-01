@@ -27,6 +27,7 @@ import {WalletRepository} from "./services/wallet/wallet.repository";
 import {WalletComponent} from "./components/wallet/wallet.component";
 import {Inject} from "angular2/core";
 import {Store} from 'redux';
+import {ReduxConnector} from "./common/connector";
 
 /**
  * Main app component for the character sheet app.
@@ -52,6 +53,7 @@ import {Store} from 'redux';
         ItemActions, ItemRepository,
         WalletActions, WalletRepository,
         StorageService,
+        ReduxConnector,
     ]
 })
 @RouteConfig([
@@ -68,12 +70,14 @@ export class AppComponent {
     constructor(
         historyRepo: HistoryRepository,
         itemRepo: ItemRepository,
-        @Inject('Store') store: Store
+        redux: ReduxConnector
     ) {
-        // Must construct to ensure HistoryRepo gets created. TODO investigate
-        console.group();
-        console.log(store);
-        console.log(store.getState());
-        console.groupEnd();
+        let u = redux.connect(() => console.log('New state', redux.getState()));
+
+        redux.dispatch({ type: 'ADD_XP', payload: 100 });
+        redux.dispatch({ type: 'ADD_XP', payload: 6500 });
+        redux.dispatch({ type: 'ADD_XP', payload: 42000 });
+
+        u();
     }
 }
