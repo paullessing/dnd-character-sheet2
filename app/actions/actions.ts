@@ -1,4 +1,6 @@
-export const UPDATE_PERSONALITY = 'personality.update';
+export const UPDATE_PERSONALITY = 'UPDATE_PERSONALITY';
 
-export const ADD_XP = 'character.addXp';
-export const UPDATE_CHARACTER = 'character.update';
+export const ADD_XP = 'ADD_XP';
+export const UPDATE_ABILITIES = 'UPDATE_ABILITIES';
+
+export const UPDATE_CHARACTER = 'UPDATE_CHARACTER';

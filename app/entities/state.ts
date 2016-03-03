@@ -1,19 +1,18 @@
-import {Character} from "character";
-import {Class} from "classes";
-import {Alignment} from "alignments";
-import {Abilities} from "abilities";
+import {Character} from "./character";
+import {Class} from "./classes";
+import {Alignment} from "./alignments";
+import {Abilities} from "./abilities";
 import {Skills} from "./skills";
-import {Item} from "item";
-import {Amount} from "currency";
-import {Personality} from "personality";
-import {AbilitiesFactory} from "abilities";
-import {convertToAmount} from "currency";
+import {Item} from "./item";
+import {Amount} from "./currency";
+import {Personality} from "./personality";
+import {AbilitiesFactory} from "./abilities";
+import {convertToAmount} from "./currency";
 
 export interface State {
     character: Character;
 
-    abilities: Abilities;
-    skills: Skills;
+    stats: Stats;
 
     personality: Personality;
 
@@ -21,4 +20,12 @@ export interface State {
         items: Item[];
         wallet: Amount;
     };
+}
+
+export interface Stats {
+    xp: number;
+    level: number;
+    proficiencyBonus: number;
+    abilities: Abilities;
+    skills: Skills;
 }

@@ -5,23 +5,11 @@ import {Action} from "../actions/action";
 import {character} from "./character.reducer";
 import {personality} from "./personality.reducer";
 import {inventory} from "./inventory.reducer";
-import {
-    basicAbilities as abilities,
-    basicSkills as skills,
-    xpAbilities as complexAbilities
-} from "./abilities.reducer";
+import {stats} from "./stats.reducer.ts";
 
-export const basicReducer: ((state: State, action: Action) => State) = combineReducers({
+export const rootReducer = (state: State, action: Action) => combineReducers({
     character,
-    abilities,
-    skills,
+    stats,
     personality,
     inventory
 });
-
-export const rootReducer = (state: State, action: Action) => {
-    let newState = state;
-    newState = basicReducer(newState, action);
-    newState = complexAbilities(newState, action);
-    return Object.freeze(newState);
-};
