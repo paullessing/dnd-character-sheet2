@@ -1,15 +1,20 @@
 import { combineReducers } from 'redux';
-import {State} from "../common/redux/state";
-import {Action} from "../common/redux/action";
+import {State} from "../entities/state";
+import {Action} from "../actions/action";
 
 import {character} from "./character.reducer";
 import {personality} from "./personality.reducer";
 import {inventory} from "./inventory.reducer";
-import {basicAbilities as abilities, xpAbilities as complexAbilities} from "./abilities.reducer";
+import {
+    basicAbilities as abilities,
+    basicSkills as skills,
+    xpAbilities as complexAbilities
+} from "./abilities.reducer";
 
 export const basicReducer: ((state: State, action: Action) => State) = combineReducers({
     character,
     abilities,
+    skills,
     personality,
     inventory
 });

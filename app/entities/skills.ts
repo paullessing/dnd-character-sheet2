@@ -1,4 +1,5 @@
-import {Names as AbilityName, Abilities} from "./abilities";
+import {Abilities} from "./abilities";
+import {SkillDefinition, SKILL_DEFINITIONS} from "./skillDefinitions";
 
 export class Proficiency {
     static NONE = 'None';
@@ -6,6 +7,11 @@ export class Proficiency {
     static YES = 'Yes';
     static EXPERTISE = 'Expertise';
     static values = [Proficiency.NONE, Proficiency.JACK_OF_ALL_TRADES, Proficiency.YES, Proficiency.EXPERTISE];
+}
+
+export interface SkillData {
+    name: string;
+    proficiency: string;
 }
 
 export class Skill {
@@ -16,6 +22,13 @@ export class Skill {
         public abilityName: string
     ) {
         Object.freeze(this);
+    }
+
+    public getData(): SkillData {
+        return {
+            name: this.name,
+            proficiency: this.proficiency
+        };
     }
 }
 
@@ -39,8 +52,11 @@ export class Skills extends Array<Skill> {
         });
         return map;
     }
-}
 
+    public changeProficiency(abilities: Abilities, newBonus: number) {
+        return loadSkills(abilities, this.map(skill => skill.getData()), newBonus);
+    }
+}
 
 export function convertToMap(skills: Skill[]): { [name: string]: Skill[] } {
     let map: { [name: string]: Skill[] } = {};
@@ -51,97 +67,12 @@ export function convertToMap(skills: Skill[]): { [name: string]: Skill[] } {
     return map;
 }
 
-export interface SkillData {
-    name: string;
-    proficiency: string;
-}
-
-interface Definition {
-    name: string;
-    abilityName: string;
-}
-
-const Definitions: Definition[] = [
-    {
-        name: 'Acrobatics',
-        abilityName: AbilityName.Dexterity
-    },
-    {
-        name: 'Animal Handling',
-        abilityName: AbilityName.Wisdom
-    },
-    {
-        name: 'Arcana',
-        abilityName: AbilityName.Intelligence
-    },
-    {
-        name: 'Athletics',
-        abilityName: AbilityName.Strength
-    },
-    {
-        name: 'Deception',
-        abilityName: AbilityName.Charisma
-    },
-    {
-        name: 'History',
-        abilityName: AbilityName.Intelligence
-    },
-    {
-        name: 'Insight',
-        abilityName: AbilityName.Wisdom
-    },
-    {
-        name: 'Intimidation',
-        abilityName: AbilityName.Charisma
-    },
-    {
-        name: 'Investigation',
-        abilityName: AbilityName.Intelligence
-    },
-    {
-        name: 'Medicine',
-        abilityName: AbilityName.Wisdom
-    },
-    {
-        name: 'Nature',
-        abilityName: AbilityName.Intelligence
-    },
-    {
-        name: 'Perception',
-        abilityName: AbilityName.Wisdom
-    },
-    {
-        name: 'Performance',
-        abilityName: AbilityName.Charisma
-    },
-    {
-        name: 'Persuasion',
-        abilityName: AbilityName.Charisma
-    },
-    {
-        name: 'Religion',
-        abilityName: AbilityName.Intelligence
-    },
-    {
-        name: 'Sleight of Hand',
-        abilityName: AbilityName.Dexterity
-    },
-    {
-        name: 'Stealth',
-        abilityName: AbilityName.Dexterity
-    },
-    {
-        name: 'Survival',
-        abilityName: AbilityName.Wisdom
-    }
-];
-
 export function loadSkills(abilities: Abilities, skillData: SkillData[], proficiencyBonus: number): Skills {
     //console.log("LoadSkills", abilities, skillData);
     let skillMap: { [name: string]: SkillData } = {};
     skillData.forEach(skill => skillMap[skill.name] = skill);
 
-    let skills: Skill[] = Definitions.map((definition: Definition) => {
+    let skills: Skill[] = SKILL_DEFINITIONS.map((definition: SkillDefinition) => {
         let data = skillMap[definition.name];
         const proficiency = data ? data.proficiency : Proficiency.NONE;
         let modifier = abilities.byName[definition.abilityName].modifier;
@@ -160,7 +91,7 @@ export function loadSkills(abilities: Abilities, skillData: SkillData[], profici
 }
 
 function generateInitialSkills() {
-    let initialSkills: SkillData[] = Definitions.map(definition => {
+    let initialSkills: SkillData[] = SKILL_DEFINITIONS.map(definition => {
         let data: SkillData = {
             name: definition.name,
             proficiency: Proficiency.NONE

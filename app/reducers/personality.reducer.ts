@@ -1,5 +1,5 @@
 import {Personality} from "../entities/personality";
-import {Action} from "../common/redux/action";
+import {Action} from "../actions/action";
 import {UPDATE_PERSONALITY} from "../actions/actions";
 
 export function personality(state = new Personality({}), action: Action) {

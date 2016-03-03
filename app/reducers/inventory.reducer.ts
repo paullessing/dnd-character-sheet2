@@ -1,4 +1,4 @@
-import {Action} from "../common/redux/action";
+import {Action} from "../actions/action";
 import {Amount} from "../entities/currency";
 
 export function inventory(state = {

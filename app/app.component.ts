@@ -28,6 +28,7 @@ import {WalletComponent} from "./components/wallet/wallet.component";
 import {Inject} from "angular2/core";
 import {Store} from 'redux';
 import {ReduxConnector} from "./common/connector";
+import {update} from "./actions/personality.actions";
 
 /**
  * Main app component for the character sheet app.
@@ -74,9 +75,12 @@ export class AppComponent {
     ) {
         let u = redux.connect(() => console.log('New state', redux.getState()));
 
-        redux.dispatch({ type: 'ADD_XP', payload: 100 });
-        redux.dispatch({ type: 'ADD_XP', payload: 6500 });
-        redux.dispatch({ type: 'ADD_XP', payload: 42000 });
+        redux.dispatch(update({
+            bonds: 'James',
+            flaws: 'Wooden',
+            ideals: 'Platonic',
+            traits: 'or'
+        }));
 
         u();
     }

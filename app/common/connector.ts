@@ -1,7 +1,7 @@
 import {Injectable, Inject} from "angular2/core";
 import {Store, Dispatch} from "redux";
-import {Action} from "./redux/action";
-import {State} from "./redux/state";
+import {Action} from "./../actions/action";
+import {State} from "./../entities/state";
 
 @Injectable()
 export class ReduxConnector {
