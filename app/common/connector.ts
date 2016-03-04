@@ -11,10 +11,14 @@ export class ReduxConnector {
 
     }
 
-    public connect(getState) {
-        let unsubscribe = this.store.subscribe((state: any) => {
-            getState(state);
-        });
+    public connect(onStoreUpdate): () => void {
+        let unsubscribe: (() => void) = this.store.subscribe(() => {
+            onStoreUpdate(this.store.getState());
+        }) as (() => void); // "Function" definition doesn't match (() => void)
+
+        // Initial update
+        onStoreUpdate(this.store.getState());
+
         return unsubscribe;
     }
 

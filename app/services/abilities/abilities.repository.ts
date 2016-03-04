@@ -26,16 +26,16 @@ export class AbilitiesRepository {
             this._lastAbilities = abilityData;
             this._update();
         });
-        this._characterRepository.observable.subscribe(character => {
-            this._lastProficiencyBonus = character.proficiencyBonus;
-            this._update();
-        });
+        //this._characterRepository.observable.subscribe(character => {
+        //    this._lastProficiencyBonus = character.proficiencyBonus;
+        //    this._update();
+        //});
 
-        this._lastAbilities = this._abilityDataRepository.currentAbilityData;
-        if (this._characterRepository.currentCharacter) {
-            this._lastProficiencyBonus = this._characterRepository.currentCharacter.proficiencyBonus;
-        }
-        this._update();
+        //this._lastAbilities = this._abilityDataRepository.currentAbilityData;
+        //if (this._characterRepository.currentCharacter) {
+        //    this._lastProficiencyBonus = this._characterRepository.currentCharacter.proficiencyBonus;
+        //}
+        //this._update();
     }
 
     private _update() {

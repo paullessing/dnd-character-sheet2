@@ -46,8 +46,7 @@ export class CharacterRepository {
             background: "Noble",
             playerName: "JRR Tolkien",
             race: "Human",
-            alignment: Alignment.LawfulGood,
-            xp: 10000
+            alignment: Alignment.LawfulGood
         }));
     }
 
@@ -76,8 +75,8 @@ export class CharacterRepository {
     }
 
     private onAddXp(data: UpdateXpDetails) {
-        let character = this.editCharacter(this.currentCharacter, { xp: this.currentCharacter.xp + data.amount});
-        this.update(character);
+        //let character = this.editCharacter(this.currentCharacter, { xp: this.currentCharacter.xp + data.amount});
+        //this.update(character);
     }
 
     private editCharacter(character: ICharacter, edits: ICharacter): Character {
@@ -87,8 +86,7 @@ export class CharacterRepository {
             background: character.background,
             playerName: character.playerName,
             race: character.race,
-            alignment: character.alignment,
-            xp: character.xp
+            alignment: character.alignment
         }, edits));
     }
 

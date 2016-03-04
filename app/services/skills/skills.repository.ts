@@ -33,7 +33,7 @@ export class SkillsRepository {
             this.pushUpdate();
         });
         this._characterRepository.observable.subscribe(character => {
-            this._lastProficiencyBonus = character.proficiencyBonus;
+            //this._lastProficiencyBonus = character.proficiencyBonus;
             this.pushUpdate();
         });
 
@@ -41,7 +41,7 @@ export class SkillsRepository {
         this._lastSkillData = this._skillDataRepository.currentSkillData;
         let character = this._characterRepository.currentCharacter;
         if (character) {
-            this._lastProficiencyBonus = character.proficiencyBonus;
+            //this._lastProficiencyBonus = character.proficiencyBonus;
         }
         this.pushUpdate();
     }

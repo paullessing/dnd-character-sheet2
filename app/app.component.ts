@@ -69,19 +69,6 @@ import {update} from "./actions/personality.actions";
 ])
 export class AppComponent {
     constructor(
-        historyRepo: HistoryRepository,
-        itemRepo: ItemRepository,
-        redux: ReduxConnector
     ) {
-        let u = redux.connect(() => console.log('New state', redux.getState()));
-
-        redux.dispatch(update({
-            bonds: 'James',
-            flaws: 'Wooden',
-            ideals: 'Platonic',
-            traits: 'or'
-        }));
-
-        u();
     }
 }

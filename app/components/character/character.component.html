@@ -1,4 +1,5 @@
 <h2>Character Details</h2>
+<div *ngIf="!character">Loading character...</div>
 <div *ngIf="character && !isEditing">
 	<div>
 		<label>Character Name</label>
@@ -10,7 +11,7 @@
 	</div>
 	<div>
 		<label>Level</label>
-		<p>{{ character.level }}</p>
+		<p>{{ stats.level }}</p>
 	</div>
 	<div>
 		<label>Background</label>
@@ -30,7 +31,7 @@
 	</div>
 	<div>
 		<label>Experience Points</label>
-		<p>{{ character.xp }} &mdash; <a href="javascript:void(0)" (click)="editXp()">edit</a></p>
+		<p>{{ stats.xp }} &mdash; <a href="javascript:void(0)" (click)="editXp()">edit</a></p>
 	</div>
 	<form *ngIf="isChangingXp" (submit)="submitXp()">
 		<h2>Add XP</h2>
@@ -78,10 +79,6 @@
 			<option value="" disabled>Select One</option>
 			<option *ngFor="#alignment of alignments; #id = index" [value]="id">{{alignment}}</option>
 		</select>
-	</div>
-	<div>
-		<label for="xp">Experience Points</label>
-		<input type="number" step="1" min="0" id="xp" [(ngModel)]="editCharacter.xp" />
 	</div>
 	<a href="javascript:void(0)" (click)="cancel()">Cancel</a> <button type="submit">Save</button>
 </form>
