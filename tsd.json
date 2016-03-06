@@ -19,6 +19,9 @@
         },
         "redux-thunk/redux-thunk.d.ts": {
             "commit": "ab2462147a313f69e7118625cfcce21c005fa4af"
+        },
+        "es6-shim/es6-shim.d.ts": {
+            "commit": "9f0f926a12026287b5a4a229e5672c01e7549313"
         }
     }
 }
