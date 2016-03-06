@@ -29,6 +29,7 @@ import {Inject} from "angular2/core";
 import {Store} from 'redux';
 import {ReduxConnector} from "./common/connector";
 import {update} from "./actions/personality.actions";
+import {load} from "./actions/history.actions";
 
 /**
  * Main app component for the character sheet app.
@@ -69,6 +70,8 @@ import {update} from "./actions/personality.actions";
 ])
 export class AppComponent {
     constructor(
+        redux: ReduxConnector
     ) {
+        redux.dispatch(load());
     }
 }

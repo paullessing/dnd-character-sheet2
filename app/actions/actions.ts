@@ -1,3 +1,5 @@
+export const LOAD = 'LOAD';
+
 export const UPDATE_PERSONALITY = 'UPDATE_PERSONALITY';
 
 export const ADD_XP = 'ADD_XP';

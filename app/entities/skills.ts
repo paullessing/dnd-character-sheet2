@@ -63,6 +63,10 @@ export class Skills extends Array<Skill> {
         let newData = InitialSkills.map(skill => _.extend({}, skill, currentMap[skill.name], skillsMap[skill.name]));
         return loadSkills(abilities, newData, proficiencyBonus);
     }
+
+    public getData(): SkillData[] {
+        return this.map(skill => skill.getData());
+    }
 }
 
 function skillDataToMap(data: SkillData[]): { [skillName: string]: SkillData } {

@@ -105,15 +105,19 @@ export class Abilities extends Array<Ability> {
     }
 
     public update(diff: AbilitiesDiff, proficiencyBonus: number) {
-        let newData: AbilityData[] = this.map(ability => ability.getData())
+        let newData: AbilityData[] = this.getData()
                 .map((abilityData: AbilityData) => {
                     return diff[abilityData.name] ? _.extend({}, abilityData, diff[abilityData.name]) : abilityData;
                 });
         return getAbilities(newData, proficiencyBonus);
     }
+
+    public getData(): AbilityData[] {
+        return this.map(ability => ability.getData());
+    }
 }
 
-function getAbilities(data: AbilityData[] | Abilities, proficiencyBonus: number): Abilities {
+export function getAbilities(data: AbilityData[] | Abilities, proficiencyBonus: number): Abilities {
     if (data instanceof Abilities) {
         data = (data as Abilities).map(ability => ability.getData());
     }
