@@ -6,6 +6,9 @@ export interface IPersonality {
 }
 
 function trimToEmpty(value) {
+    if (!value) {
+        return '';
+    }
     return ('' + value).trim();
 }
 

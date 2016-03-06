@@ -4,8 +4,6 @@ import {ReduxConnector} from "../../common/connector";
 import {Alignment, AlignmentNames} from '../../entities/alignments';
 import {Class, ClassNames} from "../../entities/classes";
 import {ICharacter, Character} from "../../entities/character";
-import {CharacterActions, UpdateXpDetails} from "../../services/character/characterActions.service";
-import {CharacterRepository} from "../../services/character/character.repository";
 import {State, Stats} from "../../entities/state";
 import {update} from "../../actions/character.actions";
 import {addXp} from "../../actions/stats.actions";

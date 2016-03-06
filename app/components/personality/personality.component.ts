@@ -1,7 +1,8 @@
-import {Component, OnInit} from 'angular2/core';
+import {Component, OnDestroy} from 'angular2/core';
 import {Personality, IPersonality} from "../../entities/personality";
-import {PersonalityActions} from "../../services/personality/personalityActions.service";
-import {PersonalityRepository} from "../../services/personality/personality.repository";
+import {ReduxConnector} from "../../common/connector";
+import {State} from "../../entities/state";
+import {update} from "../../actions/personality.actions";
 
 /**
  * Component showing personality traits, motivation etc.
@@ -10,24 +11,24 @@ import {PersonalityRepository} from "../../services/personality/personality.repo
     selector: 'personality',
     templateUrl: 'app/components/personality/personality.component.html'
 })
-export class PersonalityComponent implements OnInit {
+export class PersonalityComponent implements OnDestroy {
     public personality: IPersonality;
     public editPersonality: IPersonality;
     public isEditing: boolean;
+    private unsubscribe: () => void;
 
     constructor(
-        private _personalityActions: PersonalityActions,
-        private _personalityRepository: PersonalityRepository
+        private redux: ReduxConnector
     ) {
+        this.unsubscribe = this.redux.connect((state: State) => this.onStateUpdate(state));
     }
 
-    ngOnInit() {
-        this.personality = this._personalityRepository.currentPersonality;
+    ngOnDestroy() {
+        this.unsubscribe();
+    }
 
-        this._personalityRepository.observable.subscribe(personality => {
-            this.personality = personality;
-            console.log("Updated personality", personality);
-        });
+    private onStateUpdate(state: State) {
+        this.personality = state.personality;
     }
 
     public edit() {
@@ -41,7 +42,7 @@ export class PersonalityComponent implements OnInit {
     }
 
     public save() {
-        this._personalityActions.update(this.editPersonality);
+        this.redux.dispatch(update(this.editPersonality));
         this.isEditing = false;
     }
 
