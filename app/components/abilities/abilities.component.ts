@@ -1,5 +1,4 @@
-import {Component, OnInit} from 'angular2/core';
-import {Router} from "angular2/router";
+import {Component, OnDestroy} from 'angular2/core';
 
 import {AbilitiesRepository} from "../../services/abilities/abilities.repository";
 import {Abilities} from "../../entities/abilities";
@@ -7,6 +6,9 @@ import {ModifierPipe} from "../../common/modifier.pipe";
 import {Skill} from "../../entities/skills";
 import {SkillsRepository} from "../../services/skills/skills.repository";
 import {EditAbilitiesComponent} from "../edit-abilities/edit-abilities.component";
+import {ReduxConnector} from "../../common/connector";
+import {State} from "../../entities/state";
+import {Router} from "../../common/router.service";
 
 /**
  * Component showing character abilities.
@@ -17,32 +19,28 @@ import {EditAbilitiesComponent} from "../edit-abilities/edit-abilities.component
     pipes: [ModifierPipe],
     directives: [EditAbilitiesComponent]
 })
-export class AbilitiesComponent implements OnInit{
+export class AbilitiesComponent implements OnDestroy {
     public abilities: Abilities;
     public skills: { [name: string]: Skill[] };
+    private unsubscribe: () => void;
 
     constructor(
-        private _abilitiesRepository: AbilitiesRepository,
-        private _skillsRepository: SkillsRepository,
-        private _router: Router
+        private redux: ReduxConnector,
+        private router: Router
     ) {
+        this.unsubscribe = this.redux.connect(state => this.onStateUpdate(state));
     }
 
-    ngOnInit() {
-        this.abilities = this._abilitiesRepository.currentAbilities;
-        this._abilitiesRepository.observable.subscribe(abilities => {
-            this.abilities = abilities;
-            console.log("AbilitiesComponent.init", "Updated abilities", abilities);
-        });
-        this.skills = this._skillsRepository.currentSkills.toAbilitiesMap();
-        this._skillsRepository.observable.subscribe(skills => {
-            this.skills = skills.toAbilitiesMap();
-            console.log("AbilitiesComponent.init", "Updated skills", this.skills);
-        });
-        console.log("Initialised abilities component");
+    ngOnDestroy() {
+        this.unsubscribe();
+    }
+
+    private onStateUpdate(state: State) {
+        this.abilities = state.stats.abilities;
+        this.skills = state.stats.skills.toAbilitiesMap();
     }
 
     public edit() {
-        this._router.navigate(['EditAbilities']);
+        this.router.navigate(['EditAbilities']);
     }
 }

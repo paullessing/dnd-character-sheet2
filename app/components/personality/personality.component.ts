@@ -43,10 +43,14 @@ export class PersonalityComponent implements OnDestroy {
 
     public save() {
         this.redux.dispatch(update(this.editPersonality));
-        this.isEditing = false;
+        setTimeout(() => {
+            this.isEditing = false;
+        }, 10);
     }
 
     public cancel() {
-        this.isEditing = false;
+        setTimeout(() => {
+            this.isEditing = false;
+        }, 10);
     }
 }

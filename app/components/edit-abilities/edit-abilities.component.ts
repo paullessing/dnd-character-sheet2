@@ -1,15 +1,19 @@
-import {Component, OnInit, EventEmitter} from 'angular2/core';
-import {Router} from "angular2/router";
+import {Component, EventEmitter} from 'angular2/core';
 
 import {Names as AbilityNames} from "../../entities/abilities";
 import {Skill, SkillData} from "../../entities/skills";
 
 import {AbilitiesRepository} from "../../services/abilities/abilities.repository";
-import {AbilityDiff, AbilitiesDiff, AbilitiesActions} from "../../services/abilities/abilitiesActions.service";
 
 import {SkillsRepository} from "../../services/skills/skills.repository";
 import {SkillsActions} from "../../services/skills/skillsActions.service";
 import {Proficiency} from "../../entities/skills";
+import {AbilityData} from "../../entities/abilities";
+import {ReduxConnector} from "../../common/connector";
+import {Abilities} from "../../entities/abilities";
+import {updateStats} from "../../actions/stats.actions";
+import {AbilitiesDiff} from "../../actions/stats.actions";
+import {Router} from "../../common/router.service";
 
 /**
  * Component showing basic character details.
@@ -18,29 +22,20 @@ import {Proficiency} from "../../entities/skills";
     selector: 'edit-abilities',
     templateUrl: 'app/components/edit-abilities/edit-abilities.component.html'
 })
-export class EditAbilitiesComponent implements OnInit {
+export class EditAbilitiesComponent {
 
-    public abilities: {
-        name: string,
-        value: number,
-        isProficientSavingThrow: boolean
-    }[];
+    public abilities: AbilityData[];
     public skills: {
         [abilityName: string]: SkillData[]
     };
     public proficiencies = Proficiency.values;
 
     constructor(
-        private _abilitiesRepository: AbilitiesRepository,
-        private _skillsRepository: SkillsRepository,
-        private _abilitiesActions: AbilitiesActions,
-        private _skillsActions: SkillsActions,
-        private _router: Router
+        private redux: ReduxConnector,
+        private router: Router
     ) {
-    }
-
-    ngOnInit() {
-        let currentAbilities = this._abilitiesRepository.currentAbilities;
+        let state = this.redux.getState();
+        let currentAbilities: Abilities = state.stats.abilities;
 
         this.abilities = _.map(AbilityNames.values, name => ({
             name: name,
@@ -48,7 +43,7 @@ export class EditAbilitiesComponent implements OnInit {
             isProficientSavingThrow: currentAbilities.byName[name].savingThrows.isProficient
         }));
 
-        let currentSkills = this._skillsRepository.currentSkills;
+        let currentSkills = state.stats.skills;
 
         this.skills = {};
         _.each(currentSkills.toAbilitiesMap(), (skills: Skill[], abilityName: string) => {
@@ -67,12 +62,13 @@ export class EditAbilitiesComponent implements OnInit {
             value: abilityDiff.value,
             isProficientSavingThrow: abilityDiff.isProficientSavingThrow
         });
-        this._abilitiesActions.update(abilities);
-        this._skillsActions.update(_.flatten(_.toArray(this.skills), true));
-        this._router.navigate(['Abilities']);
+        let skills: SkillData[] = _.flatten(_.toArray(this.skills), true);
+        this.redux.dispatch(updateStats(abilities, skills))
+
+        this.router.navigate(['Abilities']);
     }
 
     public cancel() {
-        this._router.navigate(['Abilities']);
+        this.router.navigate(['Abilities']);
     }
 }

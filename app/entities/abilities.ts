@@ -1,5 +1,5 @@
 import {Injectable} from "angular2/core";
-import {AbilitiesDiff} from "../services/abilities/abilitiesActions.service";
+import {AbilitiesDiff} from "../actions/stats.actions";
 
 export interface AbilityDefinition {
     name: string;
@@ -104,6 +104,7 @@ export class Abilities extends Array<Ability> {
         return getAbilities(this, newBonus);
     }
 
+    // TODO object shouldn't depend on AbilitiesDiff
     public update(diff: AbilitiesDiff, proficiencyBonus: number) {
         let newData: AbilityData[] = this.getData()
                 .map((abilityData: AbilityData) => {

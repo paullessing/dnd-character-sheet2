@@ -29,7 +29,7 @@ export class Personality implements IPersonality {
         Object.freeze(this); // Make immutable
     }
 
-    public equals(that: Personality): boolean {
+    public equals(that: IPersonality): boolean {
         return this.traits === that.traits
             && this.ideals === that.ideals
             && this.bonds === that.bonds

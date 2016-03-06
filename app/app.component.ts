@@ -2,11 +2,7 @@ import {Component} from 'angular2/core';
 import {RouteConfig, ROUTER_DIRECTIVES} from "angular2/router";
 import {Dispatcher} from "./common/dispatcher";
 import {CharacterComponent} from "./components/character/character.component";
-import {PersonalityActions} from "./services/personality/personalityActions.service";
-import {PersonalityRepository} from "./services/personality/personality.repository";
 import {PersonalityComponent} from './components/personality/personality.component';
-import {CharacterActions} from "./services/character/characterActions.service";
-import {CharacterRepository} from "./services/character/character.repository";
 import {HistoryRepository} from "./services/history/history.repository";
 import {AbilitiesRepository} from "./services/abilities/abilities.repository";
 import {AbilitiesComponent} from "./components/abilities/abilities.component";
@@ -30,6 +26,7 @@ import {Store} from 'redux';
 import {ReduxConnector} from "./common/connector";
 import {update} from "./actions/personality.actions";
 import {load} from "./actions/history.actions";
+import {Router} from "./common/router.service";
 
 /**
  * Main app component for the character sheet app.
@@ -46,12 +43,11 @@ import {load} from "./actions/history.actions";
         ShopComponent
     ],
     providers: [
+        Router,
         Dispatcher,
         HistoryRepository,
         AbilitiesActions, AbilityDataRepository, AbilitiesRepository,
         SkillsActions, SkillDataRepository, SkillsRepository,
-        CharacterActions, CharacterRepository,
-        PersonalityActions, PersonalityRepository,
         ItemActions, ItemRepository,
         WalletActions, WalletRepository,
         StorageService,

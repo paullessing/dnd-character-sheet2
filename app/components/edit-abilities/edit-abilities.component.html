@@ -2,7 +2,7 @@
 <form *ngIf="abilities" (submit)="save()">
 	<div *ngFor="#ability of abilities">
 		<label>{{ ability.name }}</label>
-		<input [(ngModel)]="ability.value" required />
+		<input [(ngModel)]="ability.value" required type="number" step="1" min="0" />
 		<ul style="padding-left: 2rem; font-size: 0.9rem;">
 			<li>
 				<label>

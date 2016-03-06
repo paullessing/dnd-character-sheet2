@@ -13,7 +13,7 @@ import {addXp} from "../../actions/stats.actions";
  */
 @Component({
     selector: 'character',
-    templateUrl: 'app/components/character/character.component.html'
+    templateUrl: 'app/components/character/character.component.html',
 })
 export class CharacterComponent implements OnDestroy {
     // TODO allow multiclassing
@@ -59,16 +59,22 @@ export class CharacterComponent implements OnDestroy {
 
     public save() {
         this.redux.dispatch(update(this.editCharacter));
-        this.isEditing = false;
+        setTimeout(() => {
+            this.isEditing = false;
+        }, 10);
     }
 
     public cancel() {
-        this.isEditing = false;
-        this.isChangingXp = false;
+        setTimeout(() => {
+            this.isEditing = false;
+            this.isChangingXp = false;
+        }, 10);
     }
 
     public editXp() {
         this.isChangingXp = true;
+        this.xpChange = null;
+        this.xpChangeReason = null;
     }
 
     public submitXp() {
@@ -76,6 +82,9 @@ export class CharacterComponent implements OnDestroy {
             return;
         }
         this.redux.dispatch(addXp(this.xpChange, this.xpChangeReason));
-        this.isChangingXp = false;
+        console.log('submitting');
+        setTimeout(() => {
+            this.isChangingXp = false;
+        }, 10);
     }
 }

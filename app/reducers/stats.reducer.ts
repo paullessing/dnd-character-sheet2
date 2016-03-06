@@ -5,7 +5,7 @@ import {AbilitiesFactory, AbilityData, Abilities} from "../entities/abilities";
 import {Stats} from "../entities/state";
 import {Character} from "../entities/character";
 import {InitialSkills, Skills, SkillData, loadSkills} from "../entities/skills";
-import {AbilitiesDiff} from "../services/abilities/abilitiesActions.service";
+import {AbilitiesDiff} from "../actions/stats.actions";
 
 const abilitiesFactory = new AbilitiesFactory();
 const aData: AbilityData = { name: 'Strength', value: 17, isProficientSavingThrow: true };
@@ -51,7 +51,7 @@ function addXp(stats: Stats, xpToAdd: number): Stats {
     }
 }
 
-interface UpdatePayload {
+export interface UpdatePayload {
     abilities: AbilitiesDiff;
     skills: SkillData[];
 }
