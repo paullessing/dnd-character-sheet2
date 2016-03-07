@@ -1,11 +1,3 @@
-export interface ItemTemplate {
-    name: string;
-    weight?: number; // In lbs
-    cost?: number; // In cp
-    description?: string;
-    modifiers?: any[];
-}
-
 export interface IItem {
     id?: number;
     name: string;
@@ -47,7 +39,64 @@ export class Item {
     }
 
     public getData(): IItem {
-        return this;
+        return {
+            id: this.id,
+            name: this.name,
+            quantity: this.quantity,
+            weight: this.weight,
+            cost: this.cost,
+            description: this.description,
+            modifiers: this.modifiers,
+            modifications: this.modifications
+        };
+    }
+
+    public changeQuantity(newCount: number): Item {
+        let data = this.getData();
+        data.quantity = newCount;
+        return new Item(data);
+    }
+}
+
+export class Inventory extends Array<Item> {
+    public weight: number;
+    public byId: { [itemId: number]: Item };
+
+    constructor(...items: Item[]) {
+        super();
+        this.push(...items);
+        console.log(items);
+
+        this.weight = items.reduce((total: number, item: Item) => total + item.weight ? item.weight * item.quantity : 0, 0);
+        this.byId = {};
+        items.map((item: Item) => this.byId[item.id] = item);
+    }
+
+    public remove(itemId: number, count: number) {
+        let currentCount = this.getCount(itemId);
+        if (currentCount === 0) {
+            throw new Error(`Item '${itemId}' does not exist`);
+        }
+        let newCount = currentCount - count;
+        if (newCount < 0) {
+            throw new Error(`Cannot remove ${count} items of ID '${itemId}' as it only has ${currentCount}`);
+        }
+        if (newCount === 0) {
+            return new Inventory(...(this.filter((item: Item) => item.id !== itemId)));
+        } else {
+            let newItems = this
+                .map((item: Item) => item.id === itemId ? item.changeQuantity(newCount) : item);
+            return new Inventory(...newItems);
+        }
+    }
+
+    public getCount(itemId: number) {
+        let item = this.byId[itemId];
+        return item ? item.quantity : 0;
+    }
+
+    public getData(): IItem[] {
+        return this.map((item: Item) => item.getData());
     }
 }
 
@@ -60,48 +109,3 @@ interface DamageDice {
     count: number;
     size: number;
 }
-
-export const ITEM_TEMPLATES: ItemTemplate[] = Object.freeze([
-    {
-        name: 'Abacus',
-        weight: 2,
-        cost: 200
-    },
-    // Acid
-    // Alchemist's Fire
-    // Ammunition
-    // Antitoxin
-    // Arcane Focus
-    {
-        name: 'Backpack',
-        weight: 5,
-        cost: 200
-    },
-    {
-        name: 'Ball Bearings (bag of 1000)',
-        weight: 2,
-        cost: 2,
-        description: 'As an action, you can spill these tiny metal balls from their pouch to cover a level, square area that is 10 feet on a side. ' +
-        'A creature moving across the covered area must succeed on a DC10 Dexterity saving throw or fall prone. ' +
-        'A creature moving through the area at half speed doesn\'t need to make the save.'
-    },
-    {
-        name: 'Barrel',
-        weight: 70,
-        cost: 200
-    },
-    {
-        name: 'Basket',
-        weight: 2,
-        cost: 40
-    },
-    {
-        name: 'Bedroll',
-        weight: 7,
-        cost: 100
-    },
-    {
-        name: 'Bell',
-        cost: 100
-    },
-]);

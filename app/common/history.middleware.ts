@@ -15,6 +15,7 @@ import {Item} from "../entities/item";
 import {Amount} from "../entities/currency";
 import {loadSkills} from "../entities/skills";
 import {LOAD} from "../actions/actions";
+import {Inventory} from "../entities/item";
 
 export const STATE_KEY = 'dnd-character-sheet.state';
 
@@ -50,17 +51,17 @@ function serialize(state: State): string {
         },
         personality: state.personality,
         inventory: {
-            items: state.inventory.items ? state.inventory.items.map(item => item.getData()) : [],
+            items: state.inventory.items.getData(),
             wallet: state.inventory.wallet || {}
         }
     };
-
     return JSON.stringify(serializedState);
 }
 
 function deserialize(dataString: string): State {
     try {
         let data: SerializedState = JSON.parse(dataString);
+        let items = data.inventory.items.map(((item: IItem) => new Item(item)));
         let state: State = {
             character: new Character(data.character),
             personality: new Personality(data.personality),
@@ -72,7 +73,7 @@ function deserialize(dataString: string): State {
                 skills: null
             },
             inventory: {
-                items: (data.inventory.items || []).map(item => new Item(item)),
+                items: new Inventory(...items),
                 wallet: new Amount(data.inventory.wallet)
             }
         };

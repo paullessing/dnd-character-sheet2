@@ -8,6 +8,7 @@ import {Amount} from "./currency";
 import {Personality} from "./personality";
 import {AbilitiesFactory} from "./abilities";
 import {convertToAmount} from "./currency";
+import {Inventory} from "./item";
 
 export interface State {
     character: Character;
@@ -17,7 +18,7 @@ export interface State {
     personality: Personality;
 
     inventory: {
-        items: Item[];
+        items: Inventory;
         wallet: Amount;
     };
 }

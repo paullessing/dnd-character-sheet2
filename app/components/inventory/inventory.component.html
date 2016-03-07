@@ -3,7 +3,10 @@
 <wallet></wallet>
 <ul>
 	<li *ngFor="#item of items">
-		<inventory-entry [item]="item"></inventory-entry>
+		<inventory-entry
+			[item]="item"
+			(remove)="onItemRemove(item.id, $event)"
+		></inventory-entry>
 	</li>
 </ul>
 <p>Total weight: {{ totalWeight | weight }}</p>

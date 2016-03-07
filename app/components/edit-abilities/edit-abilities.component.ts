@@ -3,10 +3,6 @@ import {Component, EventEmitter} from 'angular2/core';
 import {Names as AbilityNames} from "../../entities/abilities";
 import {Skill, SkillData} from "../../entities/skills";
 
-import {AbilitiesRepository} from "../../services/abilities/abilities.repository";
-
-import {SkillsRepository} from "../../services/skills/skills.repository";
-import {SkillsActions} from "../../services/skills/skillsActions.service";
 import {Proficiency} from "../../entities/skills";
 import {AbilityData} from "../../entities/abilities";
 import {ReduxConnector} from "../../common/connector";

@@ -4,14 +4,8 @@ import {Dispatcher} from "./common/dispatcher";
 import {CharacterComponent} from "./components/character/character.component";
 import {PersonalityComponent} from './components/personality/personality.component';
 import {HistoryRepository} from "./services/history/history.repository";
-import {AbilitiesRepository} from "./services/abilities/abilities.repository";
 import {AbilitiesComponent} from "./components/abilities/abilities.component";
-import {SkillDataRepository} from "./services/skills/skillData.repository";
-import {SkillsRepository} from "./services/skills/skills.repository";
-import {AbilityDataRepository} from "./services/abilities/abilityData.repository";
 import {EditAbilitiesComponent} from "./components/edit-abilities/edit-abilities.component";
-import {AbilitiesActions} from "./services/abilities/abilitiesActions.service";
-import {SkillsActions} from "./services/skills/skillsActions.service";
 import {StorageService} from "./services/storage/storage.service";
 import {InventoryComponent} from "./components/inventory/inventory.component";
 import {ItemActions} from "./services/item/itemActions.service";
@@ -46,8 +40,6 @@ import {Router} from "./common/router.service";
         Router,
         Dispatcher,
         HistoryRepository,
-        AbilitiesActions, AbilityDataRepository, AbilitiesRepository,
-        SkillsActions, SkillDataRepository, SkillsRepository,
         ItemActions, ItemRepository,
         WalletActions, WalletRepository,
         StorageService,

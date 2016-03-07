@@ -91,13 +91,10 @@ export class Abilities extends Array<Ability> {
     constructor(...abilities: Ability[]) {
         super();
         this.push(...abilities);
-        //console.log("Abilities constructor args", abilities);
         this.byName = {};
         abilities.forEach(ability => this.byName[ability.name] = ability);
         Object.freeze(this.byName);
         Object.freeze(this);
-
-        //console.log("Created new abilities", this);
     }
 
     public changeProficiency(newBonus: number) {

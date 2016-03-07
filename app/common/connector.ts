@@ -2,6 +2,7 @@ import {Injectable, Inject} from "angular2/core";
 import {Store, Dispatch} from "redux";
 import {Action} from "./../actions/action";
 import {State} from "./../entities/state";
+import {ThunkAction} from "../actions/action";
 
 @Injectable()
 export class ReduxConnector {
@@ -22,7 +23,7 @@ export class ReduxConnector {
         return unsubscribe;
     }
 
-    public dispatch(action: Action): void {
+    public dispatch(action: Action | ThunkAction): void {
         this.store.dispatch(action);
     }
 

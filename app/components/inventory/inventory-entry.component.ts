@@ -1,10 +1,15 @@
-import {Component, Input} from 'angular2/core';
+import {Component, Input, Output} from 'angular2/core';
 import {BehaviorSubject, Subject} from "rxjs/Rx";
 
 import {Item} from "../../entities/item";
 import {CurrencyPipe} from "../../common/currency.pipe";
 import {WeightPipe} from "../../common/weight.pipe";
 import {ItemActions} from "../../services/item/itemActions.service";
+import {EventEmitter} from "angular2/core";
+
+export interface ItemRemoveData {
+    count: number;
+}
 
 /**
  * Component showing an item in the inventory.
@@ -19,11 +24,13 @@ export class InventoryEntryComponent {
     @Input()
     public item: Item;
 
+    @Output('remove')
+    public removeEvents: EventEmitter<ItemRemoveData> = new EventEmitter<ItemRemoveData>();
+
     public isExpanded: boolean = false;
     public removeCount: number;
 
     constructor(
-        private itemActions: ItemActions
     ) {
     }
 
@@ -32,7 +39,10 @@ export class InventoryEntryComponent {
     }
 
     public remove(): void {
-        this.itemActions.add(this.item.id, -(this.removeCount || 1), null);
+        this.removeEvents.emit({
+            itemId: this.item.id,
+            count: this.removeCount || 1
+        });
         this.removeCount = null;
     }
 }
