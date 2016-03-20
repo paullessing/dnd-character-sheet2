@@ -12,8 +12,6 @@ import {ItemActions} from "./services/item/itemActions.service";
 import {ItemRepository} from "./services/item/item.repository";
 import {ShopComponent} from "./components/shop/shop.component";
 import {EditItemComponent} from "./components/edit-item/edit-item.component";
-import {WalletActions} from "./services/wallet/walletActions.service";
-import {WalletRepository} from "./services/wallet/wallet.repository";
 import {WalletComponent} from "./components/wallet/wallet.component";
 import {Inject} from "angular2/core";
 import {Store} from 'redux';
@@ -41,7 +39,6 @@ import {Router} from "./common/router.service";
         Dispatcher,
         HistoryRepository,
         ItemActions, ItemRepository,
-        WalletActions, WalletRepository,
         StorageService,
         ReduxConnector,
     ]

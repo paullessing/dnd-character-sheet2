@@ -1,9 +1,7 @@
 import {Component, OnDestroy} from 'angular2/core';
 import {FORM_DIRECTIVES, ControlGroup, FormBuilder, RadioButtonState} from "angular2/common";
-import {RadioControlValueAccessor} from "angular2/src/common/forms/directives/radio_control_value_accessor";
 
 import {Amount,IAmount} from "../../entities/currency";
-import {WalletRepository} from "../../services/wallet/wallet.repository";
 import {ReduxConnector} from "../../common/connector";
 import {State} from "../../entities/state";
 import {addToWallet, removeFromWallet} from "../../actions/inventory.actions";
@@ -14,7 +12,7 @@ import {addToWallet, removeFromWallet} from "../../actions/inventory.actions";
 @Component({
     selector: 'wallet',
     templateUrl: 'app/components/wallet/wallet.component.html',
-    directives: [FORM_DIRECTIVES, RadioControlValueAccessor]
+    directives: [FORM_DIRECTIVES]
 })
 export class WalletComponent implements OnDestroy {
     public wallet: Amount;
