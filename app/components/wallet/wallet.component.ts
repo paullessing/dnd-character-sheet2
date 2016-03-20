@@ -1,32 +1,47 @@
-import {Component, OnInit} from 'angular2/core';
+import {Component, OnDestroy} from 'angular2/core';
+import {FORM_DIRECTIVES, ControlGroup, FormBuilder, RadioButtonState} from "angular2/common";
+import {RadioControlValueAccessor} from "angular2/src/common/forms/directives/radio_control_value_accessor";
+
 import {Amount,IAmount} from "../../entities/currency";
 import {WalletRepository} from "../../services/wallet/wallet.repository";
-import {WalletActions} from "../../services/wallet/walletActions.service";
+import {ReduxConnector} from "../../common/connector";
+import {State} from "../../entities/state";
+import {addToWallet, removeFromWallet} from "../../actions/inventory.actions";
 
 /**
  * Component showing personality traits, motivation etc.
  */
 @Component({
     selector: 'wallet',
-    templateUrl: 'app/components/wallet/wallet.component.html'
+    templateUrl: 'app/components/wallet/wallet.component.html',
+    directives: [FORM_DIRECTIVES, RadioControlValueAccessor]
 })
-export class WalletComponent implements OnInit {
+export class WalletComponent implements OnDestroy {
     public wallet: Amount;
     public changeAmount: IAmount;
     public isEditing: boolean;
-    public isAdd: boolean;
+    private unsubscribe: () => void;
+
+    public walletForm: ControlGroup;
 
     constructor(
-        private _walletActions: WalletActions,
-        private _walletRepository: WalletRepository
+        private redux: ReduxConnector,
+        private formBuilder: FormBuilder
     ) {
+        this.unsubscribe = this.redux.connect((state: State) => this.onStateUpdate(state));
+
+        this.walletForm = formBuilder.group({
+            add: new RadioButtonState(true, 'add'),
+            remove: new RadioButtonState(false, 'remove')
+        });
     }
 
-    ngOnInit() {
-        this._walletRepository.wallet.subscribe(wallet => {
-            this.wallet = wallet;
-            console.log("Updated wallet", wallet);
-        });
+    ngOnDestroy() {
+        this.unsubscribe();
+    }
+
+    private onStateUpdate(state: State) {
+        this.wallet = state.inventory.wallet;
     }
 
     public edit() {
@@ -43,23 +58,29 @@ export class WalletComponent implements OnInit {
 
     public save() {
         if (this.isAdd) {
-            this._walletActions.add(this.changeAmount);
+            this.redux.dispatch(addToWallet(this.changeAmount));
         } else {
-            if (new Amount(this.changeAmount).totalValue > this.wallet.totalValue) {
-                this.changeAmount = {
-                    copper: this.wallet.copper,
-                    silver: this.wallet.silver,
-                    electrum: this.wallet.electrum,
-                    gold: this.wallet.gold,
-                    platinum: this.wallet.platinum
-                };
-            }
-            this._walletActions.remove(this.changeAmount);
+            this.redux.dispatch(removeFromWallet(this.changeAmount));
         }
-        this.isEditing = false;
+        setTimeout(() => {
+            this.isEditing = false;
+        }, 10);
     }
 
     public cancel() {
-        this.isEditing = false;
+        setTimeout(() => {
+            this.isEditing = false;
+        }, 10);
+    }
+
+    private get isAdd(): boolean {
+        return this.walletForm.controls['add'].value.checked;
+    }
+
+    private set isAdd(value: boolean) {
+        this.walletForm.controls['add'].value.checked = value;
+        this.walletForm.controls['remove'].value.checked = !value;
+        this.walletForm.controls['add'].updateValueAndValidity({ onlySelf: true, emitEvent: false });
+        this.walletForm.controls['remove'].updateValueAndValidity({ onlySelf: true, emitEvent: false });
     }
 }

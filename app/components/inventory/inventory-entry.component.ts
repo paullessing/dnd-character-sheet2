@@ -40,7 +40,6 @@ export class InventoryEntryComponent {
 
     public remove(): void {
         this.removeEvents.emit({
-            itemId: this.item.id,
             count: this.removeCount || 1
         });
         this.removeCount = null;

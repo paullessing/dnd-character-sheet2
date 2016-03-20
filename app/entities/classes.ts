@@ -13,7 +13,7 @@ export enum Class {
     Wizard
 }
 
-var _ClassNames: string[] = [];
+let _ClassNames: string[] = [];
 _ClassNames[Class.Barbarian] = 'Barbarian';
 _ClassNames[Class.Bard]      = 'Bard';
 _ClassNames[Class.Cleric]	 = 'Cleric';

@@ -1,7 +1,7 @@
 import {Component, Input, OnChanges, SimpleChange} from 'angular2/core';
 import {Router, RouterLink} from "angular2/router";
 
-import {ItemTemplate, ITEM_TEMPLATES} from "../../entities/item";
+import {ItemTemplate, ITEM_TEMPLATES} from "../../entities/itemDefinitions";
 import {CurrencyPipe} from "../../common/currency.pipe";
 import {WeightPipe} from "../../common/weight.pipe";
 import {ItemActions} from "../../services/item/itemActions.service";

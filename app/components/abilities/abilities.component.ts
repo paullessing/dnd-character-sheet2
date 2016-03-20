@@ -1,10 +1,8 @@
 import {Component, OnDestroy} from 'angular2/core';
 
-import {AbilitiesRepository} from "../../services/abilities/abilities.repository";
 import {Abilities} from "../../entities/abilities";
 import {ModifierPipe} from "../../common/modifier.pipe";
 import {Skill} from "../../entities/skills";
-import {SkillsRepository} from "../../services/skills/skills.repository";
 import {EditAbilitiesComponent} from "../edit-abilities/edit-abilities.component";
 import {ReduxConnector} from "../../common/connector";
 import {State} from "../../entities/state";

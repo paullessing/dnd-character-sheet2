@@ -1,7 +1,8 @@
 import {Injectable} from "angular2/core";
 
-import {IItem, Item, ItemTemplate} from "../../entities/item";
+import {IItem, Item} from "../../entities/item";
 import {Dispatcher, Event} from "../../common/dispatcher";
+import {ItemTemplate} from "../../entities/itemDefinitions";
 
 export class ItemEventType {
     static CREATE = 'item.create';

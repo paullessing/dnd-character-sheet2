@@ -1,8 +1,7 @@
 import {Action} from "./action";
-import {ADD_XP} from "./actions";
+import {ADD_XP, UPDATE_ABILITIES} from "./actions";
+
 import {SkillData} from "../entities/skills";
-import {UPDATE_ABILITIES} from "./actions";
-import {UpdatePayload} from "../reducers/stats.reducer";
 
 export interface AbilityDiff {
     value: number;
@@ -11,6 +10,11 @@ export interface AbilityDiff {
 
 export interface AbilitiesDiff {
     [name: string]: AbilityDiff
+}
+
+export interface UpdatePayload {
+    abilities: AbilitiesDiff;
+    skills: SkillData[];
 }
 
 export function updateStats(abilities: AbilitiesDiff, skills: SkillData[]) {

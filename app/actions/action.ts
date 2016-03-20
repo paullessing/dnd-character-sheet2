@@ -1,4 +1,5 @@
 import {State} from "../entities/state";
+
 export interface Action {
     type: string;
     payload?: any;

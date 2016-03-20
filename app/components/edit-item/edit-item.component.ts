@@ -2,9 +2,10 @@ import {Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChange}
 import {Observable} from "rxjs/Observable";
 import {RouteParams} from "angular2/router";
 
-import {Item, IItem, ITEM_TEMPLATES, ItemTemplate} from "../../entities/item";
+import {Item, IItem} from "../../entities/item";
 import {ItemActions} from "../../services/item/itemActions.service";
 import {Router} from "../../common/router.service";
+import {ITEM_TEMPLATES, ItemTemplate} from "../../entities/itemDefinitions";
 
 /**
  * Component showing personality traits, motivation etc.

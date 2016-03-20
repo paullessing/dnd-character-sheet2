@@ -1,22 +1,21 @@
 import {Action} from "../actions/action";
 import {ADD_XP, UPDATE_ABILITIES} from "../actions/actions";
 
-import {AbilitiesFactory, AbilityData, Abilities} from "../entities/abilities";
+import {getAbilities, AbilityData, Abilities} from "../entities/abilities";
 import {Stats} from "../entities/state";
 import {Character} from "../entities/character";
 import {InitialSkills, Skills, SkillData, loadSkills} from "../entities/skills";
-import {AbilitiesDiff} from "../actions/stats.actions";
+import {AbilitiesDiff, UpdatePayload} from "../actions/stats.actions";
 
-const abilitiesFactory = new AbilitiesFactory();
-const aData: AbilityData = { name: 'Strength', value: 17, isProficientSavingThrow: true };
-const emptyAbilities = abilitiesFactory.getAbilities([aData], 2);
+const defaultProficiency = getProficiencyBonus(1);
+const emptyAbilities = getAbilities([], defaultProficiency);
 
 const defaultState = Object.freeze({
     xp: 0,
     level: 1,
-    proficiencyBonus: getProficiencyBonus(1),
+    proficiencyBonus: defaultProficiency,
     abilities: emptyAbilities,
-    skills: loadSkills(emptyAbilities, [], getProficiencyBonus(1))
+    skills: loadSkills(emptyAbilities, [], defaultProficiency)
 });
 
 export function stats(state: Stats = defaultState, action: Action) {
@@ -49,11 +48,6 @@ function addXp(stats: Stats, xpToAdd: number): Stats {
             skills
         };
     }
-}
-
-export interface UpdatePayload {
-    abilities: AbilitiesDiff;
-    skills: SkillData[];
 }
 
 function updateStats(state: Stats, data: UpdatePayload): Stats {
