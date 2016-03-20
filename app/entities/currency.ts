@@ -8,6 +8,30 @@ export interface IAmount {
     platinum?: number;
 }
 
+const shortAmounts = {
+    'c': 'copper',
+    's': 'silver',
+    'e': 'electrum',
+    'g': 'gold',
+    'p': 'platinum'
+};
+
+function parseStringToAmount(value: string): IAmount {
+    const input = value.toLowerCase();
+    const pattern = /(?:(\d+)\s*(cp?|copper|sp?|silver|ep?|electrum|gp?|gold|pp?|platinum)\b)/gi;
+    let match;
+    let amount: IAmount = {};
+
+    while ((match = pattern.exec(input)) !== null) {
+        if (match.index === pattern.lastIndex) {
+            pattern.lastIndex++;
+        }
+        const name = shortAmounts[match[2][0]]; // First letter is indicative of the value
+        amount[name] = (amount[name] || 0) + parseInt(match[1], 10);
+    }
+    return amount;
+}
+
 export class Amount implements IAmount {
     public copper:   number;
     public silver:   number;
@@ -18,15 +42,14 @@ export class Amount implements IAmount {
     public totalValue: number;
 
     constructor(value: IAmount | string) {
-        if (typeof value === 'string') {
-            // TODO
-        } else {
-            this.copper   = value.copper   || 0;
-            this.silver   = value.silver   || 0;
-            this.electrum = value.electrum || 0;
-            this.gold     = value.gold     || 0;
-            this.platinum = value.platinum || 0;
-        }
+        let amount: IAmount = (typeof value === 'string') ?
+            parseStringToAmount(value) :
+            value;
+        this.copper   = amount.copper   || 0;
+        this.silver   = amount.silver   || 0;
+        this.electrum = amount.electrum || 0;
+        this.gold     = amount.gold     || 0;
+        this.platinum = amount.platinum || 0;
         this.totalValue = toCopper(this);
         Object.freeze(this);
     }

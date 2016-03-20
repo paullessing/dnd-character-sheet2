@@ -65,7 +65,6 @@ export class Inventory extends Array<Item> {
     constructor(...items: Item[]) {
         super();
         this.push(...items);
-        console.log(items);
 
         this.weight = items.reduce((total: number, item: Item) => total + item.weight ? item.weight * item.quantity : 0, 0);
         this.byId = {};
