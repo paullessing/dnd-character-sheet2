@@ -1,6 +1,15 @@
 <div *ngIf="wallet">
 	<h2>Wallet</h2>
-	<table>
+	<style>
+		.wallet {
+			border: 1px solid #666;
+		}
+		.wallet th, .wallet td {
+			min-width: 50px;
+			text-align: center;
+		}
+	</style>
+	<table class="wallet">
 		<thead>
 		<tr>
 			<th>PP</th>

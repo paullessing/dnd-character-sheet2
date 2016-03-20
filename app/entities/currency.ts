@@ -60,13 +60,12 @@ export class Amount implements IAmount {
             newWallet[currency] = (this[currency] || 0) - (costAsAmount[currency] || 0);
         });
 
+        // Try to clear discrepancies by going up first
         while (newWallet.copper < 0) {
-            console.log("copper < 0");
             newWallet.silver--;
             newWallet.copper += 10;
         }
         while (newWallet.silver < 0) {
-            console.log("silver < 0");
             if (newWallet.electrum > 0) {
                 newWallet.electrum--;
                 newWallet.silver += 5;
@@ -76,14 +75,34 @@ export class Amount implements IAmount {
             }
         }
         while (newWallet.electrum < 0) {
-            console.log("electrum < 0");
             newWallet.gold--;
             newWallet.electrum += 2;
         }
         while (newWallet.gold < 0) {
-            console.log("gold < 0");
             newWallet.platinum--;
             newWallet.gold += 10;
+        }
+
+        // Now try to clear discrepancies by converting smaller amounts up
+        if (newWallet.platinum < 0) {
+            newWallet.gold += newWallet.platinum * 10;
+            newWallet.platinum = 0;
+        }
+        if (newWallet.gold < 0) {
+            if (newWallet.electrum > 0) {
+                newWallet.electrum += newWallet.gold * 2;
+            } else {
+                newWallet.silver += newWallet.silver * 10;
+            }
+            newWallet.gold = 0;
+        }
+        if (newWallet.electrum < 0) {
+            newWallet.silver += newWallet.electrum * 5;
+            newWallet.electrum = 0;
+        }
+        if (newWallet.silver < 0) {
+            newWallet.copper += newWallet.silver * 10;
+            newWallet.silver = 0;
         }
 
         return new Amount(newWallet);
