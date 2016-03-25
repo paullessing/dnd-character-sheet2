@@ -7,7 +7,6 @@ import {Item} from "./item";
 import {Amount} from "./currency";
 import {Personality} from "./personality";
 import {AbilitiesFactory} from "./abilities";
-import {convertToAmount} from "./currency";
 import {Inventory} from "./item";
 
 export interface State {
@@ -20,6 +19,7 @@ export interface State {
     inventory: {
         items: Inventory;
         wallet: Amount;
+        maxItemId: number;
     };
 }
 

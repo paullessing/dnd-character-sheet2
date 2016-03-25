@@ -4,7 +4,9 @@ import {Router, RouterLink} from "angular2/router";
 import {ItemTemplate, ITEM_TEMPLATES} from "../../entities/itemDefinitions";
 import {CurrencyPipe} from "../../common/currency.pipe";
 import {WeightPipe} from "../../common/weight.pipe";
-import {ItemActions} from "../../services/item/itemActions.service";
+import {Amount} from "../../entities/currency";
+import {ReduxConnector} from "../../common/connector";
+import {buy} from "../../actions/inventory.actions";
 
 @Component({
     selector: 'shop-item-actions',
@@ -21,9 +23,10 @@ export class ShopItemActionsComponent implements OnChanges {
 
     public action: string;
     public isExpanded: boolean;
+    public price: Amount;
 
     constructor(
-        private itemActions: ItemActions
+        private redux: ReduxConnector
     ) {
     }
 
@@ -31,15 +34,21 @@ export class ShopItemActionsComponent implements OnChanges {
         this.action = null;
         this.count = null;
         this.reason = null;
+        this.onCountChange();
     }
 
     public buy() {
-        this.itemActions.buy(this.item, this.count, this.reason);
+        this.redux.dispatch(buy(this.item, this.count, this.reason, null));
         this.count = null;
         this.reason = null;
+        this.onCountChange();
     }
 
-    public get price(): number {
-        return this.count ? this.count * this.item.cost : null;
+    public onCountChange() {
+        if (!this.count) {
+            this.price = null;
+            return;
+        }
+        this.price = new Amount(this.item.cost).times(this.count);
     }
 }

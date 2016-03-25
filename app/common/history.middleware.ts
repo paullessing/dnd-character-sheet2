@@ -36,6 +36,7 @@ interface SerializedState {
     inventory: {
         items: IItem[];
         wallet: IAmount;
+        maxItemId: number;
     };
 }
 
@@ -52,7 +53,8 @@ function serialize(state: State): string {
         personality: state.personality,
         inventory: {
             items: state.inventory.items.getData(),
-            wallet: state.inventory.wallet || {}
+            wallet: state.inventory.wallet || {},
+            maxItemId: state.inventory.maxItemId || Math.max(0, Math.max.apply(Math, state.inventory.items.items.map(item => item.id)))
         }
     };
     return JSON.stringify(serializedState);
@@ -74,7 +76,8 @@ function deserialize(dataString: string): State {
             },
             inventory: {
                 items: new Inventory(...items),
-                wallet: new Amount(data.inventory.wallet)
+                wallet: new Amount(data.inventory.wallet),
+                maxItemId: data.inventory.maxItemId
             }
         };
         let abilities = getAbilities(data.stats.abilities, state.stats.proficiencyBonus);

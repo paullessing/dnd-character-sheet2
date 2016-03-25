@@ -6,6 +6,7 @@ import {IAmount} from "../entities/currency";
 const names = [
     ' cp',
     ' sp',
+    ' ep',
     ' gp',
     ' pp',
 ];
@@ -13,6 +14,7 @@ function getPresence(values: IAmount) {
     return [
         !!values.copper,
         !!values.silver,
+        !!values.electrum,
         !!values.gold,
         !!values.platinum,
     ];
@@ -22,6 +24,7 @@ function toArray(values: IAmount) {
     return [
         values.copper,
         values.silver,
+        values.electrum,
         values.gold,
         values.platinum,
     ];
@@ -32,11 +35,20 @@ function toArray(values: IAmount) {
 })
 export class CurrencyPipe implements PipeTransform {
     public transform(value: any, args: any[]): any {
-        const parsedValue = parseInt(value, 10);
-        if (isNaN(parsedValue) || parsedValue === 0) {
+        let values: Amount;
+        if (value instanceof Amount) {
+            values = value;
+        } else {
+            let numeric = +value;
+            if (isNaN(numeric)) {
+                values = new Amount(value);
+            } else {
+                values = convertToAmount(numeric, false);
+            }
+        }
+        if (values.totalValue <= 0) {
             return '—';
         }
-        let values = convertToAmount(parsedValue, false);
         let array = toArray(values);
         let present = getPresence(values);
         let smallest = present.indexOf(true);

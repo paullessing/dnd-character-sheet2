@@ -2,16 +2,20 @@ import {combineReducers} from 'redux';
 
 import {Action} from "../actions/action";
 import {Amount} from "../entities/currency";
-import {Inventory} from "../entities/item";
-import {REMOVE_ITEM, REMOVE_FROM_WALLET, ADD_TO_WALLET} from "../actions/actions";
+import {Item, IItem, Inventory} from "../entities/item";
+import {ItemTemplate} from "../entities/itemDefinitions";
+import {ADD_ITEM, REMOVE_ITEM, REMOVE_FROM_WALLET, ADD_TO_WALLET, BUY_ITEM, CREATE_ITEM} from "../actions/actions";
 
 interface InventoryState {
     items: Inventory,
+    maxItemId: number,
     wallet: Amount
 }
 
-function items(state: Inventory = new Inventory(), action: Action): Inventory {
+function items(state: Inventory, action: Action): Inventory {
     switch (action.type) {
+        case ADD_ITEM:
+            return state.add(action.payload.itemId, action.payload.count);
         case REMOVE_ITEM:
             return state.remove(action.payload.itemId, action.payload.count);
         default:
@@ -19,7 +23,7 @@ function items(state: Inventory = new Inventory(), action: Action): Inventory {
     }
 }
 
-function wallet(state: Amount = new Amount({}), action: Action): Amount {
+function wallet(state: Amount, action: Action): Amount {
     switch (action.type) {
         case ADD_TO_WALLET:
             return state.plus(action.payload.amount);
@@ -30,10 +34,68 @@ function wallet(state: Amount = new Amount({}), action: Action): Amount {
     }
 }
 
-const simpleActions = combineReducers({ items, wallet });
+function reducePurchases(state: InventoryState, action: Action): InventoryState {
+    switch (action.type) {
+        case CREATE_ITEM:
+            let newState = Object.assign({}, state);
+            newState.items = state.items.push(action.payload.item, getNewMaxId(newState));
+            return newState;
+        case BUY_ITEM:
+            return buyItem(state, action);
+        default:
+            return state;
+    }
+}
 
-export function inventory(state: InventoryState, action: Action) {
-    let newState = simpleActions(state, action);
-    // TODO complex actions
+function buyItem(state: InventoryState, action: Action) {
+    const template: ItemTemplate = action.payload.item;
+    const totalCost = new Amount(template.cost).times(action.payload.count);
+    if (state.wallet.lessThan(totalCost)) {
+        throw new Error(`Cannot buy item "${template.name}": it costs ${totalCost} and user only has ${state.wallet}`);
+    }
+    let existingItem = state.items.find((item: Item) => {
+        return item.name === template.name &&
+            !item.modifications &&
+            item.cost.totalValue === new Amount(template.cost).totalValue &&
+            item.description === template.description &&
+            item.weight === template.weight
+    });
+
+    let newState = Object.assign({}, state);
+
+    if (existingItem) {
+        newState.items = state.items.add(existingItem.id, action.payload.count);
+    } else {
+        let itemData: IItem = {
+            name: template.name,
+            description: template.description,
+            cost: template.cost,
+            weight: template.weight,
+            modifiers: template.modifiers,
+            quantity: action.payload.count,
+            modifications: action.payload.modifications
+        };
+        newState.items = state.items.push(itemData, getNewMaxId(newState));
+    }
+    newState.wallet = state.wallet.minus(new Amount(template.cost).times(action.payload.count));
+    return newState;
+}
+
+function getNewMaxId(state: InventoryState) {
+    return () => ++state.maxItemId;
+}
+
+export function inventory(state: InventoryState = {
+    items: new Inventory(),
+    maxItemId: 0,
+    wallet: new Amount({})
+}, action: Action) {
+    let newState = {
+        items: items(state.items, action),
+        wallet: wallet(state.wallet, action),
+        maxItemId: state.maxItemId
+    };
+    newState = reducePurchases(newState, action);
+
     return newState;
 }

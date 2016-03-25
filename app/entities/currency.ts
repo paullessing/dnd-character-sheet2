@@ -42,9 +42,10 @@ export class Amount implements IAmount {
     public totalValue: number;
 
     constructor(value: IAmount | string) {
-        let amount: IAmount = (typeof value === 'string') ?
-            parseStringToAmount(value) :
-            value;
+        let amount: IAmount = !value ? {} :
+            (typeof value === 'string') ?
+                parseStringToAmount(value) :
+                value;
         this.copper   = amount.copper   || 0;
         this.silver   = amount.silver   || 0;
         this.electrum = amount.electrum || 0;
@@ -137,6 +138,18 @@ export class Amount implements IAmount {
         return new Amount(newData);
     }
 
+    public greaterThan(that: Amount | number | string): boolean {
+        return this.totalValue > toCopper(that);
+    }
+
+    public lessThan(that: Amount | number | string): boolean {
+        return this.totalValue < toCopper(that);
+    }
+
+    public times(count: number): Amount {
+        return convertToAmount(this.totalValue * count, this.platinum > 0);
+    }
+
     public getData(): IAmount {
         return {
             copper: this.copper,
@@ -145,6 +158,13 @@ export class Amount implements IAmount {
             gold: this.gold,
             platinum: this.platinum
         };
+    }
+
+    public equals(that: Amount | number | string) {
+        if (that instanceof Amount) {
+            return this.totalValue === that.totalValue;
+        }
+        return new Amount(that).totalValue === this.totalValue;
     }
 }
 
@@ -171,7 +191,14 @@ export const Currencies: string[] = Object.freeze([
     'platinum'
 ]);
 
-export function toCopper(amount: IAmount) {
+export function toCopper(amount: IAmount | string | number): number {
+    if (typeof amount === 'string') {
+        return toCopper(parseStringToAmount(amount));
+    }
+    if (typeof amount === 'number') {
+        return amount;
+    }
+
     let total = 0;
     Object.keys(Exchange).forEach((key) => {
         if (amount[key] && typeof amount[key] === 'number') {
@@ -181,7 +208,7 @@ export function toCopper(amount: IAmount) {
     return total;
 }
 
-export function convertToAmount(copper: number, includePlatinum: boolean = true): IAmount {
+export function convertToAmount(copper: number, includePlatinum: boolean = true): Amount {
     let value = copper;
     let amount: IAmount = {};
     amount.copper = value % 10;
@@ -195,5 +222,5 @@ export function convertToAmount(copper: number, includePlatinum: boolean = true)
     } else {
         amount.gold = value;
     }
-    return amount;
+    return new Amount(amount);
 }

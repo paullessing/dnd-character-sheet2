@@ -9,7 +9,7 @@
 	<label><input name="shop-action-type" type="radio" [checked]="action==='buy'" (click)="action='buy'" /> Buy</label>
 	<div [hidden]="action !== 'buy'">
 		<form (submit)="buy()">
-			<label>Count: <input [(ngModel)]="count" type="number" min="1" step="1" required width="50" /> <span [hidden]="!price">({{ price | currency }})</span></label><br />
+			<label>Count: <input [(ngModel)]="count" type="number" min="1" step="1" required width="50" (change)="onCountChange()" /> <span [hidden]="!price">({{ price }})</span></label><br />
 			<label>Reason: <input [(ngModel)]="reason" placeholder="Reason" /></label>
 
 			<button type="submit">Buy</button>

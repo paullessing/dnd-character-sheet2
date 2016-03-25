@@ -2,11 +2,11 @@
 
 <wallet></wallet>
 <ul>
-	<li *ngFor="#item of items">
+	<li *ngFor="#item of inventory.items">
 		<inventory-entry
 			[item]="item"
 			(remove)="onItemRemove(item.id, $event)"
 		></inventory-entry>
 	</li>
 </ul>
-<p>Total weight: {{ totalWeight | weight }}</p>
+<p>Total weight: {{ inventory.weight | weight }}</p>

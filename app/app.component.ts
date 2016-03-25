@@ -8,8 +8,6 @@ import {AbilitiesComponent} from "./components/abilities/abilities.component";
 import {EditAbilitiesComponent} from "./components/edit-abilities/edit-abilities.component";
 import {StorageService} from "./services/storage/storage.service";
 import {InventoryComponent} from "./components/inventory/inventory.component";
-import {ItemActions} from "./services/item/itemActions.service";
-import {ItemRepository} from "./services/item/item.repository";
 import {ShopComponent} from "./components/shop/shop.component";
 import {EditItemComponent} from "./components/edit-item/edit-item.component";
 import {WalletComponent} from "./components/wallet/wallet.component";
@@ -38,7 +36,6 @@ import {Router} from "./common/router.service";
         Router,
         Dispatcher,
         HistoryRepository,
-        ItemActions, ItemRepository,
         StorageService,
         ReduxConnector,
     ]

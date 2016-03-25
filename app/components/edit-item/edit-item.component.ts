@@ -3,9 +3,10 @@ import {Observable} from "rxjs/Observable";
 import {RouteParams} from "angular2/router";
 
 import {Item, IItem} from "../../entities/item";
-import {ItemActions} from "../../services/item/itemActions.service";
 import {Router} from "../../common/router.service";
 import {ITEM_TEMPLATES, ItemTemplate} from "../../entities/itemDefinitions";
+import {ReduxConnector} from "../../common/connector";
+import {create} from "../../actions/inventory.actions";
 
 /**
  * Component showing personality traits, motivation etc.
@@ -27,8 +28,8 @@ export class EditItemComponent implements OnChanges {
     private isFromShop = false;
 
     constructor(
+        private redux: ReduxConnector,
         params: RouteParams,
-        private itemActions: ItemActions,
         private router: Router
     ) {
         if (params.get('template')) {
@@ -40,6 +41,11 @@ export class EditItemComponent implements OnChanges {
                 cost: template.cost,
                 weight: template.weight,
                 description: template.description,
+                quantity: 1
+            };
+        } else {
+            this.item = {
+                name: '',
                 quantity: 1
             };
         }
@@ -63,7 +69,7 @@ export class EditItemComponent implements OnChanges {
             this.item = {
                 name:          newItem.name || null,
                 quantity:      newItem.quantity || 1,
-                cost:          newItem.cost || null,
+                cost:          newItem.cost.toString() || null,
                 description:   newItem.description || null,
                 weight:        newItem.weight || null,
                 modifications: newItem.modifications || null
@@ -74,8 +80,9 @@ export class EditItemComponent implements OnChanges {
     public submit() {
         console.log("Submitting", this.item);
         // TODO validation
+        // TODO pay?
         if (this.isCreate) {
-            this.itemActions.create(this.item);
+            this.redux.dispatch(create(this.item));
             this.router.navigate([this.isFromShop ? 'Shop' : 'Inventory', {addSuccess: true}]);
         } else {
             // TODO not sure I need this

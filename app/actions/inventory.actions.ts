@@ -1,6 +1,8 @@
 import {Action, ThunkAction, GetState, Dispatch} from "./action";
-import {REMOVE_ITEM, ADD_TO_WALLET, REMOVE_FROM_WALLET} from "./actions";
+import {REMOVE_ITEM, ADD_TO_WALLET, REMOVE_FROM_WALLET, CREATE_ITEM, UPDATE_ITEM, BUY_ITEM} from "./actions";
 import {IAmount, Amount} from "../entities/currency";
+import {IItem} from "../entities/item";
+import {ItemTemplate} from "../entities/itemDefinitions";
 
 export function remove(itemId: number, count: number, reason?: string): ThunkAction {
     return (dispatch: Dispatch, getState: GetState) => {
@@ -18,6 +20,62 @@ export function remove(itemId: number, count: number, reason?: string): ThunkAct
         });
     };
 }
+
+export function create(data: IItem): Action {
+    // TODO maybe check if this item already exists?
+    return {
+        type: CREATE_ITEM,
+        payload: {
+            item: data
+        }
+    };
+}
+
+export function update(data: IItem): ThunkAction {
+    return (dispatch: Dispatch, getState: GetState) => {
+        if (!getState().inventory.items.containsId(data.id)) {
+            throw new Error(`Cannot update item with ID ${data.id} as it does not exist in the inventory`);
+        }
+        dispatch({
+            type: UPDATE_ITEM,
+            payload: data
+        });
+    };
+}
+
+export function add(itemId: number, count: number, reason: string): ThunkAction {
+    return (dispatch: Dispatch, getState: GetState) => {
+        if (!getState().inventory.items.containsId(itemId)) {
+            throw new Error(`Cannot update item with ID ${itemId} as it does not exist in the inventory`);
+        }
+        dispatch({
+            type: UPDATE_ITEM,
+            payload: {
+                itemId,
+                count,
+                reason
+            }
+        });
+    };
+}
+
+export function buy(item: ItemTemplate, count: number, reason: string, modifications?: string): ThunkAction {
+    return (dispatch: Dispatch, getState: GetState) => {
+        if (getState().inventory.wallet.lessThan(new Amount(item.cost).times(count))) {
+            throw new Error('Item is more than user can afford!');
+        }
+        dispatch({
+            type: BUY_ITEM,
+            payload: {
+                item,
+                count,
+                reason,
+                modifications
+            }
+        });
+    };
+}
+
 
 export function addToWallet(amountToAdd: IAmount, reason?: string): Action {
     return {

@@ -4,7 +4,6 @@ import {BehaviorSubject, Subject} from "rxjs/Rx";
 import {Item} from "../../entities/item";
 import {CurrencyPipe} from "../../common/currency.pipe";
 import {WeightPipe} from "../../common/weight.pipe";
-import {ItemActions} from "../../services/item/itemActions.service";
 import {EventEmitter} from "angular2/core";
 
 export interface ItemRemoveData {

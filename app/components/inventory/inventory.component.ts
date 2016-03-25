@@ -9,6 +9,7 @@ import {ReduxConnector} from "../../common/connector";
 import {State} from "../../entities/state";
 import {ItemRemoveData} from "./inventory-entry.component";
 import {remove} from "../../actions/inventory.actions";
+import {Inventory} from "../../entities/item";
 
 /**
  * Component showing the character's inventory.
@@ -21,7 +22,7 @@ import {remove} from "../../actions/inventory.actions";
 })
 export class InventoryComponent implements OnDestroy {
 
-    public items: Item[];
+    public inventory: Inventory;
     public newItem: Item;
 
     private unsubscribe: () => void;
@@ -30,7 +31,7 @@ export class InventoryComponent implements OnDestroy {
         private redux: ReduxConnector
     ) {
         this.newItem = null;
-        this.items = [];
+        this.inventory = new Inventory();
 
         this.unsubscribe = this.redux.connect(state => this.onUpdate(state));
     }
@@ -40,15 +41,10 @@ export class InventoryComponent implements OnDestroy {
     }
 
     private onUpdate(state: State) {
-        this.items = state.inventory.items;
+        this.inventory = state.inventory.items;
     }
 
     public onItemRemove(itemId: number, data: ItemRemoveData) {
-        console.log('item remove', itemId, data);
         this.redux.dispatch(remove(itemId, data.count, null));
-    }
-
-    public get totalWeight(): number {
-        return this.items.reduce((current, item) => current + item.weight * item.quantity, 0);
     }
 }

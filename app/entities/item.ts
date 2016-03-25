@@ -1,9 +1,10 @@
+import {Amount} from "./currency";
 export interface IItem {
     id?: number;
     name: string;
     quantity: number;
     weight?: number; // In lbs
-    cost?: number; // In cp
+    cost?: string;
     description?: string;
     modifiers?: any[];
     modifications?: string;
@@ -14,7 +15,7 @@ export class Item {
     public name: string;
     public quantity: number;
     public weight: number;
-    public cost: number;
+    public cost: Amount;
     public description: string;
     public modifiers: any[];
     public modifications: string;
@@ -30,7 +31,7 @@ export class Item {
         this.name = data.name;
         this.quantity = data.quantity || 1;
         this.weight = data.weight || null;
-        this.cost = data.cost || null;
+        this.cost = new Amount(data.cost || {});
         this.description = data.description;
         this.modifiers = data.modifiers || [];
         this.modifications = data.modifications;
@@ -44,7 +45,7 @@ export class Item {
             name: this.name,
             quantity: this.quantity,
             weight: this.weight,
-            cost: this.cost,
+            cost: this.cost.toString(),
             description: this.description,
             modifiers: this.modifiers,
             modifications: this.modifications
@@ -58,32 +59,62 @@ export class Item {
     }
 }
 
-export class Inventory extends Array<Item> {
+export class Inventory {
+    // TODO move out to separate file, add wallet
     public weight: number;
     public byId: { [itemId: number]: Item };
+    public items: Item[] = [];
 
     constructor(...items: Item[]) {
-        super();
-        this.push(...items);
+        this.items.push(...items);
 
         this.weight = items.reduce((total: number, item: Item) => total + item.weight ? item.weight * item.quantity : 0, 0);
         this.byId = {};
         items.map((item: Item) => this.byId[item.id] = item);
+        Object.freeze(this.items);
     }
 
-    public remove(itemId: number, count: number) {
+    public remove(itemId: number, count: number): Inventory {
+        return this.changeQuantity(itemId, -count);
+    }
+
+    public add(itemId: number, count: number): Inventory {
+        return this.changeQuantity(itemId, count);
+    }
+
+    public find(predicate: (item: Item, index: number, array: Item[]) => boolean): Item {
+        return this.items.find(predicate);
+    }
+
+    public push(data: IItem, getNewId: () => number) {
+        let existingItem = this.items.find((item: Item) =>
+            item.name === data.name &&
+            !item.modifications &&
+            item.cost.equals(data.cost) &&
+            item.description === data.description &&
+            item.weight === data.weight);
+        if (existingItem) {
+            return this.add(existingItem.id, data.quantity);
+        } else {
+            let newData = Object.assign({}, data);
+            newData.id = getNewId();
+            return new Inventory(...(this.items.concat(new Item(newData))));
+        }
+    }
+
+    private changeQuantity(itemId: number, count: number): Inventory {
         let currentCount = this.getCount(itemId);
         if (currentCount === 0) {
             throw new Error(`Item '${itemId}' does not exist`);
         }
-        let newCount = currentCount - count;
+        let newCount = currentCount + count;
         if (newCount < 0) {
             throw new Error(`Cannot remove ${count} items of ID '${itemId}' as it only has ${currentCount}`);
         }
         if (newCount === 0) {
-            return new Inventory(...(this.filter((item: Item) => item.id !== itemId)));
+            return new Inventory(...(this.items.filter((item: Item) => item.id !== itemId)));
         } else {
-            let newItems = this
+            let newItems = this.items
                 .map((item: Item) => item.id === itemId ? item.changeQuantity(newCount) : item);
             return new Inventory(...newItems);
         }
@@ -94,8 +125,12 @@ export class Inventory extends Array<Item> {
         return item ? item.quantity : 0;
     }
 
+    public containsId(itemId: number) {
+        return !!this.byId[itemId];
+    }
+
     public getData(): IItem[] {
-        return this.map((item: Item) => item.getData());
+        return this.items.map((item: Item) => item.getData());
     }
 }
 
