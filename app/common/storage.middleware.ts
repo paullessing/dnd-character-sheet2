@@ -1,21 +1,13 @@
 import { Store } from 'redux';
+import {LOAD} from "../actions/actions";
 import {Action} from "../actions/action";
 import {State} from "../entities/state";
-import {AbilityData} from "../entities/abilities";
-import {SkillData} from "../entities/skills";
-import {IPersonality} from "../entities/personality";
-import {IItem} from "../entities/item";
-import {IAmount} from "../entities/currency";
-import {ICharacter} from "../entities/character";
-import {Character} from "../entities/character";
-import {Personality} from "../entities/personality";
-import {Abilities} from "../entities/abilities";
-import {getAbilities} from "../entities/abilities";
-import {Item} from "../entities/item";
-import {Amount} from "../entities/currency";
-import {loadSkills} from "../entities/skills";
-import {LOAD} from "../actions/actions";
-import {Inventory} from "../entities/item";
+import {Abilities, getAbilities, AbilityData} from "../entities/abilities";
+import {loadSkills, SkillData} from "../entities/skills";
+import {IItem, Item, Inventory} from "../entities/item";
+import {IAmount, Amount} from "../entities/currency";
+import {IPersonality, Personality} from "../entities/personality";
+import {ICharacter, Character} from "../entities/character";
 
 export const STATE_KEY = 'dnd-character-sheet.state';
 

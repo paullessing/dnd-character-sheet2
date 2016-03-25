@@ -6,7 +6,7 @@ import thunk from 'redux-thunk';
 
 import {AppComponent} from './app.component'
 import {rootReducer} from "./reducers/root.reducer";
-import {storeStateAfterUpdate} from "./common/history.middleware";
+import {storeStateAfterUpdate} from "./common/storage.middleware.ts";
 
 const createStoreWithMiddleware = applyMiddleware(thunk, storeStateAfterUpdate)(createStore);
 const store = createStoreWithMiddleware(rootReducer);

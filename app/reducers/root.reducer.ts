@@ -7,7 +7,7 @@ import {personality} from "./personality.reducer";
 import {inventory} from "./inventory.reducer";
 import {stats} from "./stats.reducer";
 import {LOAD} from "../actions/actions";
-import {loadState} from "../common/history.middleware";
+import {loadState} from "../common/storage.middleware.ts";
 
 type StateReducer = ((state: State, action: Action) => State);
 

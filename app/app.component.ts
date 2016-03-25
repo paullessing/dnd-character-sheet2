@@ -5,7 +5,7 @@ import {Inject} from "angular2/core";
 import {Store} from 'redux';
 import {ReduxConnector} from "./common/connector";
 import {update} from "./actions/personality.actions";
-import {load} from "./actions/history.actions";
+import {load} from "./actions/storage.actions.ts";
 import {Router} from "./common/router.service";
 import {
     AbilitiesComponent,
