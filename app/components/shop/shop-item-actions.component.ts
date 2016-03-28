@@ -1,5 +1,6 @@
 import {Component, Input, OnChanges, SimpleChange, provide, Injector} from 'angular2/core';
 import {Router, RouterLink} from "angular2/router";
+import {FORM_DIRECTIVES, FormBuilder, Control} from 'angular2/common'
 
 import {GainItemComponent, GainItemConfig} from "./gain-item.component";
 
@@ -10,50 +11,66 @@ import {CurrencyPipe} from "../../common/currency.pipe";
 import {ReduxConnector} from "../../common/connector";
 import {buy} from "../../actions/inventory.actions";
 import {Modal} from "../modal/modal.service";
+import {create} from "../../actions/inventory.actions";
+import {ResolvedBinding} from "angular2/core";
 
 @Component({
     selector: 'shop-item-actions',
     templateUrl: 'app/components/shop/shop-item-actions.component.html',
-    directives: [RouterLink],
+    directives: [FORM_DIRECTIVES, RouterLink],
     pipes: [CurrencyPipe],
 })
-export class ShopItemActionsComponent implements OnChanges {
+export class ShopItemActionsComponent {
 
     @Input()
     public item: ItemTemplate;
+
     public count: number;
     public reason: string;
+    public isEdit: boolean;
 
-    public action: string;
     public price: Amount;
 
     constructor(
         private redux: ReduxConnector,
         private modal: Modal
     ) {
+        this.reset();
     }
 
-    ngOnChanges(changes: {[propertyName: string]: SimpleChange}) {
-        this.action = null;
+    private reset() {
+        this.isEdit = false;
         this.count = null;
-        this.reason = null;
         this.onCountChange();
     }
 
-    public buy() {
-        let item: IItem = {
-            name: this.item.name,
-            cost: this.item.cost,
-            description: this.item.description,
-            weight: this.item.weight,
-            modifiers: this.item.modifiers,
+    public gain(isBuy: boolean) {
+        if (this.isEdit) {
+            this.modal.open(GainItemComponent, this.getBindings(isBuy));
+        } else {
+            let action = isBuy ? buy(this.getItem(), this.reason) : create(this.getItem());
+            this.redux.dispatch(action);
+            this.reset();
+        }
+    }
 
+    private getBindings(isBuy: boolean): ResolvedBinding[] {
+        let config: GainItemConfig = {
+            item: this.item,
+            isBuy: isBuy,
             quantity: this.count,
+            onComplete: () => this.onCompleteEdit()
         };
-        this.redux.dispatch(buy(item, this.reason));
-        this.count = null;
-        this.reason = null;
-        this.onCountChange();
+
+        return Injector.resolve([
+            provide('gainConfig', {
+                useValue: config
+            })
+        ]);
+    }
+
+    private onCompleteEdit(): void {
+        this.reset();
     }
 
     public onCountChange() {
@@ -64,8 +81,15 @@ export class ShopItemActionsComponent implements OnChanges {
         this.price = new Amount(this.item.cost).times(this.count);
     }
 
-    public gain() {
-        let bindings = Injector.resolve([provide('gainConfig', { useValue: { item: this.item, isBuy: false } })]);
-        this.modal.open(GainItemComponent, bindings);
+    private getItem(): IItem {
+        return {
+            name: this.item.name,
+            cost: this.item.cost,
+            description: this.item.description,
+            weight: this.item.weight,
+            modifiers: this.item.modifiers,
+
+            quantity: this.count,
+        };
     }
 }

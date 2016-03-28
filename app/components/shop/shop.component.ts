@@ -22,6 +22,8 @@ export class ShopComponent {
     public items: ItemTemplate[] = ITEM_TEMPLATES;
     public itemToBuy: ItemTemplate;
 
+    private expandedItemName: string;
+
     constructor(
         private _router: Router
     ) {
@@ -33,5 +35,17 @@ export class ShopComponent {
 
     public deselect() {
         this.itemToBuy = null;
+    }
+
+    public toggleExpand(item: ItemTemplate) {
+        if (this.isExpanded(item)) {
+            this.expandedItemName = null;
+        } else {
+            this.expandedItemName = item.name;
+        }
+    }
+
+    public isExpanded(item: ItemTemplate): boolean {
+        return this.expandedItemName === item.name;
     }
 }

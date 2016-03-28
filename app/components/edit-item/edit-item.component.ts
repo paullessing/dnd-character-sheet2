@@ -22,6 +22,9 @@ export class EditItemComponent implements OnChanges {
     public inputItem: IItem;
     public item: IItem;
 
+    @Input('submit-label')
+    public submitLabel: string = 'Edit';
+
     @Output()
     public update = new EventEmitter<IItem>();
 
@@ -56,7 +59,6 @@ export class EditItemComponent implements OnChanges {
     }
 
     public submit() {
-        console.log("Submitting", this.item);
         // TODO validation
         // TODO pay?
         this.update.emit(this.item);

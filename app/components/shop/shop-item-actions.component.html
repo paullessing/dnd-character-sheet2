@@ -1,18 +1,7 @@
-<div>
-	<label><input name="shop-action-type" type="radio" [checked]="action==='gain'" (click)="action='gain'" /> Gain</label>
-	<div [hidden]="action !== 'gain'">
-		<button (click)="gain()">Create from Template</button><br />
-	</div>
-</div>
-
-<div>
-	<label><input name="shop-action-type" type="radio" [checked]="action==='buy'" (click)="action='buy'" /> Buy</label>
-	<div [hidden]="action !== 'buy'">
-		<form (submit)="buy()">
-			<label>Count: <input [(ngModel)]="count" type="number" min="1" step="1" required width="50" (change)="onCountChange()" /> <span [hidden]="!price">({{ price }})</span></label><br />
-			<label>Reason: <input [(ngModel)]="reason" placeholder="Reason" /></label>
-
-			<button type="submit">Buy</button>
-		</form>
-	</div>
-</div>
+<label>
+	<input type="checkbox" [(ngModel)]="isEdit" />
+	Edit
+</label><br />
+<input type="number" min="1" [(ngModel)]="count" (change)="onCountChange()" /> <span [hidden]="!isPay || !price">({{ price }})</span><br />
+<button type="button" (click)="gain(true)">Buy</button>
+<button type="button" (click)="gain(false)">Gain</button>
