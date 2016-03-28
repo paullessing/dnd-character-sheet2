@@ -91,8 +91,8 @@ export class Inventory {
             item.name === data.name &&
             !item.modifications &&
             item.cost.equals(data.cost) &&
-            item.description === data.description &&
-            item.weight === data.weight);
+            optionalEquals(item.description, data.description) &&
+            optionalEquals(item.weight, data.weight));
         if (existingItem) {
             return this.add(existingItem.id, data.quantity);
         } else {
@@ -132,6 +132,13 @@ export class Inventory {
     public getData(): IItem[] {
         return this.items.map((item: Item) => item.getData());
     }
+}
+
+export function optionalEquals(a: any, b: any): boolean {
+    if (typeof a === "undefined" || a === null) {
+        return typeof b === "undefined" || b === null;
+    }
+    return a === b;
 }
 
 export interface Weapon extends IItem {

@@ -19,47 +19,25 @@ export class EditItemComponent implements OnChanges {
 
     public items: ItemTemplate[] = ITEM_TEMPLATES;
     @Input('item')
-    public inputItem: Item;
+    public inputItem: IItem;
     public item: IItem;
-    @Output()
-    public update = new EventEmitter<Item>();
 
-    private isCreate = true;
-    private isFromShop = false;
+    @Output()
+    public update = new EventEmitter<IItem>();
 
     constructor(
-        private redux: ReduxConnector,
-        params: RouteParams,
-        private router: Router
     ) {
-        if (params.get('template')) {
-            this.isFromShop = true;
-            let name = params.get('name');
-            let template = ITEM_TEMPLATES.find(template => template.name === name);
-            this.item = {
-                name: template.name,
-                cost: template.cost,
-                weight: template.weight,
-                description: template.description,
-                quantity: 1
-            };
-        } else {
-            this.item = {
-                name: '',
-                quantity: 1
-            };
-        }
+        this.updateItem(null);
     }
 
     ngOnChanges(changes: {[propertyName: string]: SimpleChange}) {
         if (changes['inputItem']) {
             let change = changes['inputItem'];
             this.updateItem(change.currentValue);
-            this.isCreate = false;
         }
     }
 
-    private updateItem(newItem: Item) {
+    private updateItem(newItem: IItem) {
         if (!newItem) {
             this.item = {
                 name: null,
@@ -81,12 +59,10 @@ export class EditItemComponent implements OnChanges {
         console.log("Submitting", this.item);
         // TODO validation
         // TODO pay?
-        if (this.isCreate) {
-            this.redux.dispatch(create(this.item));
-            this.router.navigate([this.isFromShop ? 'Shop' : 'Inventory', {addSuccess: true}]);
-        } else {
-            // TODO not sure I need this
-            this.update.emit(new Item(this.item));
-        }
+        this.update.emit(this.item);
+    }
+
+    public cancel() {
+        this.update.emit(null);
     }
 }

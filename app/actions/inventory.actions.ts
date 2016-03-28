@@ -59,18 +59,16 @@ export function add(itemId: number, count: number, reason: string): ThunkAction 
     };
 }
 
-export function buy(item: ItemTemplate, count: number, reason: string, modifications?: string): ThunkAction {
+export function buy(item: IItem, reason: string): ThunkAction {
     return (dispatch: Dispatch, getState: GetState) => {
-        if (getState().inventory.wallet.lessThan(new Amount(item.cost).times(count))) {
+        if (getState().inventory.wallet.lessThan(new Amount(item.cost).times(item.quantity))) {
             throw new Error('Item is more than user can afford!');
         }
         dispatch({
             type: BUY_ITEM,
             payload: {
                 item,
-                count,
-                reason,
-                modifications
+                reason
             }
         });
     };

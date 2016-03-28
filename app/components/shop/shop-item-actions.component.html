@@ -1,7 +1,7 @@
 <div>
 	<label><input name="shop-action-type" type="radio" [checked]="action==='gain'" (click)="action='gain'" /> Gain</label>
 	<div [hidden]="action !== 'gain'">
-		<button [routerLink]="['EditItem', {name: item.name, template: true}]">Create from Template</button><br />
+		<button (click)="gain()">Create from Template</button><br />
 	</div>
 </div>
 

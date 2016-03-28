@@ -48,36 +48,36 @@ function reducePurchases(state: InventoryState, action: Action): InventoryState 
 }
 
 function buyItem(state: InventoryState, action: Action) {
-    const template: ItemTemplate = action.payload.item;
-    const totalCost = new Amount(template.cost).times(action.payload.count);
+    const data: IItem = action.payload.item;
+    const totalCost = new Amount(data.cost).times(data.quantity);
     if (state.wallet.lessThan(totalCost)) {
-        throw new Error(`Cannot buy item "${template.name}": it costs ${totalCost} and user only has ${state.wallet}`);
+        throw new Error(`Cannot buy item "${data.name}": it costs ${totalCost} and user only has ${state.wallet}`);
     }
     let existingItem = state.items.find((item: Item) => {
-        return item.name === template.name &&
+        return item.name === data.name &&
             !item.modifications &&
-            item.cost.totalValue === new Amount(template.cost).totalValue &&
-            item.description === template.description &&
-            item.weight === template.weight
+            item.cost.totalValue === new Amount(data.cost).totalValue &&
+            item.description === data.description &&
+            item.weight === data.weight
     });
 
     let newState = Object.assign({}, state);
 
     if (existingItem) {
-        newState.items = state.items.add(existingItem.id, action.payload.count);
+        newState.items = state.items.add(existingItem.id, data.quantity);
     } else {
         let itemData: IItem = {
-            name: template.name,
-            description: template.description,
-            cost: template.cost,
-            weight: template.weight,
-            modifiers: template.modifiers,
-            quantity: action.payload.count,
-            modifications: action.payload.modifications
+            name: data.name,
+            description: data.description,
+            cost: data.cost,
+            weight: data.weight,
+            modifiers: data.modifiers,
+            quantity: data.quantity,
+            modifications: data.modifications
         };
         newState.items = state.items.push(itemData, getNewMaxId(newState));
     }
-    newState.wallet = state.wallet.minus(new Amount(template.cost).times(action.payload.count));
+    newState.wallet = state.wallet.minus(new Amount(data.cost).times(data.quantity));
     return newState;
 }
 

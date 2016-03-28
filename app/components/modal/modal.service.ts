@@ -34,8 +34,10 @@ export class Modal {
         .then((componentRef: ComponentRef) => {
             this.toggleModalState(true);
             let modalWindow = new ModalWindow(() => {
-                componentRef.dispose();
-                Modal.currentWindow = null;
+                setTimeout(() => {
+                    componentRef.dispose();
+                    Modal.currentWindow = null;
+                }, 10);
             });
             Modal.currentWindow = modalWindow;
             let bindings = Injector.resolve([provide(ModalWindow, { useValue: modalWindow })]).concat(injectBindings);
