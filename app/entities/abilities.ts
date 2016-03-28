@@ -1,12 +1,7 @@
 import {Injectable} from "angular2/core";
 import {AbilitiesDiff} from "../actions/stats.actions";
 
-export interface AbilityDefinition {
-    name: string;
-    skills: string[];
-}
-
-export const Names = {
+export const AbilityNames = {
     Strength: 'Strength',
     Dexterity: 'Dexterity',
     Constitution: 'Constitution',
@@ -15,33 +10,6 @@ export const Names = {
     Charisma: 'Charisma',
     values: ['Strength', 'Dexterity', 'Constitution', 'Intelligence', 'Wisdom', 'Charisma'],
 }
-
-export const AbilityDefinitions: AbilityDefinition[] = [
-    {
-        name: 'Strength',
-        skills: ['Athletics']
-    },
-    {
-        name: 'Dexterity',
-        skills: ['Acrobatics', 'Sleight of Hand', 'Stealth']
-    },
-    {
-        name: 'Constitution',
-        skills: []
-    },
-    {
-        name: 'Intelligence',
-        skills: ['Arcana', 'History', 'Investigation', 'Nature', 'Religion']
-    },
-    {
-        name: 'Wisdom',
-        skills: ['Animal Handling', 'Insight', 'Medicine', 'Perception', 'Survival']
-    },
-    {
-        name: 'Charisma',
-        skills: ['Deception', 'Intimidation', 'Performance', 'Persuasion']
-    }
-];
 
 export interface AbilityData {
     name: string;
@@ -133,19 +101,13 @@ export function getAbilities(data: AbilityData[] | Abilities, proficiencyBonus: 
     );
 
     return new Abilities(
-        create(Names.Strength),
-        create(Names.Dexterity),
-        create(Names.Constitution),
-        create(Names.Intelligence),
-        create(Names.Wisdom),
-        create(Names.Charisma)
+        create(AbilityNames.Strength),
+        create(AbilityNames.Dexterity),
+        create(AbilityNames.Constitution),
+        create(AbilityNames.Intelligence),
+        create(AbilityNames.Wisdom),
+        create(AbilityNames.Charisma)
     );
-}
-
-export class AbilitiesFactory {
-    public getAbilities(data: AbilityData[] | Abilities, proficiencyBonus: number): Abilities {
-        return getAbilities(data, proficiencyBonus);
-    }
 }
 
 function ensureRange(score: number): number {

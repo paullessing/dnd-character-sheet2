@@ -1,15 +1,18 @@
 import {Component, OnDestroy} from 'angular2/core';
 import {BehaviorSubject, Subject} from "rxjs/Rx";
 
-import {Item} from "../../entities/item";
-import {InventoryEntryComponent} from "./inventory-entry.component";
-import {WeightPipe} from "../../common/weight.pipe";
-import {WalletComponent} from "../wallet/wallet.component";
 import {ReduxConnector} from "../../common/connector";
-import {State} from "../../entities/state";
-import {ItemRemoveData} from "./inventory-entry.component";
+
 import {remove} from "../../actions/inventory.actions";
+import {WeightPipe} from "../../common/weight.pipe";
+import {Modal} from "../modal/modal.service";
+
 import {Inventory} from "../../entities/item";
+import {Item} from "../../entities/item";
+import {State} from "../../entities/state";
+import {InventoryEntryComponent, ItemRemoveData} from "./inventory-entry.component";
+import {WalletComponent} from "../wallet/wallet.component";
+import {EditWalletComponent} from "../edit-wallet/edit-wallet.component";
 
 /**
  * Component showing the character's inventory.
@@ -28,7 +31,8 @@ export class InventoryComponent implements OnDestroy {
     private unsubscribe: () => void;
 
     constructor(
-        private redux: ReduxConnector
+        private redux: ReduxConnector,
+        private modal: Modal
     ) {
         this.newItem = null;
         this.inventory = new Inventory();
@@ -46,5 +50,9 @@ export class InventoryComponent implements OnDestroy {
 
     public onItemRemove(itemId: number, data: ItemRemoveData) {
         this.redux.dispatch(remove(itemId, data.count, null));
+    }
+
+    public editWallet() {
+        this.modal.open(EditWalletComponent);
     }
 }

@@ -21,8 +21,11 @@ import {Modal} from "./components/modal/modal.service";
  * Main app component for the character sheet app.
  */
 @Component({
-    selector: 'character-sheet',
+    selector: 'body[character-sheet], character-sheet',
     templateUrl: 'app/app.component.html',
+    host: {
+        '[class.modal-open]': 'isModalOpen'
+    },
     directives: [
         ROUTER_DIRECTIVES,
     ],
@@ -44,12 +47,22 @@ import {Modal} from "./components/modal/modal.service";
 
 ])
 export class AppComponent {
+    public isModalOpen: boolean = false;
+
     constructor(
         elementRef: ElementRef,
         redux: ReduxConnector,
         modal: Modal
     ) {
         redux.dispatch(load());
-        modal.init(elementRef);
+        modal.init(elementRef, this.toggleModalOpen.bind(this));
+    }
+
+    public toggleModalOpen(newValue?: boolean) {
+        if (typeof newValue === undefined) {
+            this.isModalOpen = !this.isModalOpen;
+        } else {
+            this.isModalOpen = !!newValue;
+        }
     }
 }

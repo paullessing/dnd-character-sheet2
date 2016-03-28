@@ -1,35 +1,4 @@
-<div *ngIf="wallet">
-	<h2>Wallet</h2>
-	<style>
-		.wallet {
-			border: 1px solid #666;
-		}
-		.wallet th, .wallet td {
-			min-width: 50px;
-			text-align: center;
-		}
-	</style>
-	<table class="wallet">
-		<thead>
-		<tr>
-			<th>PP</th>
-			<th>GP</th>
-			<th>EP</th>
-			<th>SP</th>
-			<th>CP</th>
-		</tr>
-		<tr>
-			<td>{{ wallet.platinum }}</td>
-			<td>{{ wallet.gold }}</td>
-			<td>{{ wallet.electrum }}</td>
-			<td>{{ wallet.silver}}</td>
-			<td>{{ wallet.copper }}</td>
-		</tr>
-		</thead>
-	</table>
-</div>
-
-<form *ngIf="isEditing" (ngSubmit)="save()" [ngFormModel]="walletForm">
+<form (ngSubmit)="save()" [ngFormModel]="walletForm">
 	<div>
 		<label><input type="radio" name="isAdd" ngControl="add" />Add</label>
 		<label><input type="radio" name="isAdd" ngControl="remove" />Remove</label>

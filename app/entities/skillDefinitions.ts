@@ -1,4 +1,4 @@
-import {Names as AbilityName} from "./abilities";
+import {AbilityNames as AbilityName} from "./abilities";
 
 export interface SkillDefinition {
     name: string;

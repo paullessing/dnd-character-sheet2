@@ -1,13 +1,11 @@
+import {Abilities} from "./abilities";
+import {Alignment} from "./alignments";
 import {Character} from "./character";
 import {Class} from "./classes";
-import {Alignment} from "./alignments";
-import {Abilities} from "./abilities";
-import {Skills} from "./skills";
-import {Item} from "./item";
 import {Amount} from "./currency";
+import {Item, Inventory} from "./item";
 import {Personality} from "./personality";
-import {AbilitiesFactory} from "./abilities";
-import {Inventory} from "./item";
+import {Skills} from "./skills";
 
 export interface State {
     character: Character;

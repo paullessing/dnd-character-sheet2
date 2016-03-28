@@ -1,6 +1,6 @@
 import {Component, EventEmitter} from 'angular2/core';
 
-import {Names as AbilityNames} from "../../entities/abilities";
+import {AbilityNames} from "../../entities/abilities";
 import {Skill, SkillData} from "../../entities/skills";
 
 import {Proficiency} from "../../entities/skills";
