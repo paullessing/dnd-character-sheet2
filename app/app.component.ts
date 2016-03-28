@@ -1,11 +1,10 @@
-import {Component} from 'angular2/core';
+import {Component, Inject, ElementRef} from 'angular2/core';
 import {RouteConfig, ROUTER_DIRECTIVES} from "angular2/router";
-import {Dispatcher} from "./common/dispatcher";
-import {Inject} from "angular2/core";
 import {Store} from 'redux';
+import {Dispatcher} from "./common/dispatcher";
 import {ReduxConnector} from "./common/connector";
 import {update} from "./actions/personality.actions";
-import {load} from "./actions/storage.actions.ts";
+import {load} from "./actions/storage.actions";
 import {Router} from "./common/router.service";
 import {
     AbilitiesComponent,
@@ -16,6 +15,7 @@ import {
     InventoryComponent,
     EditItemComponent
 } from "./components/_module";
+import {Modal} from "./components/modal/modal.service";
 
 /**
  * Main app component for the character sheet app.
@@ -30,6 +30,7 @@ import {
         Router,
         Dispatcher,
         ReduxConnector,
+        Modal
     ]
 })
 @RouteConfig([
@@ -44,8 +45,11 @@ import {
 ])
 export class AppComponent {
     constructor(
-        redux: ReduxConnector
+        elementRef: ElementRef,
+        redux: ReduxConnector,
+        modal: Modal
     ) {
         redux.dispatch(load());
+        modal.init(elementRef);
     }
 }
