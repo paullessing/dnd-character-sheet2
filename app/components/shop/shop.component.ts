@@ -6,6 +6,7 @@ import {CurrencyPipe} from "../../common/currency.pipe";
 import {WeightPipe} from "../../common/weight.pipe";
 import {ShopItemActionsComponent} from "./shop-item-actions.component";
 import {WalletComponent} from "../wallet/wallet.component";
+import {AmountComponent} from "../amount/amount.component";
 
 /**
  * Component listing standard items for sale.
@@ -13,7 +14,7 @@ import {WalletComponent} from "../wallet/wallet.component";
 @Component({
     selector: 'shop',
     templateUrl: 'app/components/shop/shop.component.html',
-    directives: [ShopItemActionsComponent, WalletComponent],
+    directives: [ShopItemActionsComponent, WalletComponent, AmountComponent],
     pipes: [WeightPipe, CurrencyPipe],
 })
 export class ShopComponent {

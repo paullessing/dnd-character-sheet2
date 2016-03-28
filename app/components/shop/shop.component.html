@@ -19,7 +19,7 @@
 			<tr>
 				<td><a (click)="select(item)" href="javascript:void(0)">{{ item.name }}</a>
 					<a href="javascript:void(0)" (click)="isExpanded=!isExpanded" *ngIf="item.description">({{ isExpanded ? '-' : '+' }})</a></td>
-				<td>{{ item.cost | currency }}</td>
+				<td><amount [value]="item.cost"></amount></td>
 				<td>{{ item.weight | weight }}</td>
 			</tr>
 			<tr *ngIf="item.description && isExpanded">
