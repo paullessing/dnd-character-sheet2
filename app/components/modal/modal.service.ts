@@ -37,6 +37,7 @@ export class Modal {
                 setTimeout(() => {
                     componentRef.dispose();
                     Modal.currentWindow = null;
+                    this.toggleModalState(false);
                 }, 10);
             });
             Modal.currentWindow = modalWindow;
