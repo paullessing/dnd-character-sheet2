@@ -1,24 +1,26 @@
 import {Component, OnDestroy} from 'angular2/core';
-import {Personality, IPersonality} from "../../entities/personality";
+import {Personality} from "../../entities/personality";
 import {ReduxConnector} from "../../common/connector";
 import {State} from "../../entities/state";
-import {update} from "../../actions/personality.actions";
+import {EditPersonalityComponent} from "./edit-personality.component";
+import {Modal} from "../modal/modal.service";
+import {EditPersonalityModalComponent} from "./edit-personality-modal.component";
 
 /**
  * Component showing personality traits, motivation etc.
  */
 @Component({
     selector: 'personality',
-    templateUrl: 'app/components/personality/personality.component.html'
+    templateUrl: 'app/components/personality/personality.component.html',
+    directives: [EditPersonalityComponent]
 })
 export class PersonalityComponent implements OnDestroy {
-    public personality: IPersonality;
-    public editPersonality: IPersonality;
-    public isEditing: boolean;
+    public personality: Personality;
     private unsubscribe: () => void;
 
     constructor(
-        private redux: ReduxConnector
+        private redux: ReduxConnector,
+        private modal: Modal
     ) {
         this.unsubscribe = this.redux.connect((state: State) => this.onStateUpdate(state));
     }
@@ -32,25 +34,6 @@ export class PersonalityComponent implements OnDestroy {
     }
 
     public edit() {
-        this.editPersonality = {
-            traits: this.personality.traits,
-            ideals: this.personality.ideals,
-            bonds: this.personality.bonds,
-            flaws: this.personality.flaws
-        };
-        this.isEditing = true;
-    }
-
-    public save() {
-        this.redux.dispatch(update(this.editPersonality));
-        setTimeout(() => {
-            this.isEditing = false;
-        }, 10);
-    }
-
-    public cancel() {
-        setTimeout(() => {
-            this.isEditing = false;
-        }, 10);
+        this.modal.open(EditPersonalityModalComponent);
     }
 }

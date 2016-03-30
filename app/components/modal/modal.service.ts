@@ -26,35 +26,39 @@ export class Modal {
         this.toggleModalState = toggleModalState;
     }
 
-    public open(component: Type, injectBindings: ResolvedBinding[] = []) {
+    public open<T>(component: Type, injectBindings: ResolvedBinding[] = []): Promise<T> {
         if (Modal.currentWindow) {
             return;
         }
-        this.loader.loadIntoLocation(ModalComponent, this.appElementRef, 'modal')
-        .then((componentRef: ComponentRef) => {
-            this.toggleModalState(true);
-            let modalWindow = new ModalWindow(() => {
-                setTimeout(() => {
-                    componentRef.dispose();
-                    Modal.currentWindow = null;
-                    this.toggleModalState(false);
-                }, 10);
-            });
-            Modal.currentWindow = modalWindow;
-            let bindings = Injector.resolve([provide(ModalWindow, { useValue: modalWindow })]).concat(injectBindings);
+        return new Promise((resolve, reject) => {
+            this.loader.loadIntoLocation(ModalComponent, this.appElementRef, 'modal')
+                .then((componentRef: ComponentRef) => {
+                    this.toggleModalState(true);
+                    let closeModal = (result?: T) => {
+                        setTimeout(() => {
+                            componentRef.dispose();
+                            Modal.currentWindow = null;
+                            this.toggleModalState(false);
+                            resolve(result);
+                        }, 10);
+                    };
+                    let modalWindow = new ModalWindow(closeModal);
+                    Modal.currentWindow = modalWindow;
+                    let bindings = Injector.resolve([provide(ModalWindow, { useValue: modalWindow })]).concat(injectBindings);
 
-            this.loader.loadIntoLocation(component, componentRef.location, 'content', bindings);
+                    this.loader.loadIntoLocation(component, componentRef.location, 'content', bindings);
+                });
         });
     }
 }
 
-export class ModalWindow {
+export class ModalWindow<T> {
     constructor(
-        private dispose: () => void
+        private dispose: (result?: T) => void
     ) {
     }
 
-    public close() {
-        this.dispose();
+    public close(result?: T) {
+        this.dispose(result);
     }
 }

@@ -1,0 +1,23 @@
+<form (ngSubmit)="save()" [ngFormModel]="personalityForm">
+	<div>
+		<label for="traits">Personality traits</label>
+		<textarea id="traits" ngControl="traits"></textarea>
+	</div>
+
+	<div>
+		<label for="ideals">Ideals</label>
+		<textarea id="ideals" ngControl="ideals"></textarea>
+	</div>
+
+	<div>
+		<label for="bonds">Bonds</label>
+		<textarea id="bonds" ngControl="bonds"></textarea>
+	</div>
+
+	<div>
+		<label for="flaws">Flaws</label>
+		<textarea id="flaws" ngControl="flaws"></textarea>
+	</div>
+
+	<a href="javascript:void(0)" (click)="cancel()">Cancel</a> <button type="submit">Save</button>
+</form>
