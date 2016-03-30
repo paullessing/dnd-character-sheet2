@@ -4,7 +4,7 @@ import {FORM_DIRECTIVES, ControlGroup, FormBuilder, Validators} from "angular2/c
 import {Personality, IPersonality} from "../../entities/personality";
 
 /**
- * Component showing personality traits, motivation etc.
+ * Component allowing editing of personality traits, motivation etc.
  */
 @Component({
     selector: 'edit-personality',

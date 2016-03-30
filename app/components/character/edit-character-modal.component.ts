@@ -6,38 +6,40 @@ import {create} from "../../actions/inventory.actions";
 import {buy} from "../../actions/inventory.actions";
 import {ModalWindow} from "../modal/modal.service";
 import {EditItemComponent} from "../edit-item/edit-item.component";
-import {EditPersonalityComponent} from "./edit-personality.component";
 import {Personality} from "../../entities/personality";
-import {update} from "../../actions/personality.actions";
+import {update} from "../../actions/character.actions";
 import {IPersonality} from "../../entities/personality";
+import {ICharacter} from "../../entities/character";
+import {EditCharacterComponent} from "./edit-character.component";
+import {Character} from "../../entities/character";
 
 @Component({
-    selector: 'edit-personality-modal',
+    selector: 'edit-character-modal',
     template: `
-<h1>Edit Personality</h1>
-<edit-personality
-    [personality]="personality"
+<h1>Edit Character</h1>
+<edit-character
+    [character]="character"
     (update)="onUpdate($event)"
-></edit-personality>`,
-    directives: [EditPersonalityComponent]
+></edit-character>`,
+    directives: [EditCharacterComponent]
 })
-export class EditPersonalityModalComponent {
-    public personality: Personality;
+export class EditCharacterModalComponent {
+    public character: Character;
 
     constructor(
         private redux: ReduxConnector,
-        private modalWindow: ModalWindow<IPersonality>
+        private modalWindow: ModalWindow<ICharacter>
     ) {
-        this.personality = this.redux.getState().personality;
+        this.character = this.redux.getState().character;
     }
 
-    public onUpdate(personality: IPersonality) {
-        if (!personality) {
+    public onUpdate(character: ICharacter) {
+        if (!character) {
             this.modalWindow.close();
             return;
         }
 
-        this.redux.dispatch(update(personality));
+        this.redux.dispatch(update(character));
         this.modalWindow.close();
     }
 }

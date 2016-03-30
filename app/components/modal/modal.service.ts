@@ -14,7 +14,7 @@ import {ResolvedBinding} from "angular2/core";
 export class Modal {
     private appElementRef: ElementRef;
     private toggleModalState: (newValue: boolean) => void;
-    static currentWindow: ModalWindow;
+    static currentWindow: ModalWindow<any>;
 
     constructor(
         private loader: DynamicComponentLoader

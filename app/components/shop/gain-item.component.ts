@@ -30,7 +30,7 @@ export class GainItemComponent {
 
     constructor(
         private redux: ReduxConnector,
-        private modalWindow: ModalWindow,
+        private modalWindow: ModalWindow<IItem>,
         @Inject('gainConfig') private config: GainItemConfig
     ) {
         this.item = {

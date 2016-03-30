@@ -7,6 +7,8 @@ import {ICharacter, Character} from "../../entities/character";
 import {State, Stats} from "../../entities/state";
 import {update} from "../../actions/character.actions";
 import {addXp} from "../../actions/stats.actions";
+import {EditCharacterModalComponent} from "./edit-character-modal.component";
+import {Modal} from "../modal/modal.service";
 
 /**
  * Component showing basic character details.
@@ -18,12 +20,8 @@ import {addXp} from "../../actions/stats.actions";
 export class CharacterComponent implements OnDestroy {
     // TODO allow multiclassing
 
-    public alignments = AlignmentNames;
-    public classes = ClassNames;
     public character: Character;
     public stats: Stats;
-    public isEditing: boolean;
-    public editCharacter: ICharacter;
     public isChangingXp: boolean;
     public xpChange: number;
     public xpChangeReason: string;
@@ -31,7 +29,8 @@ export class CharacterComponent implements OnDestroy {
     private unsubscribe: () => void;
 
     constructor(
-        private redux: ReduxConnector
+        private redux: ReduxConnector,
+        private modal: Modal
     ) {
         this.unsubscribe = this.redux.connect((state: State) => this.onStateUpdate(state));
     }
@@ -46,29 +45,7 @@ export class CharacterComponent implements OnDestroy {
     }
 
     public edit() {
-        this.isEditing = true;
-        this.editCharacter = {
-            name: this.character.name,
-            characterClass: this.character.characterClass,
-            background: this.character.background,
-            playerName: this.character.playerName,
-            race: this.character.race,
-            alignment: this.character.alignment
-        };
-    }
-
-    public save() {
-        this.redux.dispatch(update(this.editCharacter));
-        setTimeout(() => {
-            this.isEditing = false;
-        }, 10);
-    }
-
-    public cancel() {
-        setTimeout(() => {
-            this.isEditing = false;
-            this.isChangingXp = false;
-        }, 10);
+        this.modal.open(EditCharacterModalComponent);
     }
 
     public editXp() {

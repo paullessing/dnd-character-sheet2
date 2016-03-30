@@ -22,7 +22,7 @@ export class EditWalletComponent {
     constructor(
         private redux: ReduxConnector,
         private formBuilder: FormBuilder,
-        private modalWindow: ModalWindow
+        private modalWindow: ModalWindow<IAmount>
     ) {
         this.walletForm = formBuilder.group({
             add: new RadioButtonState(true, 'add'),
