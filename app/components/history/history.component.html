@@ -6,9 +6,11 @@
 			<h3>{{ group.name }} <span *ngIf="i === 0">(current)</span></h3>
 			<ol *ngIf="group.actions">
 				<li *ngFor="#action of group.actions">
-					{{ action.dateTime | date:'dd/MM/y HH:mm' }}: {{ getNiceAction(action.action) }}
+					{{ action.dateTime | date:'dd/MM/y HH:mm' }}: {{ getNiceAction(action.action) }} <span *ngIf="currentId === action.id">&lt;--</span>
 				</li>
 			</ol>
 		</li>
 	</ol>
 </div>
+<button (click)="undo()" [disabled]="!canUndo">Undo</button>
+<button (click)="redo()" [disabled]="!canRedo">Redo</button>

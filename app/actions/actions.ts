@@ -1,5 +1,8 @@
 export const LOAD = 'system/LOAD';
 
+export const UNDO = 'user/UNDO';
+export const REDO = 'user/REDO';
+
 export const UPDATE_PERSONALITY = 'user/UPDATE_PERSONALITY';
 
 export const ADD_XP = 'user/ADD_XP';

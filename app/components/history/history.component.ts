@@ -4,6 +4,7 @@ import {HistoryState, HistoricalAction, HistoryGroup} from "../../entities/state
 import * as Actions from '../../actions/actions';
 import {Action} from "../../entities/redux";
 import {Amount} from "../../entities/currency";
+import {undo, redo} from "../../actions/history.actions";
 
 /**
  * Component showing basic character details.
@@ -16,15 +17,35 @@ export class HistoryComponent implements OnDestroy {
 
     private unsubscribe: () => void;
     public history: HistoryGroup[];
+    public currentId: number;
+    public canUndo: boolean;
+    public canRedo: boolean;
 
     constructor(
-        redux: ReduxConnector
+        private redux: ReduxConnector
     ) {
         this.unsubscribe = redux.connectFull(this.onStoreUpdate.bind(this));
     }
 
     private onStoreUpdate(state: HistoryState) {
         this.history = state.history;
+        this.currentId = state.currentId;
+        let firstGroup = state.history[state.history.length - 1];
+        if (!firstGroup.actions.length) {
+            this.canUndo = false;
+        } else {
+            let firstAction = firstGroup.actions[firstGroup.actions.length - 1];
+            this.canUndo = state.currentId > firstAction.id;
+        }
+        this.canRedo = state.currentId < state.maxId;
+    }
+
+    public undo() {
+        this.redux.dispatch(undo());
+    }
+
+    public redo() {
+        this.redux.dispatch(redo());
     }
 
     ngOnDestroy() {
@@ -32,7 +53,7 @@ export class HistoryComponent implements OnDestroy {
     }
 
     private getTimes(count: number): string {
-        if (!count || count <= 0) {
+        if (!count || count <= 1) {
             return '';
         }
         return ' ×' + count;
