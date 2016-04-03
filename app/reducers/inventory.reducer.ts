@@ -12,7 +12,7 @@ interface InventoryState {
     wallet: Amount
 }
 
-let items: Reducer<Inventory> = (state: Inventory, action: Action) => {
+const items: Reducer<Inventory> = (state: Inventory, action: Action) => {
     switch (action.type) {
         case ADD_ITEM:
             return state.add(action.payload.itemId, action.payload.count);
@@ -23,7 +23,7 @@ let items: Reducer<Inventory> = (state: Inventory, action: Action) => {
     }
 };
 
-let wallet: Reducer<Amount> = (state: Amount, action: Action) => {
+const wallet: Reducer<Amount> = (state: Amount, action: Action) => {
     switch (action.type) {
         case ADD_TO_WALLET:
             return state.plus(action.payload.amount);
@@ -34,7 +34,7 @@ let wallet: Reducer<Amount> = (state: Amount, action: Action) => {
     }
 };
 
-let reducePurchases: Reducer<InventoryState> = (state: InventoryState, action: Action) => {
+const reducePurchases: Reducer<InventoryState> = (state: InventoryState, action: Action) => {
     switch (action.type) {
         case CREATE_ITEM:
             let newState = Object.assign({}, state);
@@ -47,7 +47,7 @@ let reducePurchases: Reducer<InventoryState> = (state: InventoryState, action: A
     }
 };
 
-let buyItem: Reducer<InventoryState> = (state: InventoryState, action: Action) => {
+const buyItem: Reducer<InventoryState> = (state: InventoryState, action: Action) => {
     const data: IItem = action.payload.item;
     const totalCost = new Amount(data.cost).times(data.quantity);
     if (state.wallet.lessThan(totalCost)) {
@@ -85,7 +85,7 @@ function getNewMaxId(state: InventoryState) {
     return () => ++state.maxItemId;
 }
 
-let inventory: Reducer<InventoryState> = (state: InventoryState = {
+const inventory: Reducer<InventoryState> = (state: InventoryState = {
     items: new Inventory(),
     maxItemId: 0,
     wallet: new Amount({})

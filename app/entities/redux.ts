@@ -24,3 +24,7 @@ export interface Reducer<S> {
 }
 
 export type StateReducer = Reducer<State>;
+
+export interface ReducerEnhancer<S, T> {
+    (reducer: Reducer<S>): Reducer<T>
+}

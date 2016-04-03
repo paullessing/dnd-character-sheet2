@@ -1,7 +1,7 @@
-import { Store } from 'redux';
+import {Store} from 'redux';
 import {LOAD} from "../actions/actions";
 import {Action} from "../entities/redux";
-import {State} from "../entities/state";
+import {HistoryState, HistoryGroup, HistoricalAction, State} from "../entities/state";
 import {Abilities, getAbilities, AbilityData} from "../entities/abilities";
 import {loadSkills, SkillData} from "../entities/skills";
 import {IItem, Item, Inventory} from "../entities/item";
@@ -13,6 +13,26 @@ export const STATE_KEY = 'dnd-character-sheet.state';
 
 interface ActionTransformer {
     (action: Action): Action
+}
+
+interface SerializedHistoryState {
+    current: string;
+    currentId: number;
+    maxId: number;
+    history: SerializedHistoryGroup[];
+}
+
+interface SerializedHistoryGroup {
+    id: number;
+    name: string;
+    description: string;
+    dateCreated: number;
+    startStateSerialized: string;
+    actions: {
+        id: number;
+        action: Action;
+        dateTime: number;
+    }[];
 }
 
 interface SerializedState {
@@ -32,7 +52,54 @@ interface SerializedState {
     };
 }
 
-function serialize(state: State): string {
+function serialize(state: HistoryState): string {
+    let serializedState: SerializedHistoryState = {
+        current: serializeState(state.current),
+        currentId: state.currentId,
+        maxId: state.maxId,
+        history: state.history.map((group: HistoryGroup): SerializedHistoryGroup => ({
+            id: group.id,
+            name: group.name || null,
+            description: group.description || null,
+            dateCreated: group.dateCreated.getTime(),
+            startStateSerialized: group.startStateSerialized,
+            actions: group.actions.map((action: HistoricalAction) => ({
+                id: action.id,
+                action: action.action,
+                dateTime: action.dateTime.getTime()
+            }))
+        }))
+    };
+    return JSON.stringify(serializedState);
+}
+
+function deserialize(dataString: string): HistoryState {
+    try {
+        let data: SerializedHistoryState = JSON.parse(dataString);
+        return {
+            current: deserializeState(data.current),
+            currentId: data.currentId,
+            maxId: data.maxId,
+            history: data.history.map((group: SerializedHistoryGroup): HistoryGroup => ({
+                id: group.id,
+                name: group.name,
+                description: group.description,
+                dateCreated: new Date(group.dateCreated),
+                startStateSerialized: group.startStateSerialized,
+                actions: group.actions.map(action => ({
+                    id: action.id,
+                    action: action.action,
+                    dateTime: new Date(action.dateTime)
+                }))
+            }))
+        };
+    } catch (error) {
+        console.log('Could not deserialize data', dataString);
+        throw error;
+    }
+}
+
+export function serializeState(state: State): string {
     let serializedState: SerializedState = {
         character: state.character.getData(),
         stats: {
@@ -45,14 +112,14 @@ function serialize(state: State): string {
         personality: state.personality,
         inventory: {
             items: state.inventory.items.getData(),
-            wallet: state.inventory.wallet || {},
+            wallet: state.inventory.wallet.getData() || {},
             maxItemId: state.inventory.maxItemId || Math.max(0, Math.max.apply(Math, state.inventory.items.items.map(item => item.id)))
         }
     };
     return JSON.stringify(serializedState);
 }
 
-function deserialize(dataString: string): State {
+export function deserializeState(dataString: string): State {
     try {
         let data: SerializedState = JSON.parse(dataString);
         let items = data.inventory.items.map(((item: IItem) => new Item(item)));
@@ -88,14 +155,14 @@ export function storeStateAfterUpdate(store: Store) {
     return (next: ActionTransformer) => (action: Action) => {
         let nextAction: Action = next(action);
         if (nextAction.type !== LOAD) {
-            let state = store.getState();
+            let state: HistoryState = store.getState();
             localStorage.setItem(STATE_KEY, serialize(state));
         }
         return nextAction;
     }
 }
 
-export function loadState(): State {
+export function loadState(): HistoryState {
     let data = localStorage.getItem(STATE_KEY);
     if (!data) {
         return undefined;
