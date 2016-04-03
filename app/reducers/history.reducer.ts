@@ -1,11 +1,6 @@
 import {State, HistoryState} from "../entities/state";
 import {Action, StateReducer, Reducer, ReducerEnhancer} from "../entities/redux";
-import {LOAD} from "../actions/actions";
-
-export const EXCLUDED_ACTIONS = [
-    '@@redux/init',
-    LOAD
-];
+import {isUserAction} from "../actions/actions";
 
 export const history: ReducerEnhancer<State, HistoryState> = (reducer) => {
     return (state: HistoryState = {
@@ -19,7 +14,7 @@ export const history: ReducerEnhancer<State, HistoryState> = (reducer) => {
             actions: []
         }]
     }, action: Action): HistoryState => {
-        if (EXCLUDED_ACTIONS.indexOf(action.type) >= 0) {
+        if (!isUserAction(action.type)) {
             //return state;
             return Object.assign({}, state, {current: reducer(state.current, action)});
         }

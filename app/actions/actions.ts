@@ -1,18 +1,21 @@
-export const LOAD = 'LOAD';
+export const LOAD = 'system/LOAD';
 
-export const UPDATE_PERSONALITY = 'UPDATE_PERSONALITY';
+export const UPDATE_PERSONALITY = 'user/UPDATE_PERSONALITY';
 
-export const ADD_XP = 'ADD_XP';
-export const UPDATE_ABILITIES = 'UPDATE_ABILITIES';
+export const ADD_XP = 'user/ADD_XP';
+export const UPDATE_ABILITIES = 'user/UPDATE_ABILITIES';
 
-export const UPDATE_CHARACTER = 'UPDATE_CHARACTER';
+export const UPDATE_CHARACTER = 'user/UPDATE_CHARACTER';
 
+export const CREATE_ITEM = 'user/CREATE_ITEM';
+export const UPDATE_ITEM = 'user/UPDATE_ITEM';
+export const BUY_ITEM = 'user/BUY_ITEM';
+export const ADD_ITEM = 'user/ADD_ITEM';
+export const REMOVE_ITEM = 'user/REMOVE_ITEM';
 
-export const CREATE_ITEM = 'CREATE_ITEM';
-export const UPDATE_ITEM = 'UPDATE_ITEM';
-export const BUY_ITEM = 'BUY_ITEM';
-export const ADD_ITEM = 'ADD_ITEM';
-export const REMOVE_ITEM = 'REMOVE_ITEM';
+export const ADD_TO_WALLET = 'user/ADD_TO_WALLET';
+export const REMOVE_FROM_WALLET = 'user/REMOVE_FROM_WALLET';
 
-export const ADD_TO_WALLET = 'ADD_TO_WALLET';
-export const REMOVE_FROM_WALLET = 'REMOVE_FROM_WALLET';
+export function isUserAction(type: string): boolean {
+    return type.indexOf('user/') === 0;
+}
