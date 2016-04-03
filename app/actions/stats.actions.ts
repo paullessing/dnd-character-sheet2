@@ -17,7 +17,7 @@ export interface UpdatePayload {
     skills: SkillData[];
 }
 
-export function updateStats(abilities: AbilitiesDiff, skills: SkillData[]) {
+export function updateStats(abilities: AbilitiesDiff, skills: SkillData[]): Action {
     const payload: UpdatePayload = {
         abilities,
         skills

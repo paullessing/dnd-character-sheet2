@@ -13,7 +13,8 @@ import {
     EditAbilitiesComponent,
     ShopComponent,
     InventoryComponent,
-    EditItemComponent
+    EditItemComponent,
+    HistoryComponent
 } from "./components/_module";
 import {Modal} from "./components/modal/modal.service";
 
@@ -55,6 +56,7 @@ import {Modal} from "./components/modal/modal.service";
     {path: '/inventory',            name: 'Inventory',          component: InventoryComponent},
     {path: '/edit-item',            name: 'EditItem',           component: EditItemComponent},
     {path: '/shop',                 name: 'Shop',               component: ShopComponent},
+    {path: '/history',              name: 'History',            component: HistoryComponent},
 
 ])
 export class AppComponent {

@@ -1,4 +1,5 @@
 import {State} from "./state";
+import {HistoryState} from "./state";
 
 export interface Action {
     type: string;
@@ -12,7 +13,7 @@ export interface Dispatch {
 }
 
 export interface GetState {
-    (): State;
+    (): HistoryState;
 }
 
 export interface ThunkAction {

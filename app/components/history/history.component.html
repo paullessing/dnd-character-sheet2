@@ -1,0 +1,14 @@
+<h2>History</h2>
+<div *ngIf="!history">Loading history...</div>
+<div *ngIf="history">
+	<ol>
+		<li *ngFor="#group of history; #i = index">
+			<h3>{{ group.name }} <span *ngIf="i === 0">(current)</span></h3>
+			<ol *ngIf="group.actions">
+				<li *ngFor="#action of group.actions">
+					{{ action.dateTime | date:'dd/MM/y HH:mm' }}: {{ getNiceAction(action.action) }}
+				</li>
+			</ol>
+		</li>
+	</ol>
+</div>
