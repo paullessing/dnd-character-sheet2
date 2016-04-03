@@ -1,4 +1,4 @@
-import {State} from "../entities/state";
+import {State} from "./state";
 
 export interface Action {
     type: string;
@@ -18,3 +18,9 @@ export interface GetState {
 export interface ThunkAction {
     (dispatch: Dispatch, getState: GetState): void;
 }
+
+export interface Reducer<S> {
+    (state: S, action: Action): S;
+}
+
+export type StateReducer = Reducer<State>;

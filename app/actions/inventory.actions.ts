@@ -1,4 +1,4 @@
-import {Action, ThunkAction, GetState, Dispatch} from "./action";
+import {Action, ThunkAction, GetState, Dispatch} from "./../entities/redux";
 import {REMOVE_ITEM, ADD_TO_WALLET, REMOVE_FROM_WALLET, CREATE_ITEM, UPDATE_ITEM, BUY_ITEM} from "./actions";
 import {IAmount, Amount} from "../entities/currency";
 import {IItem} from "../entities/item";

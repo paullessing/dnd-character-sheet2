@@ -1,6 +1,6 @@
 import { Store } from 'redux';
 import {LOAD} from "../actions/actions";
-import {Action} from "../actions/action";
+import {Action} from "../entities/redux";
 import {State} from "../entities/state";
 import {Abilities, getAbilities, AbilityData} from "../entities/abilities";
 import {loadSkills, SkillData} from "../entities/skills";

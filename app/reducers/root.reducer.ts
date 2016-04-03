@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import {State} from "../entities/state";
-import {Action} from "../actions/action";
+import {Action} from "../entities/redux";
 
 import {character} from "./character.reducer";
 import {personality} from "./personality.reducer";

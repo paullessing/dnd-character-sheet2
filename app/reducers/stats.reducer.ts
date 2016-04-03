@@ -1,4 +1,4 @@
-import {Action} from "../actions/action";
+import {Action} from "../entities/redux";
 import {ADD_XP, UPDATE_ABILITIES} from "../actions/actions";
 
 import {getAbilities, AbilityData, Abilities} from "../entities/abilities";
