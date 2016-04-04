@@ -46,8 +46,14 @@ function find(history: HistoryGroup[], predicate: (action: HistoricalAction, gro
 } {
     for (let groupIndex = 0; groupIndex < history.length; groupIndex++) {
         let group = history[groupIndex];
+        if (group.isDeleted) {
+            continue;
+        }
         for (let actionIndex = 0; actionIndex < group.actions.length; actionIndex++) {
             let action = group.actions[actionIndex];
+            if (action.isDeleted) {
+                continue;
+            }
             if (predicate(action, group)) {
                 return {
                     group,
@@ -70,8 +76,14 @@ function findNext(history: HistoryGroup[], id: number): {
     let previous = null;
     for (let groupIndex = 0; groupIndex < history.length; groupIndex++) {
         let group = history[groupIndex];
+        if (group.isDeleted) {
+            continue;
+        }
         for (let actionIndex = 0; actionIndex < group.actions.length; actionIndex++) {
             let action = group.actions[actionIndex];
+            if (action.isDeleted) {
+                continue;
+            }
             if (action.id === id) {
                 return previous;
             }
@@ -129,12 +141,13 @@ function runAndStore(reducer: StateReducer, state: HistoryState, action: Action)
     let newState = reducer(state.current, action);
     let maxId = state.maxId;
     let history = state.history.slice();
-    history[0] = Object.assign({}, state.history[0]);
-    history[0].actions = [{
+    let current = find(history, action => action.id === state.currentId);
+    history[current.groupIndex] = Object.assign({}, state.history[current.groupIndex]);
+    history[current.groupIndex].actions = [{
         id: ++maxId,
         dateTime: new Date(), // TODO consider generating in metadata
         action: action
-    }].concat(history[0].actions);
+    }].concat(history[current.groupIndex].actions);
     return {
         current: newState,
         currentId: maxId,
@@ -144,8 +157,25 @@ function runAndStore(reducer: StateReducer, state: HistoryState, action: Action)
 }
 
 function removeFuture(state: HistoryState): HistoryState {
-    let currentState = find(state.history, (action) => action.id === state.currentId);
-    let newHistory: HistoryGroup[] = state.history.slice(currentState.groupIndex);
-    newHistory[0] = Object.assign({}, newHistory[0], { actions: newHistory[0].actions.slice(currentState.actionIndex) });
+    let newHistory: HistoryGroup[] = state.history.map((group: HistoryGroup) => {
+        let allDeleted = true;
+        let anyDeleted = false;
+        let newActions = group.actions.map((action: HistoricalAction) => {
+            if (action.id <= state.currentId) {
+                allDeleted = false;
+                return action;
+            } else {
+                anyDeleted = true;
+                return Object.assign({}, action, {isDeleted: true});
+            }
+        });
+        if (!anyDeleted) {
+            return group;
+        } else {
+            return Object.assign({}, group, { actions: newActions, isDeleted: allDeleted });
+        }
+    });
+    //let newHistory: HistoryGroup[] = state.history.slice(currentState.groupIndex);
+    //newHistory[0] = Object.assign({}, newHistory[0], { actions: newHistory[0].actions.slice(currentState.actionIndex) });
     return Object.assign({}, state, { history: newHistory });
 }

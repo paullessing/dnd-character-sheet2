@@ -3,9 +3,13 @@
 <div *ngIf="history">
 	<ol>
 		<li *ngFor="#group of history; #i = index">
-			<h3>{{ group.name }} <span *ngIf="i === 0">(current)</span></h3>
+			<h3
+				[style.textDecoration]="group.isDeleted ? 'line-through' : null"
+			>{{ group.name }} <span *ngIf="i === 0">(current)</span></h3>
 			<ol *ngIf="group.actions">
-				<li *ngFor="#action of group.actions">
+				<li *ngFor="#action of group.actions"
+					[style.textDecoration]="action.isDeleted ? 'line-through' : null"
+				>
 					{{ action.dateTime | date:'dd/MM/y HH:mm' }}: {{ getNiceAction(action.action) }} <span *ngIf="currentId === action.id">&lt;--</span>
 				</li>
 			</ol>

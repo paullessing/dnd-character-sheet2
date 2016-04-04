@@ -22,12 +22,14 @@ export interface HistoryGroup {
     dateCreated: Date;
     startStateSerialized: string;
     actions: HistoricalAction[];
+    isDeleted?: boolean;
 }
 
 export interface HistoricalAction {
     id: number;
     action: Action;
     dateTime: Date;
+    isDeleted?: boolean;
 };
 
 export interface State {
