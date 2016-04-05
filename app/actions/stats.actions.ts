@@ -1,4 +1,4 @@
-import {Action} from "./action";
+import {Action} from "./../entities/redux";
 import {ADD_XP, UPDATE_ABILITIES} from "./actions";
 
 import {SkillData} from "../entities/skills";
@@ -17,7 +17,7 @@ export interface UpdatePayload {
     skills: SkillData[];
 }
 
-export function updateStats(abilities: AbilitiesDiff, skills: SkillData[]) {
+export function updateStats(abilities: AbilitiesDiff, skills: SkillData[]): Action {
     const payload: UpdatePayload = {
         abilities,
         skills

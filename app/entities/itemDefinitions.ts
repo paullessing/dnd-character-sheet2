@@ -199,7 +199,7 @@ export const ITEM_TEMPLATES: ItemTemplate[] = Object.freeze([
         description: 'A chain has 10 hit points. It can be burst with a successful DC 20 Strength check.'
     },
     {
-        name: 'Chalk (1 piece',
+        name: 'Chalk (1 piece)',
         cost: '1cp'
     },
     {

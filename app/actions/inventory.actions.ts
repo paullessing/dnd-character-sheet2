@@ -1,14 +1,25 @@
-import {Action, ThunkAction, GetState, Dispatch} from "./action";
-import {REMOVE_ITEM, ADD_TO_WALLET, REMOVE_FROM_WALLET, CREATE_ITEM, UPDATE_ITEM, BUY_ITEM} from "./actions";
+import {Action, ThunkAction, GetState, Dispatch} from "./../entities/redux";
+import {
+    ADD_TO_WALLET,
+    REMOVE_FROM_WALLET,
+    CREATE_ITEM,
+    UPDATE_ITEM,
+    REMOVE_ITEM,
+    BUY_ITEM,
+    ADD_ITEM
+} from "./actions";
 import {IAmount, Amount} from "../entities/currency";
 import {IItem} from "../entities/item";
 import {ItemTemplate} from "../entities/itemDefinitions";
 
 export function remove(itemId: number, count: number, reason?: string): ThunkAction {
     return (dispatch: Dispatch, getState: GetState) => {
-        const currentCount = getState().inventory.items.getCount(itemId);
-        if (currentCount < count) {
-            throw new Error(`Cannot remove ${count} of item ID ${itemId} since it only has ${currentCount}`);
+        let existingItem = getState().current.inventory.items.byId[itemId];
+        if (!existingItem || existingItem.quantity === 0) {
+            throw new Error(`Cannot remove ${count} of item ID ${itemId} since it does not exist in the inventory`);
+        }
+        if (existingItem.quantity < count) {
+            throw new Error(`Cannot remove ${count} of item ID ${itemId} since it only has ${existingItem.quantity}`);
         }
         dispatch({
             type: REMOVE_ITEM,
@@ -16,6 +27,9 @@ export function remove(itemId: number, count: number, reason?: string): ThunkAct
                 itemId,
                 count,
                 reason
+            },
+            meta: {
+                name: existingItem.name
             }
         });
     };
@@ -33,7 +47,7 @@ export function create(data: IItem): Action {
 
 export function update(data: IItem): ThunkAction {
     return (dispatch: Dispatch, getState: GetState) => {
-        if (!getState().inventory.items.containsId(data.id)) {
+        if (!getState().current.inventory.items.containsId(data.id)) {
             throw new Error(`Cannot update item with ID ${data.id} as it does not exist in the inventory`);
         }
         dispatch({
@@ -45,15 +59,19 @@ export function update(data: IItem): ThunkAction {
 
 export function add(itemId: number, count: number, reason: string): ThunkAction {
     return (dispatch: Dispatch, getState: GetState) => {
-        if (!getState().inventory.items.containsId(itemId)) {
-            throw new Error(`Cannot update item with ID ${itemId} as it does not exist in the inventory`);
+        let existingItem = getState().current.inventory.items.byId[itemId];
+        if (!existingItem || existingItem.quantity === 0) {
+            throw new Error(`Cannot add to item with ID ${itemId} as it does not exist in the inventory`);
         }
         dispatch({
-            type: UPDATE_ITEM,
+            type: ADD_ITEM,
             payload: {
                 itemId,
                 count,
                 reason
+            },
+            meta: {
+                name: existingItem.name
             }
         });
     };
@@ -61,7 +79,7 @@ export function add(itemId: number, count: number, reason: string): ThunkAction 
 
 export function buy(item: IItem, reason: string): ThunkAction {
     return (dispatch: Dispatch, getState: GetState) => {
-        if (getState().inventory.wallet.lessThan(new Amount(item.cost).times(item.quantity))) {
+        if (getState().current.inventory.wallet.lessThan(new Amount(item.cost).times(item.quantity))) {
             throw new Error('Item is more than user can afford!');
         }
         dispatch({
@@ -88,7 +106,7 @@ export function addToWallet(amountToAdd: IAmount, reason?: string): Action {
 export function removeFromWallet(amountToRemove: IAmount, reason?: string): ThunkAction {
     return (dispatch: Dispatch, getState: GetState) => {
         let amount = new Amount(amountToRemove);
-        let wallet = getState().inventory.wallet;
+        let wallet = getState().current.inventory.wallet;
         if (wallet.totalValue < amount.totalValue) {
             throw new Error(`Cannot remove ${amount.toString()} from wallet as it is only ${wallet.toString()}`);
         } else {

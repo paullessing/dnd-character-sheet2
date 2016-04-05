@@ -1,0 +1,21 @@
+<h2>History</h2>
+<div *ngIf="!history">Loading history...</div>
+<div *ngIf="history">
+	<ol>
+		<li *ngFor="#group of history; #i = index" style="margin-bottom: 1em;">
+			<h3
+				[style.textDecoration]="group.isDeleted ? 'line-through' : null"
+			>{{ group.name }} <span *ngIf="i === 0">(current)</span><button (click)="edit(group.id)">Edit</button></h3>
+			<ol *ngIf="group.actions">
+				<li *ngFor="#action of group.actions"
+					[style.textDecoration]="action.isDeleted ? 'line-through' : null"
+				>
+					{{ action.dateTime | date:'dd/MM/y HH:mm' }}: {{ getNiceAction(action.action) }} <span *ngIf="currentId === action.id">&lt;--</span>
+				</li>
+			</ol>
+		</li>
+	</ol>
+</div>
+<button (click)="undo()" [disabled]="!canUndo">Undo</button>
+<button (click)="redo()" [disabled]="!canRedo">Redo</button>
+<button (click)="addGroup()">Add Group</button>

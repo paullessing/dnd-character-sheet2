@@ -1,6 +1,6 @@
 import {combineReducers} from 'redux';
 
-import {Action} from "../actions/action";
+import {Action, Reducer} from "../entities/redux";
 import {Amount} from "../entities/currency";
 import {Item, IItem, Inventory} from "../entities/item";
 import {ItemTemplate} from "../entities/itemDefinitions";
@@ -12,7 +12,7 @@ interface InventoryState {
     wallet: Amount
 }
 
-function items(state: Inventory, action: Action): Inventory {
+const items: Reducer<Inventory> = (state: Inventory, action: Action) => {
     switch (action.type) {
         case ADD_ITEM:
             return state.add(action.payload.itemId, action.payload.count);
@@ -21,9 +21,9 @@ function items(state: Inventory, action: Action): Inventory {
         default:
             return state;
     }
-}
+};
 
-function wallet(state: Amount, action: Action): Amount {
+const wallet: Reducer<Amount> = (state: Amount, action: Action) => {
     switch (action.type) {
         case ADD_TO_WALLET:
             return state.plus(action.payload.amount);
@@ -32,9 +32,9 @@ function wallet(state: Amount, action: Action): Amount {
         default:
             return state;
     }
-}
+};
 
-function reducePurchases(state: InventoryState, action: Action): InventoryState {
+const reducePurchases: Reducer<InventoryState> = (state: InventoryState, action: Action) => {
     switch (action.type) {
         case CREATE_ITEM:
             let newState = Object.assign({}, state);
@@ -45,9 +45,9 @@ function reducePurchases(state: InventoryState, action: Action): InventoryState 
         default:
             return state;
     }
-}
+};
 
-function buyItem(state: InventoryState, action: Action) {
+const buyItem: Reducer<InventoryState> = (state: InventoryState, action: Action) => {
     const data: IItem = action.payload.item;
     const totalCost = new Amount(data.cost).times(data.quantity);
     if (state.wallet.lessThan(totalCost)) {
@@ -79,17 +79,17 @@ function buyItem(state: InventoryState, action: Action) {
     }
     newState.wallet = state.wallet.minus(new Amount(data.cost).times(data.quantity));
     return newState;
-}
+};
 
 function getNewMaxId(state: InventoryState) {
     return () => ++state.maxItemId;
 }
 
-export function inventory(state: InventoryState = {
+const inventory: Reducer<InventoryState> = (state: InventoryState = {
     items: new Inventory(),
     maxItemId: 0,
     wallet: new Amount({})
-}, action: Action) {
+}, action: Action) => {
     let newState = {
         items: items(state.items, action),
         wallet: wallet(state.wallet, action),
@@ -98,4 +98,6 @@ export function inventory(state: InventoryState = {
     newState = reducePurchases(newState, action);
 
     return newState;
-}
+};
+
+export { inventory };

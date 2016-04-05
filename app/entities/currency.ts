@@ -55,6 +55,10 @@ export class Amount implements IAmount {
         Object.freeze(this);
     }
 
+    public static toString(value: IAmount | string) {
+        return new Amount(value).toString();
+    }
+
     public toString(): string {
         if (this.totalValue === 0) {
             return '0 gp';

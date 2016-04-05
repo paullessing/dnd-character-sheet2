@@ -3,5 +3,5 @@
 	Edit
 </label><br />
 <input type="number" min="1" [(ngModel)]="count" (change)="onCountChange()" /> <span [hidden]="!isPay || !price">({{ price }})</span><br />
-<button type="button" (click)="gain(true)">Buy</button>
-<button type="button" (click)="gain(false)">Gain</button>
+<button type="button" (click)="submit(true)">Buy</button>
+<button type="button" (click)="submit(false)">Gain</button>
