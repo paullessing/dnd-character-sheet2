@@ -2,9 +2,10 @@ import {State, HistoryState, HistoryGroup, HistoricalAction} from "../entities/s
 import {Action, StateReducer, Reducer, ReducerEnhancer} from "../entities/redux";
 import {
     isUserAction,
-    UNDO, REDO
+    UNDO, REDO, HISTORY_ADD_GROUP
 } from "../actions/actions";
 import {deserializeState} from "../common/storage.middleware";
+import {serializeState} from "../common/storage.middleware";
 
 export const history: ReducerEnhancer<State, HistoryState> = (reducer) => {
     return (state: HistoryState = {
@@ -27,12 +28,26 @@ export const history: ReducerEnhancer<State, HistoryState> = (reducer) => {
                 return undo(state, reducer);
             case REDO:
                 return redo(state, reducer);
-            // TODO cases for manipulating history
+            case HISTORY_ADD_GROUP:
+                return addHistoryGroup(state, action, reducer);
             default:
                return runAndStore(reducer, state, action);
         }
     };
 };
+
+function addHistoryGroup(state: HistoryState, action: Action, reducer: StateReducer) {
+    let maxIndex = state.history[0].id;
+    let newGroup = {
+        id: maxIndex + 1,
+        dateCreated: new Date(),
+        startStateSerialized: serializeState(state.current),
+        actions: []
+    };
+    let newState = runAndStore(reducer, state, action);
+    let newHistory = [newGroup].concat(newState.history);
+    return Object.assign({}, newState, { history: newHistory });
+}
 
 /**
  * Finds the first element that matches the given predicate.
@@ -134,6 +149,15 @@ function redo(state: HistoryState, reducer: StateReducer): HistoryState {
     };
 }
 
+function indexOfCurrent(history: HistoryGroup[]): number {
+    for (let i = 0; i < history.length; i++) {
+        if (!history[i].isDeleted) {
+            return i;
+        }
+    }
+    throw new Error('No current group found!');
+}
+
 function runAndStore(reducer: StateReducer, state: HistoryState, action: Action): HistoryState {
     if (state.currentId !== state.maxId) {
         state = removeFuture(state);
@@ -141,13 +165,13 @@ function runAndStore(reducer: StateReducer, state: HistoryState, action: Action)
     let newState = reducer(state.current, action);
     let maxId = state.maxId;
     let history = state.history.slice();
-    let current = find(history, action => action.id === state.currentId);
-    history[current.groupIndex] = Object.assign({}, state.history[current.groupIndex]);
-    history[current.groupIndex].actions = [{
+    let currentIndex = indexOfCurrent(state.history);
+    history[currentIndex] = Object.assign({}, state.history[currentIndex]);
+    history[currentIndex].actions = [{
         id: ++maxId,
         dateTime: new Date(), // TODO consider generating in metadata
         action: action
-    }].concat(history[current.groupIndex].actions);
+    }].concat(history[currentIndex].actions);
     return {
         current: newState,
         currentId: maxId,

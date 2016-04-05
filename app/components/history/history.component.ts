@@ -4,7 +4,7 @@ import {HistoryState, HistoricalAction, HistoryGroup} from "../../entities/state
 import * as Actions from '../../actions/actions';
 import {Action} from "../../entities/redux";
 import {Amount} from "../../entities/currency";
-import {undo, redo} from "../../actions/history.actions";
+import {undo, redo, addGroup} from "../../actions/history.actions";
 
 /**
  * Component showing basic character details.
@@ -48,6 +48,10 @@ export class HistoryComponent implements OnDestroy {
         this.redux.dispatch(redo());
     }
 
+    public addGroup() {
+        this.redux.dispatch(addGroup());
+    }
+
     ngOnDestroy() {
         this.unsubscribe();
     }
@@ -71,6 +75,8 @@ export class HistoryComponent implements OnDestroy {
                 return 'Bought ' + action.payload.item.name + this.getTimes(action.payload.item.quantity);
             case Actions.CREATE_ITEM:
                 return 'Added ' + action.payload.item.name + this.getTimes(action.payload.item.quantity);
+            case Actions.HISTORY_ADD_GROUP:
+                return 'End of group';
             case Actions.REMOVE_FROM_WALLET:
                 return 'Paid/Lost ' + Amount.toString(action.payload.amount);
             case Actions.REMOVE_ITEM:

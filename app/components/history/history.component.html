@@ -2,7 +2,7 @@
 <div *ngIf="!history">Loading history...</div>
 <div *ngIf="history">
 	<ol>
-		<li *ngFor="#group of history; #i = index">
+		<li *ngFor="#group of history; #i = index" style="margin-bottom: 1em;">
 			<h3
 				[style.textDecoration]="group.isDeleted ? 'line-through' : null"
 			>{{ group.name }} <span *ngIf="i === 0">(current)</span></h3>
@@ -18,3 +18,4 @@
 </div>
 <button (click)="undo()" [disabled]="!canUndo">Undo</button>
 <button (click)="redo()" [disabled]="!canRedo">Redo</button>
+<button (click)="addGroup()">Add Group</button>

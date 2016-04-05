@@ -44,7 +44,10 @@ export class ShopItemActionsComponent {
         this.onCountChange();
     }
 
-    public gain(isBuy: boolean) {
+    public submit(isBuy: boolean) {
+        if (!this.count || this.count <= 0) {
+            return;
+        }
         if (this.isEdit) {
             this.modal.open(GainItemComponent, this.getBindings(isBuy));
         } else {
