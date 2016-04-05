@@ -5,6 +5,10 @@ import * as Actions from '../../actions/actions';
 import {Action} from "../../entities/redux";
 import {Amount} from "../../entities/currency";
 import {undo, redo, addGroup} from "../../actions/history.actions";
+import {Modal} from "../modal/modal.service";
+import {EditHistoryGroupModalComponent} from "./edit-history-group-modal.component";
+import {Injector} from "angular2/core";
+import {provide} from "angular2/core";
 
 /**
  * Component showing basic character details.
@@ -22,7 +26,8 @@ export class HistoryComponent implements OnDestroy {
     public canRedo: boolean;
 
     constructor(
-        private redux: ReduxConnector
+        private redux: ReduxConnector,
+        private modal: Modal
     ) {
         this.unsubscribe = redux.connectFull(this.onStoreUpdate.bind(this));
     }
@@ -50,6 +55,14 @@ export class HistoryComponent implements OnDestroy {
 
     public addGroup() {
         this.redux.dispatch(addGroup());
+    }
+
+    public edit(id) {
+        this.modal.open(EditHistoryGroupModalComponent, Injector.resolve([
+            provide('historyGroupId', {
+                useValue: id
+            })
+        ]));
     }
 
     ngOnDestroy() {

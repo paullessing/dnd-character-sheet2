@@ -6,6 +6,7 @@ import {
 } from "../actions/actions";
 import {deserializeState} from "../common/storage.middleware";
 import {serializeState} from "../common/storage.middleware";
+import {HISTORY_RENAME_GROUP} from "../actions/actions";
 
 export const history: ReducerEnhancer<State, HistoryState> = (reducer) => {
     return (state: HistoryState = {
@@ -29,14 +30,30 @@ export const history: ReducerEnhancer<State, HistoryState> = (reducer) => {
             case REDO:
                 return redo(state, reducer);
             case HISTORY_ADD_GROUP:
-                return addHistoryGroup(state, action, reducer);
+                return addHistoryGroup(state, action);
+            case HISTORY_RENAME_GROUP:
+                return renameGroup(state, action);
             default:
                return runAndStore(reducer, state, action);
         }
     };
 };
 
-function addHistoryGroup(state: HistoryState, action: Action, reducer: StateReducer) {
+function renameGroup(state: HistoryState, action: Action) {
+    let newState = Object.assign({}, state);
+    newState.history = newState.history.map((group: HistoryGroup) => {
+        if (group.id !== action.payload.id) {
+            return group;
+        }
+        let newGroup = Object.assign({}, group);
+        newGroup.name = action.payload.name;
+        newGroup.description = action.payload.description;
+        return newGroup;
+    });
+    return newState;
+}
+
+function addHistoryGroup(state: HistoryState, action: Action) {
     let maxIndex = state.history[0].id;
     let newGroup = {
         id: maxIndex + 1,
@@ -44,7 +61,7 @@ function addHistoryGroup(state: HistoryState, action: Action, reducer: StateRedu
         startStateSerialized: serializeState(state.current),
         actions: []
     };
-    let newState = runAndStore(reducer, state, action);
+    let newState = store(state, state.current, action);
     let newHistory = [newGroup].concat(newState.history);
     return Object.assign({}, newState, { history: newHistory });
 }
@@ -159,12 +176,14 @@ function indexOfCurrent(history: HistoryGroup[]): number {
 }
 
 function runAndStore(reducer: StateReducer, state: HistoryState, action: Action): HistoryState {
-    if (state.currentId !== state.maxId) {
-        state = removeFuture(state);
-    }
+    state = removeFuture(state);
     let newState = reducer(state.current, action);
+    return store(state, newState, action);
+}
+
+function store(state: HistoryState, newState: State, action: Action): HistoryState {
     let maxId = state.maxId;
-    let history = state.history.slice();
+    let history: HistoryGroup[] = state.history.slice();
     let currentIndex = indexOfCurrent(state.history);
     history[currentIndex] = Object.assign({}, state.history[currentIndex]);
     history[currentIndex].actions = [{
@@ -181,6 +200,9 @@ function runAndStore(reducer: StateReducer, state: HistoryState, action: Action)
 }
 
 function removeFuture(state: HistoryState): HistoryState {
+    if (state.currentId === state.maxId) {
+        return state;
+    }
     let newHistory: HistoryGroup[] = state.history.map((group: HistoryGroup) => {
         let allDeleted = true;
         let anyDeleted = false;

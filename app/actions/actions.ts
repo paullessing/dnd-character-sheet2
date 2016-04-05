@@ -3,6 +3,7 @@ export const LOAD = 'system/LOAD';
 export const UNDO = 'user/UNDO';
 export const REDO = 'user/REDO';
 export const HISTORY_ADD_GROUP = 'user/HISTORY_ADD_GROUP';
+export const HISTORY_RENAME_GROUP = 'user/HISTORY_RENAME_GROUP';
 
 export const UPDATE_PERSONALITY = 'user/UPDATE_PERSONALITY';
 
