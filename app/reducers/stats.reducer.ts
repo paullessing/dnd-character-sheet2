@@ -1,5 +1,5 @@
 import {Action} from "../entities/redux";
-import {ADD_XP, UPDATE_ABILITIES} from "../actions/actions";
+import {ADD_XP, UPDATE_ABILITIES, UPDATE_PROFICIENCIES} from "../actions/actions";
 
 import {getAbilities, AbilityData, Abilities} from "../entities/abilities";
 import {Stats} from "../entities/state";
@@ -15,7 +15,8 @@ const defaultState = Object.freeze({
     level: 1,
     proficiencyBonus: defaultProficiency,
     abilities: emptyAbilities,
-    skills: loadSkills(emptyAbilities, [], defaultProficiency)
+    skills: loadSkills(emptyAbilities, [], defaultProficiency),
+    proficiencies: ''
 });
 
 export function stats(state: Stats = defaultState, action: Action) {
@@ -24,6 +25,8 @@ export function stats(state: Stats = defaultState, action: Action) {
             return addXp(state, action.payload.amount);
         case UPDATE_ABILITIES:
             return updateStats(state, action.payload.data);
+        case UPDATE_PROFICIENCIES:
+            return Object.assign({}, state, { proficiencies: action.payload });
     }
     return state;
 }
@@ -45,7 +48,8 @@ function addXp(stats: Stats, xpToAdd: number): Stats {
             level,
             proficiencyBonus,
             abilities,
-            skills
+            skills,
+            proficiencies: stats.proficiencies
         };
     }
 }

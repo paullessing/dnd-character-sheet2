@@ -43,6 +43,7 @@ interface SerializedState {
         proficiencyBonus: number;
         abilities: AbilityData[];
         skills: SkillData[];
+        proficiencies: string;
     };
     personality: IPersonality;
     inventory: {
@@ -107,7 +108,8 @@ export function serializeState(state: State): string {
             level: state.stats.level,
             proficiencyBonus: state.stats.proficiencyBonus,
             abilities: state.stats.abilities.getData(),
-            skills: state.stats.skills.getData()
+            skills: state.stats.skills.getData(),
+            proficiencies: state.stats.proficiencies
         },
         personality: state.personality,
         inventory: {
@@ -131,7 +133,8 @@ export function deserializeState(dataString: string): State {
                 level: data.stats.level,
                 proficiencyBonus: data.stats.proficiencyBonus,
                 abilities: null,
-                skills: null
+                skills: null,
+                proficiencies: data.stats.proficiencies || ''
             },
             inventory: {
                 items: new Inventory(...items),

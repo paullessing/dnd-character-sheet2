@@ -1,5 +1,5 @@
 import {Action} from "./../entities/redux";
-import {ADD_XP, UPDATE_ABILITIES} from "./actions";
+import {ADD_XP, UPDATE_ABILITIES, UPDATE_PROFICIENCIES} from "./actions";
 
 import {SkillData} from "../entities/skills";
 
@@ -37,5 +37,12 @@ export function addXp(amount: number, reason?: string): Action {
             amount,
             reason
         }
+    }
+}
+
+export function updateProficiencies(proficiencies: string): Action {
+    return {
+        type: UPDATE_PROFICIENCIES,
+        payload: proficiencies
     }
 }

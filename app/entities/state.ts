@@ -52,4 +52,5 @@ export interface Stats {
     proficiencyBonus: number;
     abilities: Abilities;
     skills: Skills;
+    proficiencies: string;
 }

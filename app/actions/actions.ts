@@ -9,6 +9,7 @@ export const UPDATE_PERSONALITY = 'user/UPDATE_PERSONALITY';
 
 export const ADD_XP = 'user/ADD_XP';
 export const UPDATE_ABILITIES = 'user/UPDATE_ABILITIES';
+export const UPDATE_PROFICIENCIES = 'user/UPDATE_PROFICIENCIES';
 
 export const UPDATE_CHARACTER = 'user/UPDATE_CHARACTER';
 
