@@ -26,9 +26,25 @@ export class Modal {
         this.toggleModalState = toggleModalState;
     }
 
-    public open<T>(component: Type, injectBindings: ResolvedBinding[] = []): Promise<T> {
+    public open<T>(component: Type, injectBindings: ResolvedBinding[] | { [key: string]: any } = []): Promise<T> {
         if (Modal.currentWindow) {
             return;
+        }
+        let bindings: ResolvedBinding[];
+        if (Array.isArray(injectBindings)) {
+            console.log('its an array');
+            bindings = injectBindings;
+        } else {
+            let providedValues = [];
+            for (let key in injectBindings) {
+                if (injectBindings.hasOwnProperty(key)) {
+                    providedValues.push(provide(
+                        key,
+                        { useValue: injectBindings[key] }
+                    ));
+                }
+            }
+            bindings = Injector.resolve(providedValues);
         }
         return new Promise((resolve, reject) => {
             this.loader.loadIntoLocation(ModalComponent, this.appElementRef, 'modal')
@@ -44,9 +60,9 @@ export class Modal {
                     };
                     let modalWindow = new ModalWindow(closeModal);
                     Modal.currentWindow = modalWindow;
-                    let bindings = Injector.resolve([provide(ModalWindow, { useValue: modalWindow })]).concat(injectBindings);
+                    let modalBindings = Injector.resolve([provide(ModalWindow, { useValue: modalWindow })]).concat(bindings);
 
-                    this.loader.loadIntoLocation(component, componentRef.location, 'content', bindings);
+                    this.loader.loadIntoLocation(component, componentRef.location, 'content', modalBindings);
                 });
         });
     }

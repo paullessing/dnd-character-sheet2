@@ -83,7 +83,7 @@ export class HistoryComponent implements OnDestroy {
             case Actions.ADD_TO_WALLET:
                 return 'Gained ' + Amount.toString(action.payload.amount);
             case Actions.ADD_XP:
-                return 'Gained ' + action.payload.amount + ' xp';
+                return 'Gained ' + action.payload.amount + ' xp' + (action.payload.reason ? ` for: "${action.payload.reason}"` : '');
             case Actions.BUY_ITEM:
                 return 'Bought ' + action.payload.item.name + this.getTimes(action.payload.item.quantity);
             case Actions.CREATE_ITEM:
@@ -102,6 +102,8 @@ export class HistoryComponent implements OnDestroy {
                 return 'Updated ' + action.payload.name;
             case Actions.UPDATE_PERSONALITY:
                 return 'Updated character personality';
+            case Actions.UPDATE_PROFICIENCIES:
+                return 'Updated proficiencies';
             default:
                 return action.type;
         }

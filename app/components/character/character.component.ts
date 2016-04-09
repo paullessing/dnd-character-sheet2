@@ -9,6 +9,7 @@ import {update} from "../../actions/character.actions";
 import {addXp} from "../../actions/stats.actions";
 import {EditCharacterModalComponent} from "./edit-character-modal.component";
 import {Modal} from "../modal/modal.service";
+import {AddXpModalComponent, XP_KEY, AddXpDetails} from "./add-xp.modal.component";
 
 /**
  * Component showing basic character details.
@@ -22,9 +23,6 @@ export class CharacterComponent implements OnDestroy {
 
     public character: Character;
     public stats: Stats;
-    public isChangingXp: boolean;
-    public xpChange: number;
-    public xpChangeReason: string;
 
     private unsubscribe: () => void;
 
@@ -48,20 +46,13 @@ export class CharacterComponent implements OnDestroy {
         this.modal.open(EditCharacterModalComponent);
     }
 
-    public editXp() {
-        this.isChangingXp = true;
-        this.xpChange = null;
-        this.xpChangeReason = null;
-    }
-
-    public submitXp() {
-        if (!this.xpChange) {
-            return;
-        }
-        this.redux.dispatch(addXp(this.xpChange, this.xpChangeReason));
-        console.log('submitting');
-        setTimeout(() => {
-            this.isChangingXp = false;
-        }, 10);
+    public addXp() {
+        this.modal.open(AddXpModalComponent, {
+            [XP_KEY]: this.stats.xp
+        }).then((details: AddXpDetails) => {
+            if (details) {
+                this.redux.dispatch(addXp(details.amount, details.reason));
+            }
+        });
     }
 }

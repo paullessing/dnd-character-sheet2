@@ -28,10 +28,12 @@ interface SerializedHistoryGroup {
     description: string;
     dateCreated: number;
     startStateSerialized: string;
+    isDeleted: boolean;
     actions: {
         id: number;
         action: Action;
         dateTime: number;
+        isDeleted: boolean;
     }[];
 }
 
@@ -64,10 +66,12 @@ function serialize(state: HistoryState): string {
             description: group.description || null,
             dateCreated: group.dateCreated.getTime(),
             startStateSerialized: group.startStateSerialized,
+            isDeleted: group.isDeleted,
             actions: group.actions.map((action: HistoricalAction) => ({
                 id: action.id,
                 action: action.action,
-                dateTime: action.dateTime.getTime()
+                dateTime: action.dateTime.getTime(),
+                isDeleted: action.isDeleted
             }))
         }))
     };
@@ -87,10 +91,12 @@ function deserialize(dataString: string): HistoryState {
                 description: group.description,
                 dateCreated: new Date(group.dateCreated),
                 startStateSerialized: group.startStateSerialized,
+                isDeleted: group.isDeleted,
                 actions: group.actions.map(action => ({
                     id: action.id,
                     action: action.action,
-                    dateTime: new Date(action.dateTime)
+                    dateTime: new Date(action.dateTime),
+                    isDeleted: action.isDeleted
                 }))
             }))
         };
@@ -159,6 +165,7 @@ export function storeStateAfterUpdate(store: Store) {
         let nextAction: Action = next(action);
         if (nextAction.type !== LOAD) {
             let state: HistoryState = store.getState();
+            console.info('Storing', state);
             localStorage.setItem(STATE_KEY, serialize(state));
         }
         return nextAction;

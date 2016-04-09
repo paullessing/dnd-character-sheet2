@@ -21,7 +21,7 @@ export const PROFICIENCIES_KEY = 'proficiencies';
 export class EditProficienciesComponent {
     constructor(
         private modalWindow: ModalWindow<string>,
-        @Inject('proficiencies') public proficiencies: string
+        @Inject(PROFICIENCIES_KEY) public proficiencies: string
     ) {
     }
 
