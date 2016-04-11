@@ -50,7 +50,7 @@ export class EditItemComponent implements OnChanges {
             this.item = {
                 name:          newItem.name || null,
                 quantity:      newItem.quantity || 1,
-                cost:          newItem.cost.toString() || null,
+                cost:          newItem.cost && newItem.cost.toString() || null,
                 description:   newItem.description || null,
                 weight:        newItem.weight || null,
                 modifications: newItem.modifications || null

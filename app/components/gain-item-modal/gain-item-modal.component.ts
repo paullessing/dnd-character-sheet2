@@ -1,18 +1,18 @@
 import {Component, Inject} from "angular2/core";
-import {ReduxConnector} from "../../common/connector";
 import {ItemTemplate} from "../../entities/itemDefinitions";
 import {IItem} from "../../entities/item";
-import {create} from "../../actions/inventory.actions";
-import {buy} from "../../actions/inventory.actions";
+import {create, buy} from "../../actions/inventory.actions";
 import {ModalWindow} from "../modal/modal.service";
 import {EditItemComponent} from "../edit-item/edit-item.component";
+import {IAction} from "../../entities/redux";
 
 export interface GainItemConfig {
-    item: ItemTemplate;
+    item?: ItemTemplate;
     isBuy?: boolean;
     quantity?: number;
-    onComplete?: () => void;
 }
+
+export const GAIN_ITEM_CONFIG_KEY = 'gainConfig';
 
 @Component({
     selector: 'gain-item',
@@ -25,21 +25,20 @@ export interface GainItemConfig {
 ></edit-item>`,
     directives: [EditItemComponent]
 })
-export class GainItemComponent {
+export class GainItemModalComponent {
     public item: IItem;
 
     constructor(
-        private redux: ReduxConnector,
-        private modalWindow: ModalWindow<IItem>,
-        @Inject('gainConfig') private config: GainItemConfig
+        private modalWindow: ModalWindow<IAction>,
+        @Inject(GAIN_ITEM_CONFIG_KEY) private config: GainItemConfig
     ) {
         this.item = {
-            name: config.item.name,
-            quantity: config.quantity || 1,
-            weight: config.item.weight,
-            description: config.item.description,
-            cost: config.item.cost
+            name: '',
+            quantity: 1
         };
+        if (config.item) {
+            Object.assign(this.item, config.item);
+        }
     }
 
     public onUpdate(item: IItem) {
@@ -49,13 +48,9 @@ export class GainItemComponent {
         }
 
         if (this.config.isBuy) {
-            this.redux.dispatch(buy(item, null)); // TODO reason
+            this.modalWindow.close(buy(item, null)); // TODO reason
         } else {
-            this.redux.dispatch(create(item));
-        }
-        this.modalWindow.close();
-        if (this.config.onComplete) {
-            this.config.onComplete();
+            this.modalWindow.close(create(item));
         }
     }
 }

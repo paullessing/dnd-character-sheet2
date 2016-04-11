@@ -1,6 +1,4 @@
-import {Component, OnInit, Input} from 'angular2/core';
-import {Router, RouterLink} from "angular2/router";
-
+import {Component} from "angular2/core";
 import {ItemTemplate, ITEM_TEMPLATES} from "../../entities/itemDefinitions";
 import {CurrencyPipe} from "../../common/currency.pipe";
 import {WeightPipe} from "../../common/weight.pipe";
@@ -25,7 +23,6 @@ export class ShopComponent {
     private expandedItemName: string;
 
     constructor(
-        private _router: Router
     ) {
     }
 

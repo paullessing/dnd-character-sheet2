@@ -1,6 +1,8 @@
 import {State} from "./state";
 import {HistoryState} from "./state";
 
+export type IAction = Action | ThunkAction;
+
 export interface Action {
     type: string;
     payload?: any;
@@ -9,7 +11,7 @@ export interface Action {
 }
 
 export interface Dispatch {
-    (action: Action | ThunkAction): void;
+    (action: IAction): void;
 }
 
 export interface GetState {

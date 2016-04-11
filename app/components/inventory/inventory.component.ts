@@ -1,5 +1,4 @@
 import {Component, OnDestroy} from 'angular2/core';
-import {BehaviorSubject, Subject} from "rxjs/Rx";
 
 import {ReduxConnector} from "../../common/connector";
 
@@ -13,6 +12,8 @@ import {State} from "../../entities/state";
 import {InventoryEntryComponent, ItemRemoveData} from "./inventory-entry.component";
 import {WalletComponent} from "../wallet/wallet.component";
 import {EditWalletComponent} from "../edit-wallet/edit-wallet.component";
+import {GainItemModalComponent, GAIN_ITEM_CONFIG_KEY} from "../gain-item-modal/gain-item-modal.component";
+import {IAction} from "../../entities/redux";
 
 /**
  * Component showing the character's inventory.
@@ -54,5 +55,15 @@ export class InventoryComponent implements OnDestroy {
 
     public editWallet() {
         this.modal.open(EditWalletComponent);
+    }
+    
+    public gainItem() {
+        this.modal.open(GainItemModalComponent, {
+            [GAIN_ITEM_CONFIG_KEY]: { isBuy: false }
+        }).then((action: IAction) => {
+            if (action) {
+                this.redux.dispatch(action)
+            }
+        });
     }
 }

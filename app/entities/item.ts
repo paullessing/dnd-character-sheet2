@@ -68,7 +68,7 @@ export class Inventory {
     constructor(...items: Item[]) {
         this.items.push(...items);
 
-        this.weight = items.reduce((total: number, item: Item) => total + item.weight ? item.weight * item.quantity : 0, 0);
+        this.weight = items.reduce((total: number, item: Item) => total + (item.weight ? item.weight * item.quantity : 0), 0);
         this.byId = {};
         items.map((item: Item) => this.byId[item.id] = item);
         Object.freeze(this.items);
