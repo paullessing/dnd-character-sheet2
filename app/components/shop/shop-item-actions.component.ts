@@ -1,4 +1,4 @@
-import {Component, Input} from "angular2/core";
+import {Component, Input, OnChanges, SimpleChange} from "angular2/core";
 import {RouterLink} from "angular2/router";
 import {FORM_DIRECTIVES} from "angular2/common";
 import {
@@ -14,6 +14,8 @@ import {ReduxConnector} from "../../common/connector";
 import {buy, create} from "../../actions/inventory.actions";
 import {Modal} from "../modal/modal.service";
 import {IAction} from "../../entities/redux";
+import {NotificationModal, SETTINGS_KEY} from "../modal/notification.modal.component";
+import {ItemNotAffordableError} from "../../entities/errors";
 
 @Component({
     selector: 'shop-item-actions',
@@ -21,14 +23,18 @@ import {IAction} from "../../entities/redux";
     directives: [FORM_DIRECTIVES, RouterLink],
     pipes: [CurrencyPipe],
 })
-export class ShopItemActionsComponent {
+export class ShopItemActionsComponent implements OnChanges {
 
     @Input()
     public item: ItemTemplate;
 
+    @Input()
+    public wallet: Amount;
+
     public count: number;
     public reason: string;
     public isEdit: boolean;
+    public canAfford: boolean;
 
     public price: Amount;
 
@@ -37,6 +43,14 @@ export class ShopItemActionsComponent {
         private modal: Modal
     ) {
         this.reset();
+    }
+
+    ngOnChanges(changes: { [property: string]: SimpleChange }) {
+        this.onCountChange();
+    }
+
+    private calculateCanAfford(): void {
+        this.canAfford = this.wallet && this.price && !this.price.greaterThan(this.wallet);
     }
 
     private reset() {
@@ -54,14 +68,16 @@ export class ShopItemActionsComponent {
                 [GAIN_ITEM_CONFIG_KEY]: this.getGainConfig(isBuy)
             }).then((action: IAction) => {
                 if (action) {
-                    this.redux.dispatch(action);
-                    this.onCompleteEdit()
+                    this.gainSafely(action).then(() => {
+                        this.onCompleteEdit();
+                    });
                 }
             });
         } else {
             let action = isBuy ? buy(this.getItem(), this.reason) : create(this.getItem());
-            this.redux.dispatch(action);
-            this.reset();
+            this.gainSafely(action).then(() => {
+                this.reset();
+            });
         }
     }
 
@@ -73,6 +89,23 @@ export class ShopItemActionsComponent {
         };
     }
 
+    private gainSafely(action: IAction): Promise<void> {
+        try {
+            this.redux.dispatch(action);
+            return Promise.resolve();
+        } catch (error) {
+            if (error instanceof ItemNotAffordableError) {
+                this.modal.open(NotificationModal, {
+                    [SETTINGS_KEY]: {
+                        text: 'You cannot afford that!',
+                        primaryButtonText: 'Oops'
+                    }
+                });
+            }
+            return Promise.reject(error);
+        }
+    }
+
     private onCompleteEdit(): void {
         this.reset();
     }
@@ -80,9 +113,10 @@ export class ShopItemActionsComponent {
     public onCountChange() {
         if (!this.count || !this.item) {
             this.price = null;
-            return;
+        } else {
+            this.price = new Amount(this.item.cost).times(this.count);
         }
-        this.price = new Amount(this.item.cost).times(this.count);
+        this.calculateCanAfford();
     }
 
     private getItem(): IItem {

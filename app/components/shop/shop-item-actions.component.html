@@ -2,6 +2,6 @@
 	<input type="checkbox" [(ngModel)]="isEdit" />
 	Edit
 </label><br />
-<input type="number" min="1" [(ngModel)]="count" (change)="onCountChange()" /> <span [hidden]="!isPay || !price">({{ price }})</span><br />
-<button type="button" (click)="submit(true)">Buy</button>
+<input type="number" min="1" [(ngModel)]="count" (change)="onCountChange()" /> <span [hidden]="!isPay || !cost">({{ cost }})</span><br />
+<button type="button" (click)="submit(true)" [disabled]="!canAfford">Buy</button>
 <button type="button" (click)="submit(false)">Gain</button>

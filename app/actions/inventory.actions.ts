@@ -11,6 +11,7 @@ import {
 import {IAmount, Amount} from "../entities/currency";
 import {IItem} from "../entities/item";
 import {ItemTemplate} from "../entities/itemDefinitions";
+import {ItemNotAffordableError} from "../entities/errors";
 
 export function remove(itemId: number, count: number, reason?: string): ThunkAction {
     return (dispatch: Dispatch, getState: GetState) => {
@@ -79,8 +80,10 @@ export function add(itemId: number, count: number, reason: string): ThunkAction 
 
 export function buy(item: IItem, reason: string): ThunkAction {
     return (dispatch: Dispatch, getState: GetState) => {
-        if (getState().current.inventory.wallet.lessThan(new Amount(item.cost).times(item.quantity))) {
-            throw new Error('Item is more than user can afford!');
+        let wallet = getState().current.inventory.wallet;
+        let cost = new Amount(item.cost).times(item.quantity);
+        if (wallet.lessThan(cost)) {
+            throw new ItemNotAffordableError(cost, wallet);
         }
         dispatch({
             type: BUY_ITEM,
