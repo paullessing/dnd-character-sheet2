@@ -32,8 +32,7 @@ export class Modal {
         }
         let bindings: ResolvedBinding[];
         if (Array.isArray(injectBindings)) {
-            console.log('its an array');
-            bindings = injectBindings;
+            bindings = <ResolvedBinding[]> injectBindings;
         } else {
             let providedValues = [];
             for (let key in injectBindings) {

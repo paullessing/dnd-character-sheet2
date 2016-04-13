@@ -94,6 +94,8 @@ export class HistoryComponent implements OnDestroy {
                 return 'Paid/Lost ' + Amount.toString(action.payload.amount);
             case Actions.REMOVE_ITEM:
                 return 'Removed' + action.meta.name + this.getTimes(action.payload.count);
+            case Actions.SELL_ITEM:
+                return 'Sold ' + action.meta.name + this.getTimes(action.payload.count) + ' for ' + action.payload.price;
             case Actions.UPDATE_ABILITIES:
                 return 'Updated abilities';
             case Actions.UPDATE_CHARACTER:

@@ -1,10 +1,11 @@
-import {Component, Input, Output} from 'angular2/core';
-import {BehaviorSubject, Subject} from "rxjs/Rx";
+import {Component, Input, Output, EventEmitter} from "angular2/core";
 
 import {Item} from "../../entities/item";
 import {CurrencyPipe} from "../../common/currency.pipe";
 import {WeightPipe} from "../../common/weight.pipe";
-import {EventEmitter} from "angular2/core";
+import {SellItemModalComponent, SELL_ITEM_DETAILS_KEY} from "./sell-item.modal.component";
+import {IAction} from "../../entities/redux";
+import {Modal} from "../modal/modal.service";
 
 export interface ItemRemoveData {
     count: number;
@@ -23,13 +24,17 @@ export class InventoryEntryComponent {
     @Input()
     public item: Item;
 
-    @Output('remove')
-    public removeEvents: EventEmitter<ItemRemoveData> = new EventEmitter<ItemRemoveData>();
+    @Output()
+    public remove: EventEmitter<ItemRemoveData> = new EventEmitter<ItemRemoveData>();
+
+    @Output()
+    public sell: EventEmitter<IAction> = new EventEmitter<IAction>();
 
     public isExpanded: boolean = false;
     public removeCount: number;
 
     constructor(
+        private modal: Modal
     ) {
     }
 
@@ -37,10 +42,15 @@ export class InventoryEntryComponent {
         this.isExpanded = !this.isExpanded;
     }
 
-    public remove(): void {
-        this.removeEvents.emit({
+    public removeItem(): void {
+        this.remove.emit({
             count: this.removeCount || 1
         });
         this.removeCount = null;
+    }
+
+    public sellItem(): void {
+        this.modal.open(SellItemModalComponent, { [SELL_ITEM_DETAILS_KEY]: this.item })
+            .then((action: IAction) => this.sell.emit(action));
     }
 }

@@ -18,6 +18,7 @@ export const UPDATE_ITEM = 'user/UPDATE_ITEM';
 export const BUY_ITEM = 'user/BUY_ITEM';
 export const ADD_ITEM = 'user/ADD_ITEM';
 export const REMOVE_ITEM = 'user/REMOVE_ITEM';
+export const SELL_ITEM = 'user/SELL_ITEM';
 
 export const ADD_TO_WALLET = 'user/ADD_TO_WALLET';
 export const REMOVE_FROM_WALLET = 'user/REMOVE_FROM_WALLET';

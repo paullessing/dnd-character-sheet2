@@ -6,7 +6,7 @@ import {
     UPDATE_ITEM,
     REMOVE_ITEM,
     BUY_ITEM,
-    ADD_ITEM
+    ADD_ITEM, SELL_ITEM
 } from "./actions";
 import {IAmount, Amount} from "../entities/currency";
 import {IItem} from "../entities/item";
@@ -28,6 +28,29 @@ export function remove(itemId: number, count: number, reason?: string): ThunkAct
                 itemId,
                 count,
                 reason
+            },
+            meta: {
+                name: existingItem.name
+            }
+        });
+    };
+}
+
+export function sell(itemId: number, count: number, price: Amount): ThunkAction {
+    return (dispatch: Dispatch, getState: GetState) => {
+        let existingItem = getState().current.inventory.items.byId[itemId];
+        if (!existingItem || existingItem.quantity === 0) {
+            throw new Error(`Cannot sell ${count} of item ID ${itemId} since it does not exist in the inventory`);
+        }
+        if (existingItem.quantity < count) {
+            throw new Error(`Cannot sell ${count} of item ID ${itemId} since it only has ${existingItem.quantity}`);
+        }
+        dispatch({
+            type: SELL_ITEM,
+            payload: {
+                itemId,
+                count,
+                price: price.toString()
             },
             meta: {
                 name: existingItem.name

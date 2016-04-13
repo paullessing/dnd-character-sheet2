@@ -53,6 +53,10 @@ export class InventoryComponent implements OnDestroy {
         this.redux.dispatch(remove(itemId, data.count, null));
     }
 
+    public onItemSell(action: IAction) {
+        this.redux.dispatch(action);
+    }
+
     public editWallet() {
         this.modal.open(EditWalletComponent);
     }
