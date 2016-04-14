@@ -1,11 +1,7 @@
-import {Component, OnDestroy} from 'angular2/core';
+import {Component, OnDestroy} from "angular2/core";
 import {ReduxConnector} from "../../common/connector";
-
-import {Alignment, AlignmentNames} from '../../entities/alignments';
-import {Class, ClassNames} from "../../entities/classes";
-import {ICharacter, Character} from "../../entities/character";
+import {Character} from "../../entities/character";
 import {State, Stats} from "../../entities/state";
-import {update} from "../../actions/character.actions";
 import {addXp} from "../../actions/stats.actions";
 import {EditCharacterModalComponent} from "./edit-character-modal.component";
 import {Modal} from "../modal/modal.service";

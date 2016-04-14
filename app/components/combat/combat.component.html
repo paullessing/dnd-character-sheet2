@@ -1,0 +1,25 @@
+<h2>Combat Stats</h2>
+<div *ngIf="combatStats">
+	<h3>Basic Stats</h3>
+	<ul>
+		<li>
+			Armour Class: {{ combatStats.armourClass }}
+		</li>
+		<li>
+			Initiative: {{ combatStats.initiative }}
+		</li>
+		<li>
+			Speed: {{ combatStats.speed }}
+		</li>
+	</ul>
+	<h3>Health</h3>
+	<p>
+		Hitpoints:
+		{{ combatStats.hitpoints }}
+		<span *ngIf="combatStats.temporaryHitpoints">+{{ combatStats.temporaryHitpoints }}</span>
+		/ {{ combatStats.temporaryMaxHitpoints }}<span *ngIf="combatStats.temporaryMaxHitpoints !== combatStats.maxHitpoints"tpoints> ({{ combatStats.maxHitpoints }})</span>
+	</p>
+	<p>
+		Death Saves / Fails: {{ combatStats.deathSaves }} / {{ combatStats.deathFails }}
+	</p>
+</div>
