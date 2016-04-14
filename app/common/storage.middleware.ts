@@ -47,6 +47,17 @@ interface SerializedState {
         skills: SkillData[];
         proficiencies: string;
     };
+    combat: {
+        speed: number;
+        initiative: number;
+        maxHitpoints: number;
+        temporaryMaxHitpoints: number;
+        hitpoints: number;
+        temporaryHitpoints: number;
+        armourClass: number;
+        deathSaves: number;
+        deathFails: number;
+    };
     personality: IPersonality;
     inventory: {
         items: IItem[];
@@ -110,17 +121,28 @@ export function serializeState(state: State): string {
     let serializedState: SerializedState = {
         character: state.character.getData(),
         stats: {
-            xp: state.stats.xp,
-            level: state.stats.level,
+            xp:               state.stats.xp,
+            level:            state.stats.level,
             proficiencyBonus: state.stats.proficiencyBonus,
-            abilities: state.stats.abilities.getData(),
-            skills: state.stats.skills.getData(),
-            proficiencies: state.stats.proficiencies
+            abilities:        state.stats.abilities.getData(),
+            skills:           state.stats.skills.getData(),
+            proficiencies:    state.stats.proficiencies
+        },
+        combat: {
+            speed:                 state.combat.speed,
+            initiative:            state.combat.initiative,
+            maxHitpoints:          state.combat.maxHitpoints,
+            temporaryMaxHitpoints: state.combat.temporaryMaxHitpoints,
+            hitpoints:             state.combat.hitpoints,
+            temporaryHitpoints:    state.combat.temporaryHitpoints,
+            armourClass:           state.combat.armourClass,
+            deathSaves:            state.combat.deathSaves,
+            deathFails:            state.combat.deathFails,
         },
         personality: state.personality,
         inventory: {
-            items: state.inventory.items.getData(),
-            wallet: state.inventory.wallet.getData() || {},
+            items:     state.inventory.items.getData(),
+            wallet:    state.inventory.wallet.getData() || {},
             maxItemId: state.inventory.maxItemId || Math.max(0, Math.max.apply(Math, state.inventory.items.items.map(item => item.id)))
         }
     };
@@ -130,28 +152,40 @@ export function serializeState(state: State): string {
 export function deserializeState(dataString: string): State {
     try {
         let data: SerializedState = JSON.parse(dataString);
-        let items = data.inventory.items.map(((item: IItem) => new Item(item)));
         let state: State = {
-            character: new Character(data.character),
-            personality: new Personality(data.personality),
-            stats: {
-                xp: data.stats.xp,
-                level: data.stats.level,
+            character:   data.character   && new Character(data.character),
+            personality: data.personality && new Personality(data.personality),
+            stats: data.stats && {
+                xp:               data.stats.xp,
+                level:            data.stats.level,
                 proficiencyBonus: data.stats.proficiencyBonus,
-                abilities: null,
-                skills: null,
-                proficiencies: data.stats.proficiencies || ''
+                abilities:        undefined,
+                skills:           undefined,
+                proficiencies:    data.stats.proficiencies || ''
             },
-            inventory: {
-                items: new Inventory(...items),
-                wallet: new Amount(data.inventory.wallet),
+            combat: data.combat && {
+                speed:                 data.combat.speed,
+                initiative:            data.combat.initiative,
+                maxHitpoints:          data.combat.maxHitpoints,
+                temporaryMaxHitpoints: data.combat.temporaryMaxHitpoints,
+                hitpoints:             data.combat.hitpoints,
+                temporaryHitpoints:    data.combat.temporaryHitpoints,
+                armourClass:           data.combat.armourClass,
+                deathSaves:            data.combat.deathSaves,
+                deathFails:            data.combat.deathFails,
+            },
+            inventory: data.inventory && {
+                items:     new Inventory(...(data.inventory.items.map((item: IItem) => new Item(item)))),
+                wallet:    new Amount(data.inventory.wallet),
                 maxItemId: data.inventory.maxItemId
             }
         };
-        let abilities = getAbilities(data.stats.abilities, state.stats.proficiencyBonus);
-        let skills = loadSkills(abilities, data.stats.skills, state.stats.proficiencyBonus);
+		if (data.stats) {
+			let abilities = getAbilities(data.stats.abilities, state.stats.proficiencyBonus);
+			let skills = loadSkills(abilities, data.stats.skills, state.stats.proficiencyBonus);
 
-        Object.assign(state.stats, { abilities, skills });
+			Object.assign(state.stats, { abilities, skills });
+		}
 
         return state;
     } catch (error) {
@@ -179,6 +213,7 @@ export function loadState(): HistoryState {
     }
     else {
         let state = deserialize(data);
-        return state;
+		console.log(state);
+		return state;
     }
 }

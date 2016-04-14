@@ -36,6 +36,7 @@ export interface State {
     character: Character;
 
     stats: Stats;
+    combat: CombatStats;
 
     personality: Personality;
 
@@ -53,4 +54,16 @@ export interface Stats {
     abilities: Abilities;
     skills: Skills;
     proficiencies: string;
+}
+
+export interface CombatStats {
+    speed: number;
+    initiative: number;
+    maxHitpoints: number;
+    temporaryMaxHitpoints: number;
+    hitpoints: number;
+    temporaryHitpoints: number;
+    armourClass: number;
+    deathSaves: number;
+    deathFails: number;
 }
