@@ -1,6 +1,11 @@
 <main class="character-sheet">
   <h1>Character Sheet</h1>
-  <cs-section name="Basics"></cs-section>
+  <cs-section name="Character">
+    <cs-character
+      [character]="character"
+      [stats]="stats"
+    ></cs-character>
+  </cs-section>
   <cs-section name="Abilities"></cs-section>
   <cs-section name="Skills & Proficiencies"></cs-section>
   <cs-section name="Combat"></cs-section>
