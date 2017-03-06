@@ -1,9 +1,7 @@
 import {Abilities} from "./abilities";
-import {Alignment} from "./alignments";
 import {Character} from "./character";
-import {Class} from "./classes";
 import {Amount} from "./currency";
-import {Item, Inventory} from "./item";
+import {Inventory} from "./item";
 import {Personality} from "./personality";
 import {Skills} from "./skills";
 import {Action} from "./redux";
