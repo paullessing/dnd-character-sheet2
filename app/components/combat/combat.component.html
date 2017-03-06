@@ -17,8 +17,12 @@
 		Hitpoints:
 		{{ combatStats.hitpoints }}
 		<span *ngIf="combatStats.temporaryHitpoints">+{{ combatStats.temporaryHitpoints }}</span>
-		/ {{ combatStats.temporaryMaxHitpoints }}<span *ngIf="combatStats.temporaryMaxHitpoints !== combatStats.maxHitpoints"tpoints> ({{ combatStats.maxHitpoints }})</span>
+		/ <a href="javascript:void(0)" (click)="editMaxHitpoints()">{{ combatStats.temporaryMaxHitpoints }}<span *ngIf="combatStats.temporaryMaxHitpoints !== combatStats.maxHitpoints"tpoints> ({{ combatStats.maxHitpoints }})</span></a>
 	</p>
+	<div>
+		<button (click)="heal()">Heal</button>
+		<button (click)="takeDamage()">Take Damage</button>
+	</div>
 	<p>
 		Death Saves / Fails: {{ combatStats.deathSaves }} / {{ combatStats.deathFails }}
 	</p>

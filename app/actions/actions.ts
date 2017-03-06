@@ -11,6 +11,10 @@ export const ADD_XP = 'user/ADD_XP';
 export const UPDATE_ABILITIES = 'user/UPDATE_ABILITIES';
 export const UPDATE_PROFICIENCIES = 'user/UPDATE_PROFICIENCIES';
 
+export const GAIN_HITPOINTS = 'user/GAIN_HITPOINTS';
+export const LOSE_HITPOINTS = 'user/LOSE_HITPOINTS';
+export const CHANGE_MAX_HITPOINTS = 'user/CHANGE_MAX_HITPOINTS';
+
 export const UPDATE_CHARACTER = 'user/UPDATE_CHARACTER';
 
 export const CREATE_ITEM = 'user/CREATE_ITEM';
