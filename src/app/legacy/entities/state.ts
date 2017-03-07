@@ -28,7 +28,7 @@ export interface HistoricalAction {
     action: Action;
     dateTime: Date;
     isDeleted?: boolean;
-};
+}
 
 export interface State {
     character: Character;
