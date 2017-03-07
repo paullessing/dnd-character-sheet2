@@ -1,10 +1,11 @@
 import {ClassLevel} from './class-level.interface';
-import {Alignment} from '../legacy/entities/alignments';
+import {Alignment} from './alignment.enum';
 
 export interface Character {
   name: string;
   playerName: string;
   alignment: Alignment;
+  xp: number;
 
   background: string;
   classLevel: ClassLevel[];

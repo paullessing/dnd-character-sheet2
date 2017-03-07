@@ -1,10 +1,9 @@
 <main class="character-sheet">
   <h1>Character Sheet</h1>
   <cs-section name="Character">
-    <cs-character
+    <cs-character-details
       [character]="character"
-      [stats]="stats"
-    ></cs-character>
+    ></cs-character-details>
   </cs-section>
   <cs-section name="Abilities"></cs-section>
   <cs-section name="Skills & Proficiencies"></cs-section>
@@ -12,5 +11,9 @@
   <cs-section name="Weapons"></cs-section>
   <cs-section name="Inventory"></cs-section>
   <cs-section name="Personality"></cs-section>
-  <cs-section name="Features & Traits"></cs-section>
+  <cs-section name="Features & Traits">
+    <cs-personality
+      [character]="character"
+    ></cs-personality>
+  </cs-section>
 </main>

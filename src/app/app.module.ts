@@ -5,7 +5,8 @@ import {HttpModule} from '@angular/http';
 
 import {AppComponent} from './app.component';
 import {SectionComponent} from './section/section.component';
-import {CharacterModule} from './character/character.module';
+import {CharacterDetailsModule} from './character-details/character-details.module';
+import {PersonalityModule} from './personality/personality.module';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import {CharacterModule} from './character/character.module';
     BrowserModule,
     FormsModule,
     HttpModule,
-    CharacterModule
+    CharacterDetailsModule,
+    PersonalityModule
   ],
   providers: [],
   bootstrap: [AppComponent]
