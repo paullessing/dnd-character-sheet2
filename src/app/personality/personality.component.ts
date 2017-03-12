@@ -1,5 +1,5 @@
 import {Component, OnInit, Input} from '@angular/core';
-import {Character} from '../models/character.interface';
+import {Character} from '../models/character.class';
 
 @Component({
   selector: 'cs-personality',

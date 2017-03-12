@@ -1,6 +1,5 @@
 import {Component, OnInit, Input} from '@angular/core';
-import {Character} from '../models/character.interface';
-import {getLevel} from '../models/character.model';
+import {Character} from '../models/character.class';
 
 @Component({
   selector: 'cs-character-details',
@@ -15,9 +14,5 @@ export class CharacterDetailsComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-  }
-
-  public getLevel() {
-    return getLevel(this.character);
   }
 }

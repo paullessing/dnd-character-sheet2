@@ -1,7 +1,10 @@
 import {Component} from '@angular/core';
-import {Character} from './models/character.interface';
 import {Alignments} from './models/alignment.enum';
 import {CharacterClasses} from './models/character-class.enum';
+import {Character} from './models/character.class';
+import {Abilities} from './models/ability.enum';
+import {Skills} from './models/skill.enum';
+import {Proficiencies} from './models/proficiency.enum';
 
 @Component({
   selector: 'character-sheet',
@@ -10,13 +13,12 @@ import {CharacterClasses} from './models/character-class.enum';
 })
 export class AppComponent {
 
-  public character: Character = {
+  public character: Character = new Character({
     name: 'Ashkor Ferrik',
     playerName: 'Paul',
     xp: 3000,
     race: 'Human (Variant)',
     background: 'Sailor',
-    abilities: '',
     alignment: Alignments.TRUE_NEUTRAL,
     classLevel: [{
       characterClass: CharacterClasses.FIGHTER,
@@ -26,6 +28,16 @@ export class AppComponent {
     flaws: 'Flawed',
     bonds: 'James',
     ideals: 'Yes please',
-    inventory: []
-  }
+    abilityScores: {
+      [Abilities.STRENGTH]: 13,
+      [Abilities.DEXTERITY]: 20
+    },
+    skillProficiencies: {
+      [Skills.ACROBATICS]: Proficiencies.REGULAR,
+      [Skills.STEALTH]: Proficiencies.REGULAR
+    },
+    savingThrowProficiencies: {
+      [Abilities.STRENGTH]: true
+    }
+  });
 }

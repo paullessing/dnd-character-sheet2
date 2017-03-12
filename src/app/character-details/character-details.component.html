@@ -3,12 +3,11 @@
   <p>{{ character.name }}</p>
 </div>
 <div>
-  <label>Class</label>
-  <p>{{ character.classLevel[0].characterClass }}</p>
-</div>
-<div>
-  <label>Level</label>
-  <p>{{ getLevel() }}</p>
+  <label>Class & Level</label>
+  <p *ngFor="let classLevel of character.classLevel">
+    {{ classLevel.characterClass }}
+    L{{ classLevel.level }}
+  </p>
 </div>
 <div>
   <label>Background</label>
